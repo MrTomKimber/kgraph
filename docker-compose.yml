@@ -1,0 +1,48 @@
+version: '3.1'
+
+services:
+
+  fuseki:
+    build:
+      context: jena-fuseki-docker-4.9.0/
+      dockerfile: Dockerfile
+    image: fuseki
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./jena-fuseki-docker-4.9.0/logs:/fuseki/logs
+      - ./jena-fuseki-docker-4.9.0/databases:/fuseki/databases
+      - ./jena-fuseki-docker-4.9.0/config:/fuseki/config
+    command: ["--conf", "config/config.ttl"]
+    healthcheck:
+      test: curl --fail http://localhost:3030/$/ping || exit 1
+      start_interval: 5s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - backend
+
+  flask:
+    build: 
+      context: .
+      dockerfile: flask_docker/Dockerfile
+
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask-app:/app
+      - ./src:/src
+
+    command: [ "flask", "run","--host","0.0.0.0","--port","5000", "--debug"]
+
+    depends_on:
+      fuseki:
+        condition: service_healthy
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
