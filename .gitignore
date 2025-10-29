@@ -1,2 +1,3 @@
 ide/
 jena-fuseki-docker-4.9.0/databases/MEM/
+Pipfile.lock
