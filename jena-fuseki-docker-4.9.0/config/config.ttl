@@ -23,22 +23,27 @@
     fuseki:name "kgstore" ;
     
     fuseki:endpoint [ 
+    	# SPARQL query service
         fuseki:operation fuseki:query ;
         fuseki:name "sparql" ;
     ] ;
     fuseki:endpoint [
+        # SPARQL query service (alternative name)
         fuseki:operation fuseki:query ;
         fuseki:name "query" 
     ] ;
     fuseki:endpoint [
+    	# SPARQL update service
         fuseki:operation fuseki:update ;
         fuseki:name "update"
     ] ;
     fuseki:endpoint [
+    	# SPARQL graph store protocol (read)
         fuseki:operation fuseki:gsp-r ;
         fuseki:name "get"
     ] ;
     fuseki:endpoint [ 
+    	# SPARQL graph store protocol (read & write)
         fuseki:operation fuseki:gsp-rw ; 
         fuseki:name "data"
     ] ; 
