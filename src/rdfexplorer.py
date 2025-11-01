@@ -28,10 +28,18 @@ PYTHON2XSDDATATYPEMAPPING = {
 }
 
 
+def uri_split(uriref):
+    frag = uriref.fragment
+    prefrag = str(uriref)[0:-len(frag)]
+    return prefrag, frag
+
 @dataclass
 class GraphData:
     """Dataclass for handling graph-links from an object to other objects"""
     subject: Identifier
+    subject_namespace_str : str
+    subject_h_label : str
+    subject_t_label : str
     subject_types : list
     subject_type_labels : list[str]
     outgoing_predicates : list[URIRef]
@@ -48,16 +56,13 @@ class GraphLiteralData(GraphData):
     subject: Literal
     value: object
     subject_types : list
-    subject_type_labels : list[str]
 
 @dataclass
 class GraphEntityData(GraphData):
     """Dataclass for handling graph-links from an object to other objects"""
     subject: URIRef
-    subject_h_label : str
-    subject_t_label : str
+    value: URIRef
     subject_types : list[URIRef]
-    subject_type_labels : list[str]
 
 class GraphEntity(object):
 
@@ -89,6 +94,8 @@ class GraphEntity(object):
             self.identifier = uri
             self.type=GraphEntity.__entity_types.literal
             self._setup_literal()
+
+        self.got_neighbours=False
 
     def get_outgoing_linked_entity_data(self): # pyright: ignore[reportUndefinedVariable]
         
@@ -164,7 +171,10 @@ class GraphEntity(object):
 
         self.data = GraphLiteralData(
             subject=self.literal, 
+            subject_namespace_str="",
             value=value,
+            subject_h_label=str(value),
+            subject_t_label=str(value), 
             subject_types=types,
             subject_type_labels=[t.n3(self.graph.namespace_manager) for t in types],
             outgoing_predicates=[], # Set outgoing_predicates to empty list for a Literal
@@ -189,6 +199,8 @@ class GraphEntity(object):
 
         self.data = GraphEntityData(
             subject=self.uri, 
+            subject_namespace_str=uri_split(self.uri)[0],
+            value=self.uri, 
             subject_h_label=self._get_subject_human_label(self.uri),
             subject_t_label=self._get_subject_technical_label(self.uri), 
             subject_types=list(subject_types),
@@ -221,6 +233,8 @@ class GraphEntity(object):
                                           GraphEntity(self.graph, o, self.entity_store)), 
                                          )        
         self.incoming_linked_neighbours=incoming_linked_neighbours
+
+        self.got_neighbours = True
         
 
 
@@ -276,12 +290,13 @@ class GraphEntity(object):
 
 
 
+class FrozenSetIndex(object):
+    pass
 
 
 
 
-
-class RDFMiner(object):
+class RDFExplorer(object):
     """A utility class for extracting content from an rdflib graph object
     After initial setup, various methods exist for generating lists of objects, 
     perhaps selecting by type, or as the result of a query.
@@ -301,13 +316,36 @@ class RDFMiner(object):
         return GraphEntity(self.graph, subject, self.entity_store)
     
     def gen_entity_report_dict(self, subjects : list[URIRef])->dict[URIRef,GraphEntity]:
+        """Generate a collection of entity details based on the list of subjects provided in the parameters
+        Note that a side-effect of the fetch process updates the self.entity_store object which serves
+        as an index/memory cache. If the object has already been fetched previously, the detail will be
+        returned from there."""
+        
         sdict=dict()
         for subject in subjects:
-            entity = self.get_entity_details(subject)
-            entity.get_neighbours() # This call happens only for the objects in the input list to avoid looping over the entire graph
-            sdict[subject]=entity
+            sdict[subject]=self.get_subject_and_neighbours(subject)
         return sdict
+    
+    def get_subject_and_neighbours(self, subject : URIRef):
+        entity = self.get_entity_details(subject)
+        entity.get_neighbours()
+        return entity
 
     def _get_subjs_by_type(self, type_uri: URIRef)->set[Identifier]:
         subj_uris = set([s for s,_,_ in list(self.graph.triples((None, RDF.type, type_uri)))])
         return subj_uris # pyright: ignore[reportReturnType]
+
+    def gen_index(self, data_attribute):
+        """Create an unsorted index from data_attribute (as key) to a set of references on self.entity_store keys"""
+        index = dict()
+        for k,v in self.entity_store.items():
+            data = v.data.__getattribute__(data_attribute)
+            if isinstance(data, (list, tuple, set, dict)):
+                data = frozenset(data)
+            else:
+                data = frozenset([data])
+            if data not in index.keys():
+                index[data]=set()
+            
+            index[data].add(k)
+        return index
