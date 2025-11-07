@@ -1,0 +1,281 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://kgraph.foo/onto/kgmeta#"
+     xml:base="https://kgraph.foo/onto/kgmeta"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+     xmlns:terms="http://purl.org/dc/terms/"
+     xmlns:kgmeta="https://kgraph.foo/onto/kgmeta#">
+    <owl:Ontology rdf:about="https://kgraph.foo/onto/kgmeta">
+        <owl:versionIRI rdf:resource="https://kgraph.foo/onto/kgmeta/v1.0.0"/>
+        <owl:imports rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+        <rdfs:comment xml:lang="en">An ontology designed to define core knowledge graph naming concepts, properties and definitions. 
+
+Many of the definitions within this ontology are used to help drive automated utility functions e.g. for serialisation, object mastery, automated documentation generation and in linking to vocabularies as part of the kgraph suite.</rdfs:comment>
+        <rdfs:label xml:lang="en">Knowledge Graph Meta Data</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#Label -->
+
+    <owl:AnnotationProperty rdf:about="https://kgraph.foo/onto/kgmeta#Label">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#nlgPredicateTemplate -->
+
+    <owl:AnnotationProperty rdf:about="https://kgraph.foo/onto/kgmeta#nlgPredicateTemplate">
+        <rdfs:comment rdf:resource="https://kgraph.foo/onto/kgnaming"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A Template used to construct a natural language representation of any triple employing the tagged predicate.
+
+Curly braces are used to reference objects and their (potential) properties.
+e.g.
+
+{s.rdfs:Label} is the parent of {o.rdfs:Label}.
+or
+{s.rdfs:Label} is {o.rdfs:Label}&apos;s parent.
+
+Ideally the template should provide a stable and gramatically correct output, so care should be taken when formulating these.</rdfs:comment>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#DocumentIsPartOf -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#DocumentIsPartOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+        <rdfs:comment>The relationship between child and parent classes within the documentation hierarchy. Fragments are part of their parent documents, and documents are part of their parent DocumentCollections.</rdfs:comment>
+        <rdfs:label>isPartOf</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#isDescribedIn -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#isDescribedIn">
+        <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+        <rdfs:comment>A link pointing to some resolvable location where documentation can be expected to be found for this specific subject-entity. This may be a document, or a document-fragment in cases where a single html page contains references to multiple entities.</rdfs:comment>
+        <rdfs:label>isDescribedIn</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#isIntegralPartOf -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#isIntegralPartOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:comment>isIntegralPartOf describes the relationship where a child object is existentially dependent on its parent (i.e. it cannot exist, except in abstract form in isolation from its parent), and where the parents identity depends on all its children&apos;s essential contributions.</rdfs:comment>
+        <skos:example rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <skos:example>For example, the columns defined within a table would be considered as being IntegralPartsOf the table - both because the table would be a different table if any of the columns were removed, but also because the columns themselves can&apos;t exist on their own (except in the most abstract sense) without the table giving them form.</skos:example>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#isKnownByConcept -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#isKnownByConcept">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+        <rdfs:comment>Connects an entity to a Vocabulary term by which the entitiy is known and understood.</rdfs:comment>
+        <rdfs:label>isKnownByConcept</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#isScopedWithin -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#isScopedWithin">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+        <rdfs:comment>Defines a link from the child NamedObject to parent NamedObject that performs as a unique naming context, i.e. a Namespace. The NamedObject&apos;s names must be defined to conform to the uniqueness characteristics within the referred NamedObject.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">isScopedWithin</rdfs:label>
+        <nlgPredicateTemplate rdf:datatype="http://www.w3.org/2001/XMLSchema#string">{s.kgnam:FullyQualifiedName} is scoped within the namespace defined by {o.kgnam:FullyQualifiedName}.</nlgPredicateTemplate>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#Description -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgmeta#Description">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Description</rdfs:label>
+        <nlgPredicateTemplate>{s.kgnam:FullyQualifiedName} has the following description: &quot;{o}&quot;.</nlgPredicateTemplate>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#FullyQualifiedName -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgmeta#FullyQualifiedName">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The FullyQualifiedName is a Functional data property of the object. It should uniquely define any individual of that object.</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The full globally identifying name of the object, consisting of the Namespace and all steps down the parental hierarchy using dot-separated notation.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FullyQualifiedName</rdfs:label>
+        <nlgPredicateTemplate>{o} is the Fully Qualified Name for the object identified by URI {s}</nlgPredicateTemplate>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#Name -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgmeta#Name">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The portion of the UniqueIdentifier that excludes the Namespace. All Names that are &quot;ScopedWithin&quot; a given Namespace must be unique.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Name</rdfs:label>
+        <nlgPredicateTemplate>{s.kgnam:FullyQualifiedName} is also sometimes named as &quot;{o}&quot;.</nlgPredicateTemplate>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#Document -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgmeta#Document">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+        <rdfs:comment>An online Document locatable with a URL</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#DocumentCollection -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgmeta#DocumentCollection">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+        <rdfs:comment>An online collection of Documents.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#DocumentFragment -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgmeta#DocumentFragment">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+        <rdfs:comment>A specific, referencable location (URL) within an online Document.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#NamedObject -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgmeta#NamedObject">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A NamedObject is any object that conforms to the scope and namespacing restrictions described in this ontology.
+
+The Hierarchy of Namespace Uniqueness is as Follows:
+
+UniqueIdentifier: A global identifier entirely unique to the thing or concept, identifying only it. Commonly it will consist of the concatenation of the Name of the Surrounding Namespace plus the Name of the object, separated by a dot.
+
+Name: An identifier unique within a namespace. Names have constrictions on thier form that exclude certain characters and enforce agreed patterns. Objects that &quot;belong&quot; or are defined as children of other objects through the `isScopedWithin` property might reference their Parent Objects using their names separated by a dot to enforce uniqueness within the namespace.
+
+ShortName: An identifier unique within the confines of a parental object (see Parent) this is enforced excuding certain characters and conforming to a common pattern. 
+
+Label: An unrestricted form of the object&apos;s ShortName, not confined as rigidly in terms of formation. 
+
+Description: A context-sensitive description of the object in terms of its enclosing parental, and namespace scopes.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NamedObject</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#Namespace -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgmeta#Namespace">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+                    <owl:Restriction>
+                        <owl:onProperty>
+                            <rdf:Description>
+                                <owl:inverseOf rdf:resource="https://kgraph.foo/onto/kgmeta#isScopedWithin"/>
+                            </rdf:Description>
+                        </owl:onProperty>
+                        <owl:someValuesFrom rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
