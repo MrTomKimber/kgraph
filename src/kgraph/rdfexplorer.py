@@ -7,10 +7,10 @@ from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
 
-KGNAM = Namespace("https://kgraph.foo/onto/kgnaming#")
+KGMETA = Namespace("https://kgraph.foo/onto/kgmeta#")
 NAMESPACE_GRAPH = rdflibGraph()
-NAMESPACE_GRAPH.bind('KGNAM', "https://kgraph.foo/onto/kgnaming#")
-    
+NAMESPACE_GRAPH.bind('KGMETA', "https://kgraph.foo/onto/kgmeta#")
+
 
 PYTHON2XSDDATATYPEMAPPING = {
     'bool' : XSD.boolean,
@@ -66,8 +66,8 @@ class GraphEntityData(GraphData):
 
 class GraphEntity(object):
 
-    __default_technical_label_prefs = [ KGNAM.FullyQualifiedName, KGNAM.Name, RDFS.label, SKOS.prefLabel ]
-    __default_human_label_prefs = [ RDFS.label, SKOS.prefLabel, KGNAM.Name, KGNAM.FullyQualifiedName ]
+    __default_technical_label_prefs = [ KGMETA.FullyQualifiedName, KGMETA.Name, RDFS.label, SKOS.prefLabel ]
+    __default_human_label_prefs = [ RDFS.label, SKOS.prefLabel, KGMETA.Name, KGMETA.FullyQualifiedName ]
     __entity_types = StrEnum('EntityType', ["object","literal","other"])
 
     def __init__(self, graph : rdflibGraph, uri : Identifier, entity_store : dict[Identifier, 'GraphEntity'] | None = None, technical_label_prefs=None, human_label_prefs=None):
@@ -339,7 +339,12 @@ class RDFExplorer(object):
         """Create an unsorted index from data_attribute (as key) to a set of references on self.entity_store keys"""
         index = dict()
         for k,v in self.entity_store.items():
-            data = v.data.__getattribute__(data_attribute)
+            if hasattr(v.data,data_attribute):
+                data = v.data.__getattribute__(data_attribute)
+            elif hasattr(v,data_attribute):
+                data = v.__getattribute__(data_attribute)
+            else:
+                data = None
             if isinstance(data, (list, tuple, set, dict)):
                 data = frozenset(data)
             else:

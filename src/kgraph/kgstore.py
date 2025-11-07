@@ -21,11 +21,12 @@ class KGStore(object):
             self.SERVICENAME = kwarg_lower_d.get('service')
 
         if 'queryurl' in kwarg_lower_d.keys():
-            self.QUERYURL = kwarg_lower_d.get('queryurl')
+            self.QUERYURL = str(kwarg_lower_d.get('queryurl'))
         else:
             self.QUERYURL = f"http://localhost:3030/{self.SERVICENAME}/query"
+
         if 'updateurl' in kwarg_lower_d.keys():
-            self.UPDATEURL = kwarg_lower_d.get('updateurl')
+            self.UPDATEURL = str(kwarg_lower_d.get('updateurl'))
         else:
             self.UPDATEURL = f"http://localhost:3030/{self.SERVICENAME}/update"
         
@@ -35,7 +36,7 @@ class KGStore(object):
             elif kwarg_lower_d.get('store_type')=='jena':
                 self.store = sparqlstore.SPARQLUpdateStore(self.QUERYURL,context_aware=True)
                 self.store.open((self.QUERYURL, self.UPDATEURL))
-        self.DS = Dataset(store=self.store, default_union=True, default_graph_base="http://base.raw")
+        self.DS = Dataset(store=self.store, default_union=True, default_graph_base="http://base.raw") # pyright: ignore[reportGeneralTypeIssues]
 
     def sparql(self, query):
         return self.DS.query(query)
