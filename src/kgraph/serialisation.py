@@ -242,6 +242,7 @@ class SerialisationInstanceSpecification(object):
     def __init__(self, parent):
         self.parent_serialisation = parent
         self.column_list = []
+        self._multivalues = None
     
     @staticmethod
     def extract_valid_fqns(rowurl, data_graph, fetch_key):
@@ -372,10 +373,6 @@ class NamedObject(object):
             elif isinstance(uri, URIRef):
                 self.types.append(uri.toPython())
 
-    def rehash(self):
-        self.hash = md5(".".join([self.label, self.fully_qualified_name, self.type]).encode('utf-8')).hexdigest()
-        return self.hash
-
     def to_triples(self)-> list[RDFTriple]:
         triples = []
         for t in self.types:
@@ -449,10 +446,6 @@ class RelationObject(object):
         self.object = object
         self.relation_uri = relation_uri
 
-    def rehash(self):
-        self.hash = md5(".".join([self.label, self.subject.fully_qualified_name, self.object.fully_qualified_name, self.type]).encode('utf-8')).hexdigest()
-        return self.hash
-
     def to_triples(self) -> list[RDFTriple]:
         triples = []
 
@@ -520,10 +513,6 @@ class PropertyObject(object):
         self.subject = subject
         self.property = property
         self.relation_uri = relation_uri
-
-    def rehash(self):
-        self.hash = md5(".".join([self.label, self.subject.fully_qualified_name, self.object.fully_qualified_name, self.type]).encode('utf-8')).hexdigest()
-        return self.hash
 
     def to_triples(self)->list[RDFTriple]:
         triples = []
