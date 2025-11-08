@@ -2,10 +2,10 @@
 
 from dataclasses import dataclass, asdict
 from enum import Enum, StrEnum
-
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
+from declarations import RDFTriple, RDFQuad, RDFSubjectAtom, RDFPredicateAtom, RDFObjectAtom
 
 KGMETA = Namespace("https://kgraph.foo/onto/kgmeta#")
 NAMESPACE_GRAPH = rdflibGraph()
@@ -289,9 +289,14 @@ class GraphEntity(object):
         return Literal(subject.n3(self.graph.namespace_manager))
 
 
+# Collection of base methods for generating triples given various input combinations
+def create_triples_from_slist_p_o(subjects : list[URIRef], predicate : URIRef, object : RDFObjectAtom) -> set[RDFTriple]:
+    """With a list of subjects, and a fixed predicate/object combination, generate a set of RDFTriples"""
+    triples = set()
+    for s in subjects:
+        triples.add((s, predicate, object))
+    return triples
 
-class FrozenSetIndex(object):
-    pass
 
 
 

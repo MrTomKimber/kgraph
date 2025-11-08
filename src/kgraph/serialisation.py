@@ -1,6 +1,5 @@
 from declarations import RDFTriple
-import json
-import jsonschema 
+import json, jsonschema, jsonschema.exceptions
 from importlib import resources
 import urllib.parse
 from rdflib import Graph as rdflibGraph, Namespace, URIRef, BNode, Literal
