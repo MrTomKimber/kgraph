@@ -7,4 +7,3 @@ RDFPredicateAtom: TypeAlias = URIRef
 RDFObjectAtom: TypeAlias = Union[URIRef, BNode, Literal]
 RDFTriple: TypeAlias = Tuple[RDFSubjectAtom, RDFPredicateAtom, RDFObjectAtom]
 RDFQuad: TypeAlias = Tuple[URIRef, RDFSubjectAtom, RDFPredicateAtom, RDFObjectAtom]
-
