@@ -78,6 +78,7 @@ Ideally the template should provide a stable and gramatically correct output, so
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
         <rdfs:range rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
         <rdfs:comment>The relationship between child and parent classes within the documentation hierarchy. Fragments are part of their parent documents, and documents are part of their parent DocumentCollections.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
         <rdfs:label>isPartOf</rdfs:label>
     </owl:ObjectProperty>
     
@@ -89,6 +90,7 @@ Ideally the template should provide a stable and gramatically correct output, so
         <rdfs:domain rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
         <rdfs:range rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
         <rdfs:comment>A link pointing to some resolvable location where documentation can be expected to be found for this specific subject-entity. This may be a document, or a document-fragment in cases where a single html page contains references to multiple entities.</rdfs:comment>
+        <rdfs:isDefinedBy>https://kgraph.foo/onto/kgmeta</rdfs:isDefinedBy>
         <rdfs:label>isDescribedIn</rdfs:label>
     </owl:ObjectProperty>
     
@@ -100,7 +102,7 @@ Ideally the template should provide a stable and gramatically correct output, so
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
         <rdfs:comment>isIntegralPartOf describes the relationship where a child object is existentially dependent on its parent (i.e. it cannot exist, except in abstract form in isolation from its parent), and where the parents identity depends on all its children&apos;s essential contributions.</rdfs:comment>
-        <skos:example rdf:resource="https://kgraph.foo/onto/kgmeta"/>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
         <skos:example>For example, the columns defined within a table would be considered as being IntegralPartsOf the table - both because the table would be a different table if any of the columns were removed, but also because the columns themselves can&apos;t exist on their own (except in the most abstract sense) without the table giving them form.</skos:example>
     </owl:ObjectProperty>
     
@@ -112,6 +114,7 @@ Ideally the template should provide a stable and gramatically correct output, so
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
         <rdfs:comment>Connects an entity to a Vocabulary term by which the entitiy is known and understood.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
         <rdfs:label>isKnownByConcept</rdfs:label>
     </owl:ObjectProperty>
     
