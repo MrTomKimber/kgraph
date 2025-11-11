@@ -78,7 +78,6 @@ Ideally the template should provide a stable and gramatically correct output, so
     <!-- https://kgraph.foo/onto/kgmeta#DocumentIsPartOf -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#DocumentIsPartOf">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
         <rdfs:range rdf:resource="https://kgraph.foo/onto/kgmeta#OnlineDocumentationObject"/>
@@ -116,7 +115,6 @@ Ideally the template should provide a stable and gramatically correct output, so
     <!-- https://kgraph.foo/onto/kgmeta#isKnownByConcept -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#isKnownByConcept">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
         <rdfs:comment>Connects an entity to a Vocabulary term by which the entitiy is known and understood.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgmeta"/>
@@ -128,7 +126,6 @@ Ideally the template should provide a stable and gramatically correct output, so
     <!-- https://kgraph.foo/onto/kgmeta#isScopedWithin -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgmeta#isScopedWithin">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgmeta#NamedObject"/>

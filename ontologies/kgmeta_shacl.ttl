@@ -1,0 +1,60 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix kgmeta: <https://kgraph.foo/onto/kgmeta#> .
+
+
+kgmeta:NamedObjectShape a sh:NodeShape;
+# Define expected property-shapes to be associated with a subject for which there exists a FullyQualifiedName
+    sh:nodeKind sh:IRI ;
+    sh:targetSubjectsOf kgmeta:FullyQualifiedName ;
+    sh:property kgmeta:FullyQualifiedNamePropertyShape ;
+    sh:property kgmeta:NamePropertyShape ;
+    sh:property kgmeta:LabelPropertyShape ;
+    sh:property kgmeta:DescriptionPropertyShape ;
+    sh:property kgmeta:isScopedWithinPropertyShape ;
+    sh:property kgmeta:isIntegralPartOfPropertyShape .
+    
+
+kgmeta:FullyQualifiedNamePropertyShape a sh:PropertyShape ;
+# The FullyQualifiedName property can and must only appear once, and when it does, it has a prescriptive pattern to which it must conform
+    sh:path kgmeta:FullyQualifiedName ;
+    sh:maxCount 1 ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:pattern "(((^|[A-Za-z0-9_()]+[.])([A-Za-z0-9_()]+))+)$" .
+
+kgmeta:NamePropertyShape a sh:PropertyShape ;
+    sh:path kgmeta:Name ;
+    sh:maxCount 1 ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:pattern "(((^|[A-Za-z0-9_()]+[.])([A-Za-z0-9_()]+))+)$" .
+
+kgmeta:LabelPropertyShape a sh:PropertyShape ;
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string .
+
+kgmeta:DescriptionPropertyShape a sh:PropertyShape ;
+    sh:path kgmeta:Description ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string .
+
+kgmeta:isScopedWithinPropertyShape a sh:PropertyShape ;
+# IsScopedWithin should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
+    sh:path kgmeta:isScopedWithin ;
+    sh:maxCount 1 ;
+    sh:class kgmeta:NamedObjectShape .
+
+kgmeta:isIntegralPartOfPropertyShape a sh:PropertyShape ;
+# isIntegralPartOf should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
+    sh:path kgmeta:isIntegralPartOf ;
+    sh:maxCount 1 ;
+    sh:class kgmeta:NamedObjectShape .
+
+
+
+
