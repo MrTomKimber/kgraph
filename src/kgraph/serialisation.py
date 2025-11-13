@@ -1,17 +1,18 @@
 # General Imports
-
-import json, jsonschema, jsonschema.exceptions
+from itertools import product
+from datetime import datetime
 import uuid
 import re
+from hashlib import md5
 import urllib.parse
+import json, jsonschema, jsonschema.exceptions
 from rdflib import Graph as rdflibGraph, Namespace, URIRef, BNode, Literal
 from rdflib.namespace import RDF, RDFS, OWL, SH
 import numpy as np
 import pandas as pd
-from hashlib import md5
-from itertools import product
-from datetime import datetime
-# Local package imports 
+
+
+# Local package imports
 from kgraph.declarations import RDFTriple, SERIALISATIONSCHEMA, KGMETA, KGMETA_G
 
 
@@ -35,7 +36,7 @@ def split_on_comma_respecting_quotes(some_string):
     return values
 
 
-class Serialisation(object):
+class Serialisation:
     schema = SERIALISATIONSCHEMA
     # Assign the namespace "DATA" to be used for temporary in-memory raw data graph
     DATA = Namespace("http://data#")
@@ -49,7 +50,7 @@ class Serialisation(object):
         except jsonschema.exceptions.ValidationError as err:
             print(err)
 
-        # Note that this forces any NamedObject Instances to mirror their associated 
+        # Note that this forces any NamedObject Instances to mirror their associated
         # SubjectTag column-names
         # A discrepancy between these two would cause the lineage to break.
         self.specifications = dict()
@@ -93,7 +94,7 @@ class Serialisation(object):
                 )
                 self.specifications[iname] = property_instance
 
-        # Update the list of object instances with the naming_hierarchy_path used later 
+        # Update the list of object instances with the naming_hierarchy_path used later
         # to establish its FQN
         referenced_columns = []
         for iname, instance_object in self.specifications.items():
@@ -119,9 +120,9 @@ class Serialisation(object):
         return c_specs
 
     def _traverse_hierarchy_path(self, start, acc=None):
-        # Given a dictionary containing node-to-node parental linkages {child:parent} 
+        # Given a dictionary containing node-to-node parental linkages {child:parent}
         # and a start node,
-        # traverse the hierarchy and return the path taken from start node, all the way 
+        # traverse the hierarchy and return the path taken from start node, all the way
         # up the tree, until it reaches the (local) top.
         if acc is None:
             acc = [start]
@@ -162,7 +163,7 @@ class Serialisation(object):
     def serialise(self, dataframe) -> rdflibGraph:
         # Convert the dataframe into a raw graph where rows are "triplified" with
         # minimal steer from the serialisation.
-        # This raw graph is expressed in the raw data namespace and consists of rows with 
+        # This raw graph is expressed in the raw data namespace and consists of rows with
         # floating column(name) predicates
         # linking to properties in the dataframe
         print(f"serialise:start {datetime.now()}")
@@ -170,7 +171,7 @@ class Serialisation(object):
         self.populate_entity_fqn_index(raw_graph)
         triple_generating_objects = list(self.entity_fqn_index.values())
 
-        # Once the entities are defined, next it's time to link them all via the various 
+        # Once the entities are defined, next it's time to link them all via the various
         # relationship linkages
         for datarow in [
             r[0] for r in raw_graph.triples((None, RDF.type, Serialisation.DATA["row"]))
@@ -266,7 +267,7 @@ class Serialisation(object):
                         # Now we need to see if it needs interpreting as a multivalue column or not
                         # N.B. there could be some discrepancy - i.e. one specification might
                         # interpret the value as multi-value, while another one doesn't.
-                        # Let's adopt the convention that if *any* specification imposes the 
+                        # Let's adopt the convention that if *any* specification imposes the
                         # multivalues flag, then *all* specifications must treat it as such.
                         if c in self.multivalue_columns:
                             # Apply explosion transformation on the value presented
@@ -288,7 +289,7 @@ class Serialisation(object):
         return g
 
 
-class SerialisationInstanceSpecification(object):
+class SerialisationInstanceSpecification:
 
     def __init__(self, parent):
         self.parent_serialisation = parent
@@ -301,8 +302,8 @@ class SerialisationInstanceSpecification(object):
         raw_fqn = SerialisationInstanceSpecification.get_keylist_from_datarow(
             rowurl, data_graph, f_key
         )
-        # Each block of the fqn could contain multiple values - we need to build the collection 
-        # of fqns that could possibly be constructed from each combination -  it's the 
+        # Each block of the fqn could contain multiple values - we need to build the collection
+        # of fqns that could possibly be constructed from each combination -  it's the
         # cartesian product that we're looking for.
 
         results = []
@@ -397,13 +398,13 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         #       labels (KGNAM)
         #       namespace
         #       FullyQualifiedNames (KGNAM)
-        # In addition, it might have any additional, overlapping properties that describe the 
-        # object, but for basic construction, we start with this list to populate the minimal, 
+        # In addition, it might have any additional, overlapping properties that describe the
+        # object, but for basic construction, we start with this list to populate the minimal,
         # KGNAM based content (...or do we??)
 
         type_uris = [URIRef(self.target_class)]
 
-        # fqn_parts = SerialisationInstanceSpecification.get_keylist_from_datarow(row_uri, 
+        # fqn_parts = SerialisationInstanceSpecification.get_keylist_from_datarow(row_uri,
         # data_graph, self.naming_hierarchy_path)
         # fqn = ".".join([n[0].toPython() for n in fqn_parts[::-1] if n != []])
         fqns = SerialisationInstanceSpecification.extract_valid_fqns(
@@ -412,7 +413,7 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         # print("fqns: ", fqns)
         # What instances exist that contain name values?
         # Let's use the final value from each fqn as a proxy for Name
-        # names = SerialisationInstanceSpecification.get_values_from_datarow(row_uri, 
+        # names = SerialisationInstanceSpecification.get_values_from_datarow(row_uri,
         # data_graph, self._subject__column)
         namespace = self._classbase_uri
         object_list = []
@@ -427,7 +428,7 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         return object_list
 
 
-class NamedObject(object):
+class NamedObject:
     def __init__(self, type_uris, fully_qualified_name, names, namespace):
         ENT = Namespace(namespace)
         self.uri = ENT[f"{uuid.uuid4().hex}"].toPython()
@@ -486,9 +487,9 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
         return f"<{self.__class__.__name__}:{self._instance_name}/{self._object__column}/{self._subject__column}>"
 
     def constructRelationFromDataGraphRow(self, row_uri, data_graph, entity_fqn_index):
-        # Collect the set of candidate fqn specifications (i.e. the columns used to fetch the 
+        # Collect the set of candidate fqn specifications (i.e. the columns used to fetch the
         # FQNs from the data row) for both sides of the relationship (subject, object)
-        # These are expressed as lists containing string values that describe the original 
+        # These are expressed as lists containing string values that describe the original
         # column names
         candidate_subject_spec = self.parent_serialisation._traverse_hierarchy_path(
             self._subject__column
@@ -497,7 +498,7 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
             self._object__column
         )
 
-        # Get the FQNs from the data row - but these can be tricky in that if no match for 
+        # Get the FQNs from the data row - but these can be tricky in that if no match for
         # the root of the FQN is found,
         # it still shows, but with element[0] being empty
         subject_fqns = SerialisationInstanceSpecification.extract_valid_fqns(
@@ -519,14 +520,14 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
                     print(f"\t\tObject match not found for {fqn}")
                 object_entities.append(object_match)
 
-        # Review the returned object lists and make a call on whether there's enough information 
+        # Review the returned object lists and make a call on whether there's enough information
         # to accept
         # whatever matches are returned
-        # Since the subjects and objects might be in n>1 collections, we generate the product of 
+        # Since the subjects and objects might be in n>1 collections, we generate the product of
         # both to
-        # create a single relations which consists of all combinations of both (in practice, 
+        # create a single relations which consists of all combinations of both (in practice,
         # subjects should)
-        # be singular, but the multivalues option means objects can contain multiple 
+        # be singular, but the multivalues option means objects can contain multiple
         # possibilities
         relations = list(product(*[subject_entities, object_entities]))
         relation_list = []
@@ -538,7 +539,7 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
         return relation_list
 
 
-class RelationObject(object):
+class RelationObject:
     def __init__(self, subject, object, relation_uri):
         self.subject = subject
         self.object = object
@@ -583,7 +584,7 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
             self._subject__column
         )
 
-        # Get the FQNs from the data row - but these can be tricky in that if no match for the 
+        # Get the FQNs from the data row - but these can be tricky in that if no match for the
         # root of the FQN is found,
         # it still shows, but with element[0] being empty
         subject_fqns = SerialisationInstanceSpecification.extract_valid_fqns(
@@ -594,20 +595,20 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
             for fqn in subject_fqns:
                 subject_entities.append(entity_fqn_index.get(fqn, None))
 
-        # Now extract the literal contents from the data row, which should *already* respect 
+        # Now extract the literal contents from the data row, which should *already* respect
         # earlier multi-values processing
         literal_values = SerialisationInstanceSpecification.get_values_from_datarow(
             row_uri, data_graph, self._literal__column
         )
 
-        # Review the returned object lists and make a call on whether there's enough information 
+        # Review the returned object lists and make a call on whether there's enough information
         # to accept
         # whatever matches are returned
-        # Since the subjects and objects might be in n>1 collections, we generate the product of 
+        # Since the subjects and objects might be in n>1 collections, we generate the product of
         # both to
-        # create a single relations which consists of all combinations of both (in practice, 
+        # create a single relations which consists of all combinations of both (in practice,
         # subjects should)
-        # be singular, but the multivalues option means objects can contain multiple 
+        # be singular, but the multivalues option means objects can contain multiple
         # possibilities
         relations = list(product(*[subject_entities, literal_values]))
         relation_list = []
@@ -622,10 +623,10 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
         return f"<{self.__class__.__name__}:{self._instance_name}/{self._literal__column}/{self._subject__column}>"
 
 
-class PropertyObject(object):
-    def __init__(self, subject, property, relation_uri):
+class PropertyObject:
+    def __init__(self, subject, property_value, relation_uri):
         self.subject = subject
-        self.property = property
+        self.property = property_value
         self.relation_uri = relation_uri
 
     def to_triples(self) -> list[RDFTriple]:

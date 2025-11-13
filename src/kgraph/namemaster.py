@@ -1,15 +1,15 @@
-from sqlitedict import SqliteDict
-from rdflib import Namespace, URIRef, Literal
-import rdflib
 from datetime import datetime
+from sqlitedict import SqliteDict
+from rdflib import Namespace, URIRef, Literal, Graph
 from kgraph.declarations import KGMETA
+
 
 class NameMaster:
     """Simple class for providing a data-mastering service using SqliteDict."""
 
     def __init__(self, db_path=":memory:", table="master", autocommit=False):
         # Start the database and return the number of items in it
-        self.db = SqliteDict(db_path, tablename="master", autocommit=autocommit)
+        self.db = SqliteDict(db_path, tablename=table, autocommit=autocommit)
 
     def close(self):
         self.db.close()
@@ -110,19 +110,20 @@ class NameMaster:
         keyvalue_pairs = {}
 
         # Cycle over all the named entities in the graph
-        for s, p, o in graph.triples((None, KGMETA.FullyQualifiedName, None)):
+        for s, _, o in graph.triples((None, KGMETA.FullyQualifiedName, None)):
+            object_value = None
             subject = s  # By convention, store entity references as raw URIRefs
             if isinstance(o, URIRef):
-                object = o.n3()
-                assert False, "FullyQualifiedName {object} should not be a URIRef"
+                object_value = o.n3()
+                assert False, "FullyQualifiedName {object_value} should not be a URIRef"
             elif isinstance(o, Literal):
-                object = o.toPython()
-            if object in keyvalue_pairs:
+                object_value = o.toPython()
+            if object_value in keyvalue_pairs:
                 assert (
                     False
                 ), "FullyQualifiedName found in graph pointing to multiple objects"
 
-            keyvalue_pairs[object] = subject
+            keyvalue_pairs[object_value] = subject
         print(f"fully_qualified_names_from_graph:end {datetime.now()}")
         return keyvalue_pairs
 
@@ -140,7 +141,7 @@ class NameMaster:
     def remaster_graph(self, graph):
         """Given an rdflib graph, remaster the URIs of named entities
         according to the master database."""
-        remastered_graph = rdflib.Graph()
+        remastered_graph = Graph()
         for ns_prefix, namespace in graph.namespaces():
             remastered_graph.bind(ns_prefix, namespace)
 
@@ -161,9 +162,7 @@ class NameMaster:
         print(f"master_graph:start {datetime.now()}")
         remastered_graph = self.remaster_graph(graph)
 
-        key_values_to_master = self.fully_qualified_names_from_graph(
-            remastered_graph
-        )
+        key_values_to_master = self.fully_qualified_names_from_graph(remastered_graph)
         update_report = self.set_values(key_values_to_master, safe=True)
         if update_report[0] > 0:
             print(
