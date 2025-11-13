@@ -1,4 +1,4 @@
+**/__pycache__/
 ide/
-jena-fuseki-docker-4.9.0/databases/MEM/
-Pipfile.lock
 ontologies/catalog-v001.xml
+tests/.pytest_cache/
