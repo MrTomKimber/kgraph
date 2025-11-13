@@ -21,4 +21,4 @@ jobs:
         pipenv install --dev
     - name: Analysing the code with pylint
       run: |
-        pipenv run pylint $(git ls-files '*.py') --fail-under=6.0 --recursive=y
+        pipenv run pylint $(git ls-files '*.py') --fail-under=7.5 --recursive=y
