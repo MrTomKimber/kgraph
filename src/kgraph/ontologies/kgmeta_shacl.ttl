@@ -6,10 +6,13 @@
 @prefix kgmeta: <https://kgraph.foo/onto/kgmeta#> .
 
 
+# Define expected property-shapes to be associated with any subject for which there is assigned a type
+# This limits the scope of the validation to (typed) individuals - which *should* be a minimum requirement
+# for any ingestion that includes naming (consider mappings though, which might arrive through a different
+# channel )
 kgmeta:NamedObjectShape a sh:NodeShape;
-# Define expected property-shapes to be associated with a subject for which there exists a FullyQualifiedName
+    sh:targetSubjectsOf rdf:type ;
     sh:nodeKind sh:IRI ;
-    sh:targetSubjectsOf kgmeta:FullyQualifiedName ;
     sh:property kgmeta:FullyQualifiedNamePropertyShape ;
     sh:property kgmeta:NamePropertyShape ;
     sh:property kgmeta:LabelPropertyShape ;
@@ -17,21 +20,21 @@ kgmeta:NamedObjectShape a sh:NodeShape;
     sh:property kgmeta:isScopedWithinPropertyShape ;
     sh:property kgmeta:isIntegralPartOfPropertyShape .
     
-
+# The FullyQualifiedName property can and must only appear once, and when it does, it has a 
+# prescriptive pattern to which it must conform
 kgmeta:FullyQualifiedNamePropertyShape a sh:PropertyShape ;
-# The FullyQualifiedName property can and must only appear once, and when it does, it has a prescriptive pattern to which it must conform
     sh:path kgmeta:FullyQualifiedName ;
     sh:maxCount 1 ;
     sh:minCount 1 ;
     sh:datatype xsd:string ;
-    sh:pattern "(((^|[A-Za-z0-9_()]+[.])([A-Za-z0-9_()]+))+)$" .
+    sh:pattern "(((^|[A-Za-z0-9_()↔\\s\\-&]+[.])([A-Za-z0-9_()↔\\s\\-&]+))+)$" .
 
 kgmeta:NamePropertyShape a sh:PropertyShape ;
     sh:path kgmeta:Name ;
     sh:maxCount 1 ;
     sh:minCount 1 ;
     sh:datatype xsd:string ;
-    sh:pattern "(((^|[A-Za-z0-9_()]+[.])([A-Za-z0-9_()]+))+)$" .
+    sh:pattern "(((^|[A-Za-z0-9_()↔\\s\\-&]+[.])([A-Za-z0-9_()↔\\s\\-&]+))+)$" .
 
 kgmeta:LabelPropertyShape a sh:PropertyShape ;
     sh:path rdfs:label ;
@@ -43,14 +46,14 @@ kgmeta:DescriptionPropertyShape a sh:PropertyShape ;
     sh:maxCount 1 ;
     sh:datatype xsd:string .
 
-kgmeta:isScopedWithinPropertyShape a sh:PropertyShape ;
 # IsScopedWithin should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
+kgmeta:isScopedWithinPropertyShape a sh:PropertyShape ;
     sh:path kgmeta:isScopedWithin ;
     sh:maxCount 1 ;
     sh:class kgmeta:NamedObjectShape .
 
-kgmeta:isIntegralPartOfPropertyShape a sh:PropertyShape ;
 # isIntegralPartOf should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
+kgmeta:isIntegralPartOfPropertyShape a sh:PropertyShape ;
     sh:path kgmeta:isIntegralPartOf ;
     sh:maxCount 1 ;
     sh:class kgmeta:NamedObjectShape .

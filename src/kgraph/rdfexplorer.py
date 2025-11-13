@@ -5,7 +5,7 @@ from enum import Enum, StrEnum
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
-from declarations import (
+from kgraph.declarations import (
     RDFTriple,
     RDFQuad,
     RDFSubjectAtom,
@@ -13,9 +13,7 @@ from declarations import (
     RDFObjectAtom,
 )
 
-KGMETA = Namespace("https://kgraph.foo/onto/kgmeta#")
-NAMESPACE_GRAPH = rdflibGraph()
-NAMESPACE_GRAPH.bind("KGMETA", "https://kgraph.foo/onto/kgmeta#")
+from kgraph.declarations import KGMETA, KGMETA_G
 
 
 PYTHON2XSDDATATYPEMAPPING = {

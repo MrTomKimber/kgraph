@@ -1,20 +1,18 @@
-from declarations import RDFTriple
+# General Imports
+
 import json, jsonschema, jsonschema.exceptions
-from importlib import resources
+import uuid
+import re
 import urllib.parse
 from rdflib import Graph as rdflibGraph, Namespace, URIRef, BNode, Literal
 from rdflib.namespace import RDF, RDFS, OWL, SH
-import pandas as pd
-import uuid
 import numpy as np
-import re
+import pandas as pd
 from hashlib import md5
 from itertools import product
-
 from datetime import datetime
-
-
-s_jsonschema = resources.read_text(__name__, "jschema/serialisationschema.json")
+# Local package imports 
+from kgraph.declarations import RDFTriple, SERIALISATIONSCHEMA, KGMETA, KGMETA_G
 
 
 def split_on_comma_respecting_quotes(some_string):
@@ -38,8 +36,7 @@ def split_on_comma_respecting_quotes(some_string):
 
 
 class Serialisation(object):
-
-    schema = json.loads(s_jsonschema)
+    schema = SERIALISATIONSCHEMA
     # Assign the namespace "DATA" to be used for temporary in-memory raw data graph
     DATA = Namespace("http://data#")
 
@@ -453,7 +450,7 @@ class NamedObject(object):
             triples.append(
                 (
                     URIRef(self.uri),
-                    URIRef("https://kgraph.foo/onto/kgmeta#Name"),
+                    URIRef(KGMETA.Name),
                     Literal(n),
                 )
             )
@@ -461,7 +458,7 @@ class NamedObject(object):
         triples.append(
             (
                 URIRef(self.uri),
-                URIRef("https://kgraph.foo/onto/kgmeta#FullyQualifiedName"),
+                URIRef(KGMETA.FullyQualifiedName),
                 Literal(self.fully_qualified_name),
             )
         )
