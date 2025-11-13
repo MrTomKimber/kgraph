@@ -33,8 +33,6 @@ with resources.as_file(resources.files(kgraph.ontologies) / os.path.normpath("kg
     KGMETA_SHAPES_G.parse(kgmeta_shapes, format='ttl')
     KGMETA_SHAPES_G.bind("KGMETA", KGMETA.title.toPython())
 
-
-
 # Define the type-aliases used to handle triple contents
 RDFSubjectAtom: TypeAlias = Union[URIRef, BNode]
 RDFPredicateAtom: TypeAlias = URIRef
