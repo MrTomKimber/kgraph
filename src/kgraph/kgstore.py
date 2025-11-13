@@ -1,12 +1,11 @@
+from datetime import datetime
 from rdflib.plugins.stores import sparqlstore, memory
 from rdflib import URIRef, Literal, BNode, Dataset, Namespace
 from rdflib import Graph as RDFGraph
 from rdflib.namespace import RDF, RDFS
 
-from datetime import datetime
 
-
-class KGStore(object):
+class KGStore:
     """Class for wrapping utility graph-store functions like
     query, load-data, delete data etc
     `store_type` parameter can be set to `memory` or `jena`

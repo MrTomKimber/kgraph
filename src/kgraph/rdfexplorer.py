@@ -141,9 +141,11 @@ class GraphEntity(object):
                     (p, list(self.graph.objects(subject, p, unique=True)))
                 )
         elif self.type == "literal":
-            pass  # This makes the assumption that literal data points do not carry any linked_entities
+            # This makes the assumption that literal data points
+            # do not carry any linked_entities
+            pass
 
-        link_pointers = set([o for _, olist in link_paths for o in olist])
+        link_pointers = {o for _, olist in link_paths for o in olist}
         link_objects_dict = dict()
 
         for candidate_object in link_pointers:
@@ -202,7 +204,8 @@ class GraphEntity(object):
         return link_objects_dict
 
     def _setup_literal(self):
-        """Where the entity has been identified as being a Literal, capture appropriate dataclass values"""
+        """Where the entity has been identified as being a Literal,
+        capture appropriate dataclass values"""
         value = self.literal.toPython()
         if self.literal.datatype is None:
             types = [
@@ -240,8 +243,11 @@ class GraphEntity(object):
         )
 
     def _setup_uriref(self):
-        """Where the entity has been identified as an Object (URIRef), capture appropriate dataclass values"""
-        # Careful to ensure that types and labels are aligned in terms of their ordering, to ensure the right type<-->labels can be recovered
+        """Where the entity has been identified as an Object (URIRef),
+        capture appropriate dataclass values"""
+        # Careful to ensure that types and labels are aligned in terms
+        # of their ordering, to ensure the right type<-->labels can be
+        # recovered
         subject_types = sorted(list(self._get_subject_types(self.uri)))
         subject_type_labels = [
             str(
@@ -381,16 +387,20 @@ class GraphEntity(object):
             if len(fetch_lits) > 0:
                 return fetch_lits[0]
 
-        # Nothing found, convert the object's URIRef into a stringlike value and serve as a Literal
-        # (Ideally shortened depending on the namespace_manager associated with the graph)
+        # Nothing found, convert the object's URIRef into a stringlike value
+        # and serve as a Literal
+        # (Ideally shortened depending on the namespace_manager associated
+        # with the graph)
         return Literal(subject.n3(self.graph.namespace_manager))
 
 
-# Collection of base methods for generating triples given various input combinations
+# Collection of base methods for generating triples given various
+# input combinations
 def create_triples_from_slist_p_o(
     subjects: list[URIRef], predicate: URIRef, object: RDFObjectAtom
 ) -> set[RDFTriple]:
-    """With a list of subjects, and a fixed predicate/object combination, generate a set of RDFTriples"""
+    """With a list of subjects, and a fixed predicate/object combination,
+    generate a set of RDFTriples"""
     triples = set()
     for s in subjects:
         triples.add((s, predicate, object))
@@ -399,18 +409,18 @@ def create_triples_from_slist_p_o(
 
 class RDFExplorer(object):
     """A utility class for extracting content from an rdflib graph object
-    After initial setup, various methods exist for generating lists of objects,
-    perhaps selecting by type, or as the result of a query.
-    These lists of object identifiers (URIs) are used to drive extracts of subject-centric
-    graph reports"""
+    After initial setup, various methods exist for generating lists of
+    objects, perhaps selecting by type, or as the result of a query.
+    These lists of object identifiers (URIs) are used to drive extracts
+    of subject-centric graph reports"""
 
     def __init__(
         self,
         rdf_g: rdflibGraph,
         entity_store: dict[Identifier, "GraphEntity"] | None = None,
     ) -> None:
-        """An object wrapper used to extract data from the graph and expose it as a set of type-centric
-        python-dicts"""
+        """An object wrapper used to extract data from the graph and
+        expose it as a set of type-centric python-dicts"""
         self.graph = rdf_g
         if entity_store is None:
             self.entity_store = dict()
@@ -423,10 +433,12 @@ class RDFExplorer(object):
     def gen_entity_report_dict(
         self, subjects: list[URIRef]
     ) -> dict[URIRef, GraphEntity]:
-        """Generate a collection of entity details based on the list of subjects provided in the parameters
-        Note that a side-effect of the fetch process updates the self.entity_store object which serves
-        as an index/memory cache. If the object has already been fetched previously, the detail will be
-        returned from there."""
+        """Generate a collection of entity details based on the list
+        of subjects provided in the parameters.
+        Note that a side-effect of the fetch process updates the
+        self.entity_store object which serves as an index/memory
+        cache. If the object has already been fetched previously,
+        the detail will be returned from there."""
 
         sdict = dict()
         for subject in subjects:
@@ -445,13 +457,14 @@ class RDFExplorer(object):
         return subj_uris  # pyright: ignore[reportReturnType]
 
     def gen_index(self, data_attribute):
-        """Create an unsorted index from data_attribute (as key) to a set of references on self.entity_store keys"""
+        """Create an unsorted index from data_attribute (as key) to
+        a set of references on self.entity_store keys"""
         index = dict()
         for k, v in self.entity_store.items():
             if hasattr(v.data, data_attribute):
-                data = v.data.__getattribute__(data_attribute)
+                data = getattr(v.data, data_attribute)
             elif hasattr(v, data_attribute):
-                data = v.__getattribute__(data_attribute)
+                data = getattr(v, data_attribute)
             else:
                 data = None
             if isinstance(data, (list, tuple, set, dict)):
