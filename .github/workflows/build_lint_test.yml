@@ -24,7 +24,7 @@ jobs:
         pipenv run pylint $(git ls-files 'src/kgraph/*.py') --fail-under=7.5 --recursive=y
   test:
     needs: [build]
-      steps:
-        - name: Perform unit testing with pytest
-          run: |
-            pipenv run pytest
+    steps:
+      - name: Perform unit testing with pytest
+        run: |
+          pipenv run pytest
