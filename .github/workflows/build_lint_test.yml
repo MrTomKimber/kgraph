@@ -1,4 +1,4 @@
-name: Pylint
+name: Push Workflow
 
 on: [push]
 
@@ -19,6 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv install --dev
-    - name: Analysing the code with pylint
+    - name: Analyse code with pylint
       run: |
-        pipenv run pylint $(git ls-files '*.py') --fail-under=7.5 --recursive=y
+        pipenv run pylint $(git ls-files 'src/kgraph/*.py') --fail-under=7.5 --recursive=y
+    - name: Perform unit testing with pytest
+      run: |
+        pipenv run pytest

@@ -1,8 +1,10 @@
 import sys, os
-repo_path = os.path.abspath("../src")
+from pathlib import Path
+current_dir = Path(__file__).parent
+repo_path = os.path.abspath(os.path.join(current_dir, "../src"))
 if repo_path not in sys.path:
     sys.path.append(repo_path)
-from pathlib import Path
+
 import pytest
 import pandas as pd
 from rdflib import Graph, Literal, URIRef
@@ -10,7 +12,7 @@ from rdflib.namespace import SKOS, RDF, RDFS
 from kgraph import declarations
 from kgraph import serialisation
 
-current_dir = Path(__file__).parent
+
 
 @pytest.fixture(scope='session')
 def serialisation_object() -> serialisation.Serialisation:
