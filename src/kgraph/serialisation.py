@@ -59,6 +59,8 @@ class Serialisation:
         for varname, varvalue in self.config["GlobalVariables"].items():
             self.glob_vars[varname] = varvalue
 
+        self.stats_dict = {}
+
         for named_object_definition in self.config["NamedObjects"]:
             for instance in named_object_definition["Instances"]:
                 iname = instance.get("InstanceName")
@@ -135,11 +137,12 @@ class Serialisation:
     def populate_entity_fqn_index(self, raw_graph):
         # Create set of entities from the raw graph
         entities = []
+        defined_entities=set()
         entity_fqn_index = dict()
         for datarow in [
             r[0] for r in raw_graph.triples((None, RDF.type, Serialisation.DATA["row"]))
         ]:
-            for s in [
+            for spec in [
                 s
                 for s in self.specifications.values()
                 if isinstance(s, NamedObjectInstanceSpecification)
@@ -149,24 +152,39 @@ class Serialisation:
                 # print("\t subcol:", s._subject__column)
                 # print("\t parcol:", s._parent__column)
                 # print("\t muvals:", s._multivalues)
-                for newobj in s.NamedObjectListFromDataGraphRow(datarow, raw_graph):
+                for newobj in spec.NamedObjectListFromDataGraphRow(datarow, raw_graph):
+                    
                     if newobj.fully_qualified_name not in entity_fqn_index.keys():
+                        if spec._is_definition:
+                            defined_entities.add(newobj)
+
                         entities.append(newobj)
                         entity_fqn_index[newobj.fully_qualified_name] = newobj
                     else:
-                        # Already found this one
-                        pass
+                        # Already found this one - but does the saved object need
+                        # replacing with one sourced as a definition?
+
+                        if not entity_fqn_index[newobj.fully_qualified_name].is_definition and newobj.is_definition:
+                            entities.remove(entity_fqn_index[newobj.fully_qualified_name])
+                            entity_fqn_index[newobj.fully_qualified_name] = newobj
+                            entities.append(newobj)
+                            entity_fqn_index[newobj.fully_qualified_name] = newobj
         # Save the entity_fqn_index to be accessible at object level
         self.entities = entities
+        self.defined_entities=defined_entities
+        print("Defined, References")
+        print(len(self.defined_entities), len(set(self.entities)-self.defined_entities))
+        self.stats_dict['defined_entities_count']=len(self.defined_entities)
+        self.stats_dict['all_entities_count']=len(set(self.entities))
+        self.stats_dict['undefined_entities_count']=len(set(self.entities)-self.defined_entities)
         self.entity_fqn_index = entity_fqn_index
 
-    def serialise(self, dataframe) -> rdflibGraph:
+    def to_rdf_graph(self, dataframe) -> rdflibGraph:
         # Convert the dataframe into a raw graph where rows are "triplified" with
         # minimal steer from the serialisation.
         # This raw graph is expressed in the raw data namespace and consists of rows with
-        # floating column(name) predicates
-        # linking to properties in the dataframe
-        print(f"serialise:start {datetime.now()}")
+        # floating column(name) predicates linking to properties in the dataframe
+        print(f"rdf_parse:start {datetime.now()}")
         raw_graph = self._rdflib_graph_from_dataframe(dataframe)
         self.populate_entity_fqn_index(raw_graph)
         triple_generating_objects = list(self.entity_fqn_index.values())
@@ -190,12 +208,15 @@ class Serialisation:
                         )
                     )
 
+        print("Objects, Unique Objects")
+        print(len(triple_generating_objects), len(set(triple_generating_objects)))
+
         return_graph = rdflibGraph(bind_namespaces="rdflib")
 
         for e in triple_generating_objects:
             for t in e.to_triples():
                 return_graph.add(t)
-        print(f"serialise:end {datetime.now()}")
+        print(f"rdf_parse:end {datetime.now()}")
         return return_graph
 
     def _rdflib_graph_from_dataframe(self, dataframe) -> rdflibGraph:
@@ -368,6 +389,10 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         self._instance_name = instance_d["InstanceName"]
         self._subject__column = instance_d["SubjectTag"]
         self._parent__column = instance_d["ParentTag"]
+        if "Definition" in instance_d.keys():
+            self._is_definition = instance_d["Definition"]
+        else:
+            self._is_definition = False
         self._classbase_uri = classbase
         if self._parent__column is None or str(self._parent__column).strip() == "":
             self._parent__column = "<root>"
@@ -418,23 +443,29 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         namespace = self._classbase_uri
         object_list = []
         if fqns is not None:
-
             for fqn in fqns:
                 names = [fqn.split(".")[-1]]
                 if fqn is not None:
-                    object_list.append(NamedObject(type_uris, fqn, names, namespace))
+                    object_list.append(NamedObject(type_uris, fqn, names, namespace, self._is_definition))
         else:
-            print(f"{self._instance_name} generated no objects for this row")
+            #print(f"{self._instance_name} generated no objects for this row")
+            pass
         return object_list
 
 
 class NamedObject:
-    def __init__(self, type_uris, fully_qualified_name, names, namespace):
+    def __init__(self, 
+                 type_uris, 
+                 fully_qualified_name, 
+                 names, 
+                 namespace, 
+                 is_definition : bool):
         ENT = Namespace(namespace)
         self.uri = ENT[f"{uuid.uuid4().hex}"].toPython()
         self.types = []
         self.names = names
         self.fully_qualified_name = fully_qualified_name
+        self.is_definition = is_definition
         # Coerce self.type to be a string
         for uri in type_uris:
             if isinstance(uri, str):

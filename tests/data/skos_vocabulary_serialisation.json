@@ -2,7 +2,7 @@
     "$schema": "../../src/kgraph/jschema/serialisationschema.json",
     "Namespaces": {
         "DMCAR": "https://kgraph.foo/onto/kgdmcar#",
-        "KGNAM": "https://kgraph.foo/onto/kgnaming#",
+        "KGMETA": "https://kgraph.foo/onto/kgmeta#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
     "GlobalVariables": {
@@ -16,8 +16,28 @@
                 {
                     "InstanceName": "ConceptScheme",
                     "SubjectTag": "ConceptScheme",
-                    "ParentTag": "RootNamespace"
+                    "ParentTag": "RootNamespace",
+                    "Definition": true
+                },
+                {
+                    "InstanceName": "RelatedConceptScheme",
+                    "SubjectTag": "RelatedScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "CloseMatchConceptScheme",
+                    "SubjectTag": "CloseMatchScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "ExactMatchConceptScheme",
+                    "SubjectTag": "ExactMatchScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": false
                 }
+
             ]
         },
         {
@@ -27,36 +47,42 @@
                 {
                     "InstanceName": "Concept",
                     "SubjectTag": "Concept",
-                    "ParentTag": "ConceptScheme"
+                    "ParentTag": "ConceptScheme",
+                    "Definition": true
                 },
                 {
                     "InstanceName": "BroaderConcept",
                     "SubjectTag": "Broader",
                     "ParentTag": "ConceptScheme",
+                    "Definition": false,
                     "EnableMultiValues": true
                 },
                 {
                     "InstanceName": "NarrowerConcept",
                     "SubjectTag": "Narrower",
                     "ParentTag": "ConceptScheme",
+                    "Definition": false,
                     "EnableMultiValues": true
                 },
                 {
                     "InstanceName": "RelatedConcept",
                     "SubjectTag": "Related",
-                    "ParentTag": "ConceptScheme",
+                    "ParentTag": "RelatedScheme",
+                    "Definition": false,
                     "EnableMultiValues": true
                 },
                 {
                     "InstanceName": "CloseMatchConcept",
                     "SubjectTag": "CloseMatch",
-                    "ParentTag": "ConceptScheme",
+                    "ParentTag": "CloseMatchScheme",
+                    "Definition": false,
                     "EnableMultiValues": true
                 },
                 {
                     "InstanceName": "ExactMatchConcept",
                     "SubjectTag": "ExactMatch",
-                    "ParentTag": "ConceptScheme",
+                    "ParentTag": "ExactMatchScheme",
+                    "Definition": false,
                     "EnableMultiValues": true
                 }
             ]
@@ -70,6 +96,31 @@
                     "InstanceName": "ConceptIsInScheme",
                     "SubjectTag": "Concept",
                     "ObjectTag": "ConceptScheme"
+                },
+                {
+                    "InstanceName": "BroaderConceptIsInScheme",
+                    "SubjectTag": "Broader",
+                    "ObjectTag": "ConceptScheme"
+                },
+                                {
+                    "InstanceName": "NarrowerConceptIsInScheme",
+                    "SubjectTag": "Narrower",
+                    "ObjectTag": "ConceptScheme"
+                },
+                                {
+                    "InstanceName": "RelatedConceptIsInScheme",
+                    "SubjectTag": "RelatedConcept",
+                    "ObjectTag": "RelatedScheme"
+                },
+                                {
+                    "InstanceName": "CloseMatchConceptIsInScheme",
+                    "SubjectTag": "CloseMatch",
+                    "ObjectTag": "CloseMatchScheme"
+                },
+                                {
+                    "InstanceName": "ExactMatchConceptIsInScheme",
+                    "SubjectTag": "ExactMatch",
+                    "ObjectTag": "ExactMatchScheme"
                 }
             ]
         },
@@ -131,7 +182,7 @@
     ],
     "Properties": [
         {
-            "Predicate": "https://kgraph.foo/onto/kgnaming#Name",
+            "Predicate": "https://kgraph.foo/onto/kgmeta#Name",
             "Instances": [
                 {
                     "InstanceName": "ConceptSchemeName",

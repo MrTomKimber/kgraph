@@ -90,6 +90,10 @@
                             "EnableMultiValues" : {
                                 "description" : "Set to true to treat the field as potentially containing multiple values separated by commas", 
                                 "type" : "boolean"
+                            },
+                            "Definition" : {
+                                "description" : "Set to true to mark the field as being the location where instances for this object are to be defined, else the field is considered a relation, and new objects created here may be marked as --undefined-- if the serialisation being performed is considered to be \"closed\" then any --undefined-- objects will trigger a warning.", 
+                                "type" : "boolean"
                             }
                         },
                         "additionalItems": false
