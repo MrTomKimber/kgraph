@@ -26,7 +26,7 @@ def raw_data_df() -> pd.DataFrame:
 
 @pytest.fixture(scope='session')
 def serialised_graph(serialisation_object, raw_data_df) -> Graph:
-    g = serialisation_object.serialise(raw_data_df)
+    g = serialisation_object.to_rdf_graph(raw_data_df)
     g.serialize("alphabet_graph.rdf", format="xml")
     return g
 
@@ -54,9 +54,10 @@ def test_serialised_concept_count(serialised_graph):
         for _,_,n in serialised_graph.triples((s, declarations.KGMETA.FullyQualifiedName, None))
     ]
 
-    assert len(extracted_concept_names) == 29
+    assert len(extracted_concept_names) == 31
     assert sorted(extracted_concept_names) == [Literal(n) 
                                        for n in ['Vocabularies.TestAlphabetVocab.Animal', 'Vocabularies.TestAlphabetVocab.Apple',
+                                                 'Vocabularies.TestAlphabetVocab.Artifact',
                                                 'Vocabularies.TestAlphabetVocab.Banana', 'Vocabularies.TestAlphabetVocab.Cat',
                                                 'Vocabularies.TestAlphabetVocab.Dog', 'Vocabularies.TestAlphabetVocab.Elephant',
                                                 'Vocabularies.TestAlphabetVocab.Fox', 'Vocabularies.TestAlphabetVocab.Fruit',
@@ -66,11 +67,11 @@ def test_serialised_concept_count(serialised_graph):
                                                 'Vocabularies.TestAlphabetVocab.Monarch', 'Vocabularies.TestAlphabetVocab.Mouse',
                                                 'Vocabularies.TestAlphabetVocab.Nest', 'Vocabularies.TestAlphabetVocab.Octopus',
                                                 'Vocabularies.TestAlphabetVocab.Parrot', 'Vocabularies.TestAlphabetVocab.Queen',
-                                                'Vocabularies.TestAlphabetVocab.Rain', 'Vocabularies.TestAlphabetVocab.Sun',
-                                                'Vocabularies.TestAlphabetVocab.Train', 'Vocabularies.TestAlphabetVocab.Umbrella',
-                                                'Vocabularies.TestAlphabetVocab.Village', 'Vocabularies.TestAlphabetVocab.Wheel',
-                                                'Vocabularies.TestAlphabetVocab.Xylophone', 'Vocabularies.TestAlphabetVocab.Yak',
-                                                'Vocabularies.TestAlphabetVocab.Zebra']
+                                                'Vocabularies.TestAlphabetVocab.Rain', 'Vocabularies.TestAlphabetVocab.Structure',
+                                                'Vocabularies.TestAlphabetVocab.Sun', 'Vocabularies.TestAlphabetVocab.Train', 
+                                                'Vocabularies.TestAlphabetVocab.Umbrella', 'Vocabularies.TestAlphabetVocab.Village', 
+                                                'Vocabularies.TestAlphabetVocab.Wheel', 'Vocabularies.TestAlphabetVocab.Xylophone', 
+                                                'Vocabularies.TestAlphabetVocab.Yak', 'Vocabularies.TestAlphabetVocab.Zebra']
                                                                                     ]
     
 def test_post_serialisation_shacl_validation(serialised_graph):

@@ -10,6 +10,18 @@
     },
     "NamedObjects": [
         {
+            "TargetClass": "https://kgraph.foo/onto/kgmeta#Namespace",
+            "URIBase": "https://kgraph.foo/namespace#",
+            "Instances": [
+                {
+                    "InstanceName": "Rootnamespace",
+                    "SubjectTag": "RootNamespace",
+                    "ParentTag": null,
+                    "Definition": true
+                }
+            ]
+        },
+        {
             "TargetClass": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
             "URIBase": "https://kgraph.foo/skos/kgdmcar#",
             "Instances": [
