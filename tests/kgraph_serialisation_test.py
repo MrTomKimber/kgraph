@@ -27,7 +27,7 @@ def raw_data_df() -> pd.DataFrame:
 @pytest.fixture(scope='session')
 def serialised_graph(serialisation_object, raw_data_df) -> Graph:
     g = serialisation_object.to_rdf_graph(raw_data_df)
-    g.serialize("alphabet_graph.rdf", format="xml")
+    g.serialize(os.path.join(current_dir, "data/alphabet_graph.rdf"), format="xml")
     return g
 
 @pytest.fixture(scope='session')
@@ -54,9 +54,10 @@ def test_serialised_concept_count(serialised_graph):
         for _,_,n in serialised_graph.triples((s, declarations.KGMETA.FullyQualifiedName, None))
     ]
 
-    assert len(extracted_concept_names) == 31
+    assert len(extracted_concept_names) == 32
     assert sorted(extracted_concept_names) == [Literal(n) 
-                                       for n in ['Vocabularies.TestAlphabetVocab.Animal', 'Vocabularies.TestAlphabetVocab.Apple',
+                                       for n in ['Vocabularies.Test.TestAlphabetVocab.Apple',
+                                                 'Vocabularies.TestAlphabetVocab.Animal', 'Vocabularies.TestAlphabetVocab.Apple',
                                                  'Vocabularies.TestAlphabetVocab.Artifact',
                                                 'Vocabularies.TestAlphabetVocab.Banana', 'Vocabularies.TestAlphabetVocab.Cat',
                                                 'Vocabularies.TestAlphabetVocab.Dog', 'Vocabularies.TestAlphabetVocab.Elephant',
@@ -71,15 +72,18 @@ def test_serialised_concept_count(serialised_graph):
                                                 'Vocabularies.TestAlphabetVocab.Sun', 'Vocabularies.TestAlphabetVocab.Train', 
                                                 'Vocabularies.TestAlphabetVocab.Umbrella', 'Vocabularies.TestAlphabetVocab.Village', 
                                                 'Vocabularies.TestAlphabetVocab.Wheel', 'Vocabularies.TestAlphabetVocab.Xylophone', 
-                                                'Vocabularies.TestAlphabetVocab.Yak', 'Vocabularies.TestAlphabetVocab.Zebra']
+                                                'Vocabularies.TestAlphabetVocab.Yak', 'Vocabularies.TestAlphabetVocab.Zebra',
+                                                ]
                                                                                     ]
     
 def test_post_serialisation_shacl_validation(serialised_graph):
+    ont = Graph()
+    ont.parse(os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta.owl"))
     conforms, results_g, results_t = validate(
                                             serialised_graph, 
                                             shacl_graph=declarations.KGMETA_SHAPES_G, 
-                                            ont_graph=None, 
-                                            inference=None, 
+                                            ont_graph=ont, 
+                                            inference='rdfs', 
                                             abort_on_first=False, 
                                             allow_infos=False, 
                                             allow_warnings=False, 
@@ -88,4 +92,6 @@ def test_post_serialisation_shacl_validation(serialised_graph):
                                             js=False, 
                                             debug=False
                                         )
-    
+    assert conforms == True
+
+

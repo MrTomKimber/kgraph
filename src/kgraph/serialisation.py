@@ -35,6 +35,19 @@ def split_on_comma_respecting_quotes(some_string):
             values.append(value.strip())
     return values
 
+def retrieve_fqn_parent(fqn):
+    return ".".join(fqn.split(".")[:-1])
+
+def collate_fqn_parents(fqn : str) -> list[str]:
+    stub = fqn
+    parents = []
+    while len(stub.split("."))>1:
+        parent = retrieve_fqn_parent(stub)
+        parents.append(parent)
+        stub = parent
+    return parents
+
+
 
 class Serialisation:
     schema = SERIALISATIONSCHEMA
@@ -189,6 +202,28 @@ class Serialisation:
         self.populate_entity_fqn_index(raw_graph)
         triple_generating_objects = list(self.entity_fqn_index.values())
 
+        # Here there's an opportunity to review the formation of the triple_generating_objects
+        # To determine whether all/any namespace hierarchies are fully populated.
+        # i.e. That if a namespace is inferred anywhere in any of the FullyQualifiedNames used to
+        # describe the objects being referenced, then there ought to be full and complete
+        # pathway from each leaf object, all the way up the tree. 
+        raw_fqn_parents = { q
+                    for n in triple_generating_objects
+                    for q in collate_fqn_parents(n.fully_qualified_name)
+                    }
+        nameless_parents = [p for p in raw_fqn_parents if p not in self.entity_fqn_index.keys()]
+        print(f"Warning - the following FullyQualifiedNames are inferred but not directly referenced in this file: {nameless_parents}")
+
+        for fqn, o in self.entity_fqn_index.items():
+            # For each object, create a link to the isScopedWithin object that acts as its parent
+            o_parent = self.entity_fqn_index.get(o.parent_fqn, None)
+            if o_parent is not None:
+                scope_r = RelationObject(o, o_parent, KGMETA.isScopedWithin)
+                triple_generating_objects.extend([scope_r])
+            else:
+                print(f"Warning, object {fqn} unable to connect to its parent {o.parent_fqn} - doesn't exist in file")
+
+
         # Once the entities are defined, next it's time to link them all via the various
         # relationship linkages
         for datarow in [
@@ -210,13 +245,15 @@ class Serialisation:
 
         print("Objects, Unique Objects")
         print(len(triple_generating_objects), len(set(triple_generating_objects)))
-
+  
         return_graph = rdflibGraph(bind_namespaces="rdflib")
-
         for e in triple_generating_objects:
             for t in e.to_triples():
                 return_graph.add(t)
         print(f"rdf_parse:end {datetime.now()}")
+
+        # Any validation ought to be performed at this stage:
+
         return return_graph
 
     def _rdflib_graph_from_dataframe(self, dataframe) -> rdflibGraph:
@@ -380,6 +417,57 @@ class SerialisationInstanceSpecification:
             return None
 
 
+class NamedObject:
+    def __init__(self, 
+                 type_uris, 
+                 fully_qualified_name, 
+                 names, 
+                 namespace, 
+                 is_definition : bool):
+        ENT = Namespace(namespace)
+        self.uri = ENT[f"{uuid.uuid4().hex}"].toPython()
+        self.types = []
+        self.names = names
+        self.fully_qualified_name = fully_qualified_name
+        self.parent_fqn = retrieve_fqn_parent(fully_qualified_name)
+        self.is_definition = is_definition
+        # Coerce self.type to be a string
+        for uri in type_uris:
+            if isinstance(uri, str):
+                self.types.append(uri)
+            elif isinstance(uri, URIRef):
+                self.types.append(uri.toPython())
+
+    def to_triples(self) -> list[RDFTriple]:
+        triples = []
+        for t in self.types:
+            triples.append((URIRef(self.uri), RDF.type, URIRef(t)))
+
+        for n in self.names:
+            if "." not in n:
+                triples.append(
+                    (
+                        URIRef(self.uri),
+                        URIRef(KGMETA.Name),
+                        Literal(n),
+                    )
+                )
+
+        triples.append(
+            (
+                URIRef(self.uri),
+                URIRef(KGMETA.FullyQualifiedName),
+                Literal(self.fully_qualified_name),
+            )
+        )
+        return triples
+
+    def __repr__(self):
+        return (
+            f"<NamedObject:{self.types[0]}//{self.fully_qualified_name}>({self.uri})>"
+        )
+
+
 class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
     def __init__(self, parent, target_class, classbase, instance_d):
         """Extract the values hosted in the configuration and store as
@@ -416,7 +504,7 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
                 f"This function can only be called on InstanceSpecifications that reference a parent"
             )
 
-    def NamedObjectListFromDataGraphRow(self, row_uri, data_graph):
+    def NamedObjectListFromDataGraphRow(self, row_uri, data_graph) -> list[NamedObject]:
         # A NamedObject must have one or more principle:
         #       types
         #       names (KGNAM)
@@ -452,55 +540,29 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
             pass
         return object_list
 
-
-class NamedObject:
-    def __init__(self, 
-                 type_uris, 
-                 fully_qualified_name, 
-                 names, 
-                 namespace, 
-                 is_definition : bool):
-        ENT = Namespace(namespace)
-        self.uri = ENT[f"{uuid.uuid4().hex}"].toPython()
-        self.types = []
-        self.names = names
-        self.fully_qualified_name = fully_qualified_name
-        self.is_definition = is_definition
-        # Coerce self.type to be a string
-        for uri in type_uris:
-            if isinstance(uri, str):
-                self.types.append(uri)
-            elif isinstance(uri, URIRef):
-                self.types.append(uri.toPython())
+class RelationObject:
+    def __init__(self, subject : NamedObject, object : NamedObject, relation_uri : str):
+        self.subject = subject
+        self.object = object
+        self.relation_uri = relation_uri
 
     def to_triples(self) -> list[RDFTriple]:
         triples = []
-        for t in self.types:
-            triples.append((URIRef(self.uri), RDF.type, URIRef(t)))
-
-        for n in self.names:
-            triples.append(
-                (
-                    URIRef(self.uri),
-                    URIRef(KGMETA.Name),
-                    Literal(n),
-                )
-            )
 
         triples.append(
             (
-                URIRef(self.uri),
-                URIRef(KGMETA.FullyQualifiedName),
-                Literal(self.fully_qualified_name),
+                URIRef(self.subject.uri),
+                URIRef(self.relation_uri),
+                URIRef(self.object.uri),
             )
         )
+
         return triples
 
     def __repr__(self):
         return (
-            f"<NamedObject:{self.types[0]}//{self.fully_qualified_name}>({self.uri})>"
+            f"<Relation:{self.relation_uri}//<({self.subject.uri}-{self.object.uri})>"
         )
-
 
 class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
     def __init__(self, parent, target_class, instance_d):
@@ -517,7 +579,7 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
     def __repr__(self):
         return f"<{self.__class__.__name__}:{self._instance_name}/{self._object__column}/{self._subject__column}>"
 
-    def constructRelationFromDataGraphRow(self, row_uri, data_graph, entity_fqn_index):
+    def constructRelationFromDataGraphRow(self, row_uri, data_graph, entity_fqn_index) -> list[RelationObject]:
         # Collect the set of candidate fqn specifications (i.e. the columns used to fetch the
         # FQNs from the data row) for both sides of the relationship (subject, object)
         # These are expressed as lists containing string values that describe the original
@@ -570,10 +632,11 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
         return relation_list
 
 
-class RelationObject:
-    def __init__(self, subject, object, relation_uri):
+
+class PropertyObject:
+    def __init__(self, subject : NamedObject, property_value, relation_uri : str):
         self.subject = subject
-        self.object = object
+        self.property = property_value
         self.relation_uri = relation_uri
 
     def to_triples(self) -> list[RDFTriple]:
@@ -583,16 +646,14 @@ class RelationObject:
             (
                 URIRef(self.subject.uri),
                 URIRef(self.relation_uri),
-                URIRef(self.object.uri),
+                Literal(self.property),
             )
         )
 
         return triples
 
     def __repr__(self):
-        return (
-            f"<Relation:{self.relation_uri}//<({self.subject.uri}-{self.object.uri})>"
-        )
+        return f"<Relation:{self.relation_uri}//<({self.subject.uri}-{self.property})>"
 
 
 class PropertyInstanceSpecification(SerialisationInstanceSpecification):
@@ -609,7 +670,7 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
 
     def constructPropertyFromDataGraphRow(
         self, row_uri, data_graph, entity_fqn_index
-    ) -> list[RDFTriple]:
+    ) -> list[PropertyObject]:
         # Get the subject fqn
         candidate_subject_spec = self.parent_serialisation._traverse_hierarchy_path(
             self._subject__column
@@ -653,25 +714,3 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
     def __repr__(self):
         return f"<{self.__class__.__name__}:{self._instance_name}/{self._literal__column}/{self._subject__column}>"
 
-
-class PropertyObject:
-    def __init__(self, subject, property_value, relation_uri):
-        self.subject = subject
-        self.property = property_value
-        self.relation_uri = relation_uri
-
-    def to_triples(self) -> list[RDFTriple]:
-        triples = []
-
-        triples.append(
-            (
-                URIRef(self.subject.uri),
-                URIRef(self.relation_uri),
-                Literal(self.property),
-            )
-        )
-
-        return triples
-
-    def __repr__(self):
-        return f"<Relation:{self.relation_uri}//<({self.subject.uri}-{self.property})>"
