@@ -11,7 +11,8 @@
 # for any ingestion that includes naming (consider mappings though, which might arrive through a different
 # channel )
 kgmeta:NamedObjectShape a sh:NodeShape;
-    sh:targetSubjectsOf rdf:type ;
+    #sh:targetSubjectsOf rdf:type ;
+    sh:targetClass kgmeta:NamedObject ;
     sh:nodeKind sh:IRI ;
     sh:property kgmeta:FullyQualifiedNamePropertyShape ;
     sh:property kgmeta:NamePropertyShape ;
@@ -50,13 +51,13 @@ kgmeta:DescriptionPropertyShape a sh:PropertyShape ;
 kgmeta:isScopedWithinPropertyShape a sh:PropertyShape ;
     sh:path kgmeta:isScopedWithin ;
     sh:maxCount 1 ;
-    sh:class kgmeta:NamedObjectShape .
+    sh:class kgmeta:NamedObject .
 
 # isIntegralPartOf should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
 kgmeta:isIntegralPartOfPropertyShape a sh:PropertyShape ;
     sh:path kgmeta:isIntegralPartOf ;
     sh:maxCount 1 ;
-    sh:class kgmeta:NamedObjectShape .
+    sh:class kgmeta:NamedObject .
 
 
 

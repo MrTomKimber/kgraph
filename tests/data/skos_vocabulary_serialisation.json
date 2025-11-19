@@ -6,7 +6,8 @@
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
     "GlobalVariables": {
-        "RootNamespace" : "Vocabularies"
+        "RootNamespace" : "Vocabularies",
+        "RootNamespaceLabel" : "Vocabularies"
     },
     "NamedObjects": [
         {
@@ -23,7 +24,7 @@
         },
         {
             "TargetClass": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
-            "URIBase": "https://kgraph.foo/skos/kgdmcar#",
+            "URIBase": "https://kgraph.foo/skos/schemes#",
             "Instances": [
                 {
                     "InstanceName": "ConceptScheme",
@@ -101,7 +102,7 @@
         }
     ],
     "Relationships": [
-        {
+{
             "Predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
             "Instances": [
                 {
@@ -193,21 +194,7 @@
         }
     ],
     "Properties": [
-        {
-            "Predicate": "https://kgraph.foo/onto/kgmeta#Name",
-            "Instances": [
-                {
-                    "InstanceName": "ConceptSchemeName",
-                    "SubjectTag": "ConceptScheme",
-                    "LiteralTag": "ConceptScheme"
-                },
-                {
-                    "InstanceName": "ConceptName",
-                    "SubjectTag": "Concept",
-                    "LiteralTag": "Concept"
-                }
-            ]
-        },
+        
         {
             "Predicate": "http://www.w3.org/2004/02/skos/core#notation",
             "Instances": [
@@ -232,10 +219,21 @@
             "Predicate": "http://www.w3.org/2000/01/rdf-schema#label",
             "Instances": [
                 {
+                    "InstanceName": "RootNamespaceLabel",
+                    "SubjectTag": "RootNamespace",
+                    "LiteralTag": "RootNamespaceLabel"
+                },
+                {
                     "InstanceName": "ConceptprefLabelToKGLabel",
                     "SubjectTag": "Concept",
                     "LiteralTag": "prefLabel"
+                },
+                {
+                    "InstanceName": "ConceptSchemeLabel",
+                    "SubjectTag": "ConceptScheme",
+                    "LiteralTag": "ConceptSchemeLabel"
                 }
+                
             ]
         },
         {
