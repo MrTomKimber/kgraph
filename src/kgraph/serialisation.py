@@ -35,18 +35,19 @@ def split_on_comma_respecting_quotes(some_string):
             values.append(value.strip())
     return values
 
+
 def retrieve_fqn_parent(fqn):
     return ".".join(fqn.split(".")[:-1])
 
-def collate_fqn_parents(fqn : str) -> list[str]:
+
+def collate_fqn_parents(fqn: str) -> list[str]:
     stub = fqn
     parents = []
-    while len(stub.split("."))>1:
+    while len(stub.split(".")) > 1:
         parent = retrieve_fqn_parent(stub)
         parents.append(parent)
         stub = parent
     return parents
-
 
 
 class Serialisation:
@@ -150,7 +151,7 @@ class Serialisation:
     def populate_entity_fqn_index(self, raw_graph):
         # Create set of entities from the raw graph
         entities = []
-        defined_entities=set()
+        defined_entities = set()
         entity_fqn_index = dict()
         for datarow in [
             r[0] for r in raw_graph.triples((None, RDF.type, Serialisation.DATA["row"]))
@@ -166,7 +167,7 @@ class Serialisation:
                 # print("\t parcol:", s._parent__column)
                 # print("\t muvals:", s._multivalues)
                 for newobj in spec.NamedObjectListFromDataGraphRow(datarow, raw_graph):
-                    
+
                     if newobj.fully_qualified_name not in entity_fqn_index.keys():
                         if spec._is_definition:
                             defined_entities.add(newobj)
@@ -177,19 +178,30 @@ class Serialisation:
                         # Already found this one - but does the saved object need
                         # replacing with one sourced as a definition?
 
-                        if not entity_fqn_index[newobj.fully_qualified_name].is_definition and newobj.is_definition:
-                            entities.remove(entity_fqn_index[newobj.fully_qualified_name])
+                        if (
+                            not entity_fqn_index[
+                                newobj.fully_qualified_name
+                            ].is_definition
+                            and newobj.is_definition
+                        ):
+                            entities.remove(
+                                entity_fqn_index[newobj.fully_qualified_name]
+                            )
                             entity_fqn_index[newobj.fully_qualified_name] = newobj
                             entities.append(newobj)
                             entity_fqn_index[newobj.fully_qualified_name] = newobj
         # Save the entity_fqn_index to be accessible at object level
         self.entities = entities
-        self.defined_entities=defined_entities
+        self.defined_entities = defined_entities
         print("Defined, References")
-        print(len(self.defined_entities), len(set(self.entities)-self.defined_entities))
-        self.stats_dict['defined_entities_count']=len(self.defined_entities)
-        self.stats_dict['all_entities_count']=len(set(self.entities))
-        self.stats_dict['undefined_entities_count']=len(set(self.entities)-self.defined_entities)
+        print(
+            len(self.defined_entities), len(set(self.entities) - self.defined_entities)
+        )
+        self.stats_dict["defined_entities_count"] = len(self.defined_entities)
+        self.stats_dict["all_entities_count"] = len(set(self.entities))
+        self.stats_dict["undefined_entities_count"] = len(
+            set(self.entities) - self.defined_entities
+        )
         self.entity_fqn_index = entity_fqn_index
 
     def to_rdf_graph(self, dataframe) -> rdflibGraph:
@@ -206,13 +218,19 @@ class Serialisation:
         # To determine whether all/any namespace hierarchies are fully populated.
         # i.e. That if a namespace is inferred anywhere in any of the FullyQualifiedNames used to
         # describe the objects being referenced, then there ought to be full and complete
-        # pathway from each leaf object, all the way up the tree. 
-        raw_fqn_parents = { q
-                    for n in triple_generating_objects
-                    for q in collate_fqn_parents(n.fully_qualified_name)
-                    }
-        nameless_parents = [p for p in raw_fqn_parents if p not in self.entity_fqn_index.keys()]
-        print(f"Warning - the following FullyQualifiedNames are inferred but not directly referenced in this file: {nameless_parents}")
+        # pathway from each leaf object, all the way up the tree.
+        raw_fqn_parents = {
+            q
+            for n in triple_generating_objects
+            for q in collate_fqn_parents(n.fully_qualified_name)
+        }
+        nameless_parents = [
+            p for p in raw_fqn_parents if p not in self.entity_fqn_index.keys()
+        ]
+        print(
+            f"Warning - the following FullyQualifiedNames are inferred \
+                but not directly referenced in this file: {nameless_parents}"
+        )
 
         for fqn, o in self.entity_fqn_index.items():
             # For each object, create a link to the isScopedWithin object that acts as its parent
@@ -221,8 +239,10 @@ class Serialisation:
                 scope_r = RelationObject(o, o_parent, KGMETA.isScopedWithin)
                 triple_generating_objects.extend([scope_r])
             else:
-                print(f"Warning, object {fqn} unable to connect to its parent {o.parent_fqn} - doesn't exist in file")
-
+                print(
+                    f"Warning, object {fqn} unable to connect to its \
+                        parent {o.parent_fqn} - doesn't exist in file"
+                )
 
         # Once the entities are defined, next it's time to link them all via the various
         # relationship linkages
@@ -245,7 +265,7 @@ class Serialisation:
 
         print("Objects, Unique Objects")
         print(len(triple_generating_objects), len(set(triple_generating_objects)))
-  
+
         return_graph = rdflibGraph(bind_namespaces="rdflib")
         for e in triple_generating_objects:
             for t in e.to_triples():
@@ -411,19 +431,17 @@ class SerialisationInstanceSpecification:
                 return self._literal__column
             else:
                 raise TypeError(
-                    f"Class {self.__class__.__name__} not recognised as one supporting this function."
+                    f"Class {self.__class__.__name__} not recognised as one \
+                        supporting this function."
                 )
         else:
             return None
 
 
 class NamedObject:
-    def __init__(self, 
-                 type_uris, 
-                 fully_qualified_name, 
-                 names, 
-                 namespace, 
-                 is_definition : bool):
+    def __init__(
+        self, type_uris, fully_qualified_name, names, namespace, is_definition: bool
+    ):
         ENT = Namespace(namespace)
         self.uri = ENT[f"{uuid.uuid4().hex}"].toPython()
         self.types = []
@@ -489,7 +507,8 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         super()._populate_column_list()
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}:{self._instance_name}/{self._parent__column}/{self._subject__column}>"
+        return f"<{self.__class__.__name__}:{self._instance_name}\
+            /{self._parent__column}/{self._subject__column}>"
 
     def populate_naming_hierarchy_path(self):
         if isinstance(self, NamedObjectInstanceSpecification):
@@ -501,7 +520,8 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
             )
         else:
             raise TypeError(
-                f"This function can only be called on InstanceSpecifications that reference a parent"
+                f"This function can only be called on InstanceSpecifications \
+                    that reference a parent"
             )
 
     def NamedObjectListFromDataGraphRow(self, row_uri, data_graph) -> list[NamedObject]:
@@ -534,14 +554,19 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
             for fqn in fqns:
                 names = [fqn.split(".")[-1]]
                 if fqn is not None:
-                    object_list.append(NamedObject(type_uris, fqn, names, namespace, self._is_definition))
+                    object_list.append(
+                        NamedObject(
+                            type_uris, fqn, names, namespace, self._is_definition
+                        )
+                    )
         else:
-            #print(f"{self._instance_name} generated no objects for this row")
+            # print(f"{self._instance_name} generated no objects for this row")
             pass
         return object_list
 
+
 class RelationObject:
-    def __init__(self, subject : NamedObject, object : NamedObject, relation_uri : str):
+    def __init__(self, subject: NamedObject, object: NamedObject, relation_uri: str):
         self.subject = subject
         self.object = object
         self.relation_uri = relation_uri
@@ -564,6 +589,7 @@ class RelationObject:
             f"<Relation:{self.relation_uri}//<({self.subject.uri}-{self.object.uri})>"
         )
 
+
 class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
     def __init__(self, parent, target_class, instance_d):
         """Extract the values hosted in the configuration and store as
@@ -577,9 +603,12 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
         super()._populate_column_list()
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}:{self._instance_name}/{self._object__column}/{self._subject__column}>"
+        return f"<{self.__class__.__name__}:{self._instance_name}\
+            /{self._object__column}/{self._subject__column}>"
 
-    def constructRelationFromDataGraphRow(self, row_uri, data_graph, entity_fqn_index) -> list[RelationObject]:
+    def constructRelationFromDataGraphRow(
+        self, row_uri, data_graph, entity_fqn_index
+    ) -> list[RelationObject]:
         # Collect the set of candidate fqn specifications (i.e. the columns used to fetch the
         # FQNs from the data row) for both sides of the relationship (subject, object)
         # These are expressed as lists containing string values that describe the original
@@ -632,9 +661,8 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
         return relation_list
 
 
-
 class PropertyObject:
-    def __init__(self, subject : NamedObject, property_value, relation_uri : str):
+    def __init__(self, subject: NamedObject, property_value, relation_uri: str):
         self.subject = subject
         self.property = property_value
         self.relation_uri = relation_uri
@@ -712,5 +740,5 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
         return relation_list
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}:{self._instance_name}/{self._literal__column}/{self._subject__column}>"
-
+        return f"<{self.__class__.__name__}:{self._instance_name}\
+            /{self._literal__column}/{self._subject__column}>"
