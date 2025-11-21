@@ -12,15 +12,15 @@ from rdflib.namespace import Namespace
 import kgraph.ontologies
 import kgraph.jschema
 
-# SERIALISATIONSCHEMA is the json-schema that validates serialisation
+# SCHEMAMAPPINGSCHEMA is the json-schema that validates schema mapping
 # configuration files
 with resources.as_file(
-    resources.files(kgraph.jschema) / os.path.normpath("serialisationschema.json")
-) as serialisation_schema_file:
-    with serialisation_schema_file.open(
+    resources.files(kgraph.jschema) / os.path.normpath("schemamappingschema.json")
+) as schema_mapping_schema_file:
+    with schema_mapping_schema_file.open(
         "r", encoding="utf-8", errors="strict"
-    ) as serialisation_schema:
-        SERIALISATIONSCHEMA = json.load(serialisation_schema)
+    ) as schema_mapping_schema:
+        SCHEMAMAPPINGSCHEMA = json.load(schema_mapping_schema)
 
 # KGMETA is the fixed namespace used by the kgraph suite of utilities
 # Here the namespace is defined, and the underlying ontology resource
