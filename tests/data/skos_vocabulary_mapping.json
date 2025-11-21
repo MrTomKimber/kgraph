@@ -1,0 +1,292 @@
+{
+    "$schema": "../../src/kgraph/jschema/serialisationschema.json",
+    "Namespaces": {
+        "DMCAR": "https://kgraph.foo/onto/kgdmcar#",
+        "KGMETA": "https://kgraph.foo/onto/kgmeta#",
+        "skos": "http://www.w3.org/2004/02/skos/core#"
+    },
+    "GlobalVariables": {
+        "RootNamespace" : "Vocabularies",
+        "RootNamespaceLabel" : "Vocabularies"
+    },
+    "NamedObjects": [
+        {
+            "TargetClass": "https://kgraph.foo/onto/kgmeta#Namespace",
+            "URIBase": "https://kgraph.foo/namespace#",
+            "Instances": [
+                {
+                    "InstanceName": "Rootnamespace",
+                    "SubjectTag": "RootNamespace",
+                    "ParentTag": null,
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+            "URIBase": "https://kgraph.foo/skos/schemes#",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptScheme",
+                    "SubjectTag": "ConceptScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": true
+                },
+                {
+                    "InstanceName": "RelatedConceptScheme",
+                    "SubjectTag": "RelatedScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "CloseMatchConceptScheme",
+                    "SubjectTag": "CloseMatchScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "ExactMatchConceptScheme",
+                    "SubjectTag": "ExactMatchScheme",
+                    "ParentTag": "RootNamespace",
+                    "Definition": false
+                }
+
+            ]
+        },
+        {
+            "TargetClass": "http://www.w3.org/2004/02/skos/core#Concept",
+            "URIBase": "https://kgraph.foo/skos/kgdmcar#",
+            "Instances": [
+                {
+                    "InstanceName": "Concept",
+                    "SubjectTag": "Concept",
+                    "ParentTag": "ConceptScheme",
+                    "Definition": true
+                },
+                {
+                    "InstanceName": "BroaderConcept",
+                    "SubjectTag": "Broader",
+                    "ParentTag": "ConceptScheme",
+                    "Definition": false,
+                    "EnableMultiValues": true
+                },
+                {
+                    "InstanceName": "NarrowerConcept",
+                    "SubjectTag": "Narrower",
+                    "ParentTag": "ConceptScheme",
+                    "Definition": false,
+                    "EnableMultiValues": true
+                },
+                {
+                    "InstanceName": "RelatedConcept",
+                    "SubjectTag": "Related",
+                    "ParentTag": "RelatedScheme",
+                    "Definition": false,
+                    "EnableMultiValues": true
+                },
+                {
+                    "InstanceName": "CloseMatchConcept",
+                    "SubjectTag": "CloseMatch",
+                    "ParentTag": "CloseMatchScheme",
+                    "Definition": false,
+                    "EnableMultiValues": true
+                },
+                {
+                    "InstanceName": "ExactMatchConcept",
+                    "SubjectTag": "ExactMatch",
+                    "ParentTag": "ExactMatchScheme",
+                    "Definition": false,
+                    "EnableMultiValues": true
+                }
+            ]
+        }
+    ],
+    "Relationships": [
+{
+            "Predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptIsInScheme",
+                    "SubjectTag": "Concept",
+                    "ObjectTag": "ConceptScheme"
+                },
+                {
+                    "InstanceName": "BroaderConceptIsInScheme",
+                    "SubjectTag": "Broader",
+                    "ObjectTag": "ConceptScheme"
+                },
+                                {
+                    "InstanceName": "NarrowerConceptIsInScheme",
+                    "SubjectTag": "Narrower",
+                    "ObjectTag": "ConceptScheme"
+                },
+                                {
+                    "InstanceName": "RelatedConceptIsInScheme",
+                    "SubjectTag": "RelatedConcept",
+                    "ObjectTag": "RelatedScheme"
+                },
+                                {
+                    "InstanceName": "CloseMatchConceptIsInScheme",
+                    "SubjectTag": "CloseMatch",
+                    "ObjectTag": "CloseMatchScheme"
+                },
+                                {
+                    "InstanceName": "ExactMatchConceptIsInScheme",
+                    "SubjectTag": "ExactMatch",
+                    "ObjectTag": "ExactMatchScheme"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#broader",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptIsBroaderThan",
+                    "SubjectTag": "Concept",
+                    "ObjectTag": "Broader", 
+                    "EnableMultiValues": true
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#narrower",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptIsNarrowerThan",
+                    "SubjectTag": "Concept",
+                    "ObjectTag": "Narrower", 
+                    "EnableMultiValues": true
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#related",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptIsRelatedTo",
+                    "SubjectTag": "Concept",
+                    "ObjectTag": "Related", 
+                    "EnableMultiValues": true
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#closeMatch",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptIsACloseMatchFor",
+                    "SubjectTag": "Concept",
+                    "ObjectTag": "CloseMatch", 
+                    "EnableMultiValues": true
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#exactMatch",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptIsAnExactMatchFor",
+                    "SubjectTag": "Concept",
+                    "ObjectTag": "ExactMatch", 
+                    "EnableMultiValues": true
+                }
+            ]
+        }
+    ],
+    "Properties": [
+        
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#notation",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptNotation",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "Notation"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#prefLabel",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptprefLabel",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "prefLabel"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+            "Instances": [
+                {
+                    "InstanceName": "RootNamespaceLabel",
+                    "SubjectTag": "RootNamespace",
+                    "LiteralTag": "RootNamespaceLabel"
+                },
+                {
+                    "InstanceName": "ConceptprefLabelToKGLabel",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "prefLabel"
+                },
+                {
+                    "InstanceName": "ConceptSchemeLabel",
+                    "SubjectTag": "ConceptScheme",
+                    "LiteralTag": "ConceptSchemeLabel"
+                }
+                
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#altLabel",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptaltLabel",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "altLabel", 
+                    "EnableMultiValues": true
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#hiddenLabel",
+            "Instances": [
+                {
+                    "InstanceName": "hiddenLabel",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "hiddenLabel"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#definition",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptDefinition",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "Definition"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2004/02/skos/core#example",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptExample",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "Example"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#seeAlso",
+            "Instances": [
+                {
+                    "InstanceName": "ConceptseeAlso",
+                    "SubjectTag": "Concept",
+                    "LiteralTag": "SeeAlso", 
+                    "EnableMultiValues": true
+                }
+            ]
+        }
+    ]
+}
