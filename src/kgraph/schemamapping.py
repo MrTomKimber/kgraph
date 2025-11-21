@@ -13,7 +13,7 @@ import pandas as pd
 
 
 # Local package imports
-from kgraph.declarations import RDFTriple, SERIALISATIONSCHEMA, KGMETA, KGMETA_G
+from kgraph.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGMETA, KGMETA_G
 
 
 def split_on_comma_respecting_quotes(some_string):
@@ -50,17 +50,17 @@ def collate_fqn_parents(fqn: str) -> list[str]:
     return parents
 
 
-class Serialisation:
-    schema = SERIALISATIONSCHEMA
+class SchemaMapping:
+    schema = SCHEMAMAPPINGSCHEMA
     # Assign the namespace "DATA" to be used for temporary in-memory raw data graph
     DATA = Namespace("http://data#")
 
-    def __init__(self, serialisation_config):
+    def __init__(self, SchemaMapping_config):
         """Read in a configuration file, validate it and generate a
-        well-populated Serialisation object"""
-        self.config = json.load(open(serialisation_config, "r"))
+        well-populated SchemaMapping object"""
+        self.config = json.load(open(SchemaMapping_config, "r"))
         try:
-            jsonschema.validate(self.config, schema=Serialisation.schema)
+            jsonschema.validate(self.config, schema=SchemaMapping.schema)
         except jsonschema.exceptions.ValidationError as err:
             print(err)
 
@@ -154,7 +154,7 @@ class Serialisation:
         defined_entities = set()
         entity_fqn_index = dict()
         for datarow in [
-            r[0] for r in raw_graph.triples((None, RDF.type, Serialisation.DATA["row"]))
+            r[0] for r in raw_graph.triples((None, RDF.type, SchemaMapping.DATA["row"]))
         ]:
             for spec in [
                 s
@@ -206,7 +206,7 @@ class Serialisation:
 
     def to_rdf_graph(self, dataframe) -> rdflibGraph:
         # Convert the dataframe into a raw graph where rows are "triplified" with
-        # minimal steer from the serialisation.
+        # minimal steer from the SchemaMapping.
         # This raw graph is expressed in the raw data namespace and consists of rows with
         # floating column(name) predicates linking to properties in the dataframe
         print(f"rdf_parse:start {datetime.now()}")
@@ -247,7 +247,7 @@ class Serialisation:
         # Once the entities are defined, next it's time to link them all via the various
         # relationship linkages
         for datarow in [
-            r[0] for r in raw_graph.triples((None, RDF.type, Serialisation.DATA["row"]))
+            r[0] for r in raw_graph.triples((None, RDF.type, SchemaMapping.DATA["row"]))
         ]:
             for s in [s for s in self.specifications.values()]:
                 if isinstance(s, RelationshipInstanceSpecification):
@@ -279,39 +279,39 @@ class Serialisation:
     def _rdflib_graph_from_dataframe(self, dataframe) -> rdflibGraph:
         """Reads in a dataframe and converts it into an anonymous graph"""
         g = rdflibGraph(bind_namespaces="rdflib")
-        g.bind("DATA", Serialisation.DATA)
-        g.add((Serialisation.DATA.row, RDF.type, OWL.Class))
-        g.add((Serialisation.DATA.row, RDFS.label, Literal("Row")))
+        g.bind("DATA", SchemaMapping.DATA)
+        g.add((SchemaMapping.DATA.row, RDF.type, OWL.Class))
+        g.add((SchemaMapping.DATA.row, RDFS.label, Literal("Row")))
 
         for c in dataframe.columns:
             url_c = urllib.parse.quote(c)
             g.add(
-                (Serialisation.DATA[f"column({url_c})"], RDF.type, OWL.DatatypeProperty)
+                (SchemaMapping.DATA[f"column({url_c})"], RDF.type, OWL.DatatypeProperty)
             )  # Define the column as a datatype property
             g.add(
-                (Serialisation.DATA[f"column({url_c})"], RDFS.label, Literal(c))
+                (SchemaMapping.DATA[f"column({url_c})"], RDFS.label, Literal(c))
             )  # Attach a simple label to the datatype property
             g.add(
                 (
-                    Serialisation.DATA.row,
-                    Serialisation.DATA.has_field,
-                    Serialisation.DATA[f"column({url_c})"],
+                    SchemaMapping.DATA.row,
+                    SchemaMapping.DATA.has_field,
+                    SchemaMapping.DATA[f"column({url_c})"],
                 )
             )
 
         for c in self.glob_vars.keys():
             url_c = urllib.parse.quote(c)
             g.add(
-                (Serialisation.DATA[f"column({url_c})"], RDF.type, OWL.DatatypeProperty)
+                (SchemaMapping.DATA[f"column({url_c})"], RDF.type, OWL.DatatypeProperty)
             )  # Define the column as a datatype property
             g.add(
-                (Serialisation.DATA[f"column({url_c})"], RDFS.label, Literal(c))
+                (SchemaMapping.DATA[f"column({url_c})"], RDFS.label, Literal(c))
             )  # Attach a simple label to the datatype property
             g.add(
                 (
-                    Serialisation.DATA.row,
-                    Serialisation.DATA.has_field,
-                    Serialisation.DATA[f"column({url_c})"],
+                    SchemaMapping.DATA.row,
+                    SchemaMapping.DATA.has_field,
+                    SchemaMapping.DATA[f"column({url_c})"],
                 )
             )
 
@@ -319,23 +319,23 @@ class Serialisation:
         for row_i, data in dataframe.replace(
             {np.nan: None, pd.NaT: None, pd.NA: None, "": None}
         ).iterrows():
-            row_url = Serialisation.DATA[uuid.uuid4().hex]
+            row_url = SchemaMapping.DATA[uuid.uuid4().hex]
             row_index = Literal(row_i)
-            g.add((row_url, RDF.type, Serialisation.DATA.row))
-            g.add((row_url, Serialisation.DATA.row_ident, row_index))
+            g.add((row_url, RDF.type, SchemaMapping.DATA.row))
+            g.add((row_url, SchemaMapping.DATA.row_ident, row_index))
 
             # Populate the contents of `GlobalVariables` as pseudo-columns associated with each
             # data row
             for c, v in self.glob_vars.items():
                 url_c = urllib.parse.quote(c)
-                p_url = Serialisation.DATA[f"column({url_c})"]
+                p_url = SchemaMapping.DATA[f"column({url_c})"]
                 o_literal = Literal(v)
                 g.add((row_url, p_url, o_literal))
 
             for c in dataframe.columns:
 
                 url_c = urllib.parse.quote(c)
-                p_url = Serialisation.DATA[f"column({url_c})"]
+                p_url = SchemaMapping.DATA[f"column({url_c})"]
 
                 if data[c] is not None:
                     # print(c, ":", data[c])
@@ -367,17 +367,17 @@ class Serialisation:
         return g
 
 
-class SerialisationInstanceSpecification:
+class SchemaMappingInstanceSpecification:
 
     def __init__(self, parent):
-        self.parent_serialisation = parent
+        self.parent_SchemaMapping = parent
         self.column_list = []
         self._multivalues = None
 
     @staticmethod
     def extract_valid_fqns(rowurl, data_graph, fetch_key):
         f_key = [f for f in fetch_key if f != "<root>"]
-        raw_fqn = SerialisationInstanceSpecification.get_keylist_from_datarow(
+        raw_fqn = SchemaMappingInstanceSpecification.get_keylist_from_datarow(
             rowurl, data_graph, f_key
         )
         # Each block of the fqn could contain multiple values - we need to build the collection
@@ -399,9 +399,9 @@ class SerialisationInstanceSpecification:
     def get_keylist_from_datarow(rowurl, data_graph, spec):
         fetched_values = []
         for fetch_key in spec:
-            # data_key = URIRef(Serialisation.DATA[f"column({fetch_key})"] )
+            # data_key = URIRef(SchemaMapping.DATA[f"column({fetch_key})"] )
             fetched_key_values = (
-                SerialisationInstanceSpecification.get_values_from_datarow(
+                SchemaMappingInstanceSpecification.get_values_from_datarow(
                     rowurl, data_graph, fetch_key
                 )
             )
@@ -411,7 +411,7 @@ class SerialisationInstanceSpecification:
     @staticmethod
     def get_values_from_datarow(rowurl, data_graph, key):
         # Given a row url and predicate key, return all the values that match
-        data_key = URIRef(Serialisation.DATA[f"column({key})"])
+        data_key = URIRef(SchemaMapping.DATA[f"column({key})"])
         key_values = [r[2] for r in data_graph.triples((rowurl, data_key, None))]
         return key_values
 
@@ -486,7 +486,7 @@ class NamedObject:
         )
 
 
-class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
+class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
     def __init__(self, parent, target_class, classbase, instance_d):
         """Extract the values hosted in the configuration and store as
         object properties"""
@@ -514,7 +514,7 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
         if isinstance(self, NamedObjectInstanceSpecification):
             # Needs parent column to determine naming_hierarchy - only works for NamedObjects
             self.naming_hierarchy_path = (
-                self.parent_serialisation._traverse_hierarchy_path(
+                self.parent_SchemaMapping._traverse_hierarchy_path(
                     self._subject__column
                 )
             )
@@ -537,16 +537,16 @@ class NamedObjectInstanceSpecification(SerialisationInstanceSpecification):
 
         type_uris = [URIRef(self.target_class)]
 
-        # fqn_parts = SerialisationInstanceSpecification.get_keylist_from_datarow(row_uri,
+        # fqn_parts = SchemaMappingInstanceSpecification.get_keylist_from_datarow(row_uri,
         # data_graph, self.naming_hierarchy_path)
         # fqn = ".".join([n[0].toPython() for n in fqn_parts[::-1] if n != []])
-        fqns = SerialisationInstanceSpecification.extract_valid_fqns(
+        fqns = SchemaMappingInstanceSpecification.extract_valid_fqns(
             row_uri, data_graph, self.naming_hierarchy_path
         )
         # print("fqns: ", fqns)
         # What instances exist that contain name values?
         # Let's use the final value from each fqn as a proxy for Name
-        # names = SerialisationInstanceSpecification.get_values_from_datarow(row_uri,
+        # names = SchemaMappingInstanceSpecification.get_values_from_datarow(row_uri,
         # data_graph, self._subject__column)
         namespace = self._classbase_uri
         object_list = []
@@ -590,7 +590,7 @@ class RelationObject:
         )
 
 
-class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
+class RelationshipInstanceSpecification(SchemaMappingInstanceSpecification):
     def __init__(self, parent, target_class, instance_d):
         """Extract the values hosted in the configuration and store as
         object properties"""
@@ -613,20 +613,20 @@ class RelationshipInstanceSpecification(SerialisationInstanceSpecification):
         # FQNs from the data row) for both sides of the relationship (subject, object)
         # These are expressed as lists containing string values that describe the original
         # column names
-        candidate_subject_spec = self.parent_serialisation._traverse_hierarchy_path(
+        candidate_subject_spec = self.parent_SchemaMapping._traverse_hierarchy_path(
             self._subject__column
         )
-        candidate_object_spec = self.parent_serialisation._traverse_hierarchy_path(
+        candidate_object_spec = self.parent_SchemaMapping._traverse_hierarchy_path(
             self._object__column
         )
 
         # Get the FQNs from the data row - but these can be tricky in that if no match for
         # the root of the FQN is found,
         # it still shows, but with element[0] being empty
-        subject_fqns = SerialisationInstanceSpecification.extract_valid_fqns(
+        subject_fqns = SchemaMappingInstanceSpecification.extract_valid_fqns(
             row_uri, data_graph, candidate_subject_spec
         )
-        object_fqns = SerialisationInstanceSpecification.extract_valid_fqns(
+        object_fqns = SchemaMappingInstanceSpecification.extract_valid_fqns(
             row_uri, data_graph, candidate_object_spec
         )
         subject_entities = []
@@ -684,7 +684,7 @@ class PropertyObject:
         return f"<Relation:{self.relation_uri}//<({self.subject.uri}-{self.property})>"
 
 
-class PropertyInstanceSpecification(SerialisationInstanceSpecification):
+class PropertyInstanceSpecification(SchemaMappingInstanceSpecification):
     def __init__(self, parent, target_class, instance_d):
         """Extract the values hosted in the configuration and store as
         object properties"""
@@ -700,14 +700,14 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
         self, row_uri, data_graph, entity_fqn_index
     ) -> list[PropertyObject]:
         # Get the subject fqn
-        candidate_subject_spec = self.parent_serialisation._traverse_hierarchy_path(
+        candidate_subject_spec = self.parent_SchemaMapping._traverse_hierarchy_path(
             self._subject__column
         )
 
         # Get the FQNs from the data row - but these can be tricky in that if no match for the
         # root of the FQN is found,
         # it still shows, but with element[0] being empty
-        subject_fqns = SerialisationInstanceSpecification.extract_valid_fqns(
+        subject_fqns = SchemaMappingInstanceSpecification.extract_valid_fqns(
             row_uri, data_graph, candidate_subject_spec
         )
         subject_entities = []
@@ -717,7 +717,7 @@ class PropertyInstanceSpecification(SerialisationInstanceSpecification):
 
         # Now extract the literal contents from the data row, which should *already* respect
         # earlier multi-values processing
-        literal_values = SerialisationInstanceSpecification.get_values_from_datarow(
+        literal_values = SchemaMappingInstanceSpecification.get_values_from_datarow(
             row_uri, data_graph, self._literal__column
         )
 

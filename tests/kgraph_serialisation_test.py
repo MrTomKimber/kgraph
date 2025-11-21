@@ -10,13 +10,13 @@ import pandas as pd
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import SKOS, RDF, RDFS
 from kgraph import declarations
-from kgraph import serialisation
+from kgraph import schemamapping
 from pyshacl import validate
 
 
 @pytest.fixture(scope='session')
-def serialisation_object() -> serialisation.Serialisation:
-    S = serialisation.Serialisation(os.path.join(current_dir, "data/skos_vocabulary_serialisation.json"))
+def schema_mapping_object() -> schemamapping.SchemaMapping:
+    S = schemamapping.SchemaMapping(os.path.join(current_dir, "data/skos_vocabulary_mapping.json"))
     return S
 
 @pytest.fixture(scope='session')
@@ -25,21 +25,21 @@ def raw_data_df() -> pd.DataFrame:
     return rd_df
 
 @pytest.fixture(scope='session')
-def serialised_graph(serialisation_object, raw_data_df) -> Graph:
-    g = serialisation_object.to_rdf_graph(raw_data_df)
+def serialised_graph(schema_mapping_object, raw_data_df) -> Graph:
+    g = schema_mapping_object.to_rdf_graph(raw_data_df)
     g.serialize(os.path.join(current_dir, "data/alphabet_graph.rdf"), format="xml")
     return g
 
 @pytest.fixture(scope='session')
 def shacl_graph() -> Graph:
     g = Graph()
-    g.parse(os.path.join(current_dir, "data/skos_vocabulary_serialisation.json"))
+    g.parse(os.path.join(current_dir, "data/skos_vocabulary_mapping.json"))
     return g
 
-def test_instantiate_serialisation_isdataframe(serialisation_object):
-    """Instantiate a serialisation object"""
-    S = serialisation_object
-    assert isinstance(S, serialisation.Serialisation)
+def test_instantiate_schema_mapping_isdataframe(schema_mapping_object):
+    """Instantiate a schema_mapping object"""
+    S = schema_mapping_object
+    assert isinstance(S, schemamapping.SchemaMapping)
 
 def test_serialise_data_isgraph(serialised_graph):
     g = serialised_graph
@@ -76,7 +76,7 @@ def test_serialised_concept_count(serialised_graph):
                                                 ]
                                                                                     ]
     
-def test_post_serialisation_shacl_validation(serialised_graph):
+def test_post_schema_mapping_shacl_validation(serialised_graph):
     ont = Graph()
     ont.parse(os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta.owl"))
     conforms, results_g, results_t = validate(
