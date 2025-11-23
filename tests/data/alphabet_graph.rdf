@@ -5,396 +5,396 @@
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
    xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 >
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#4a0b81687f1e4ecf913bb245eacc2359">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Apple</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.Test.TestAlphabetVocab.Apple</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#c7591ee22d92447580e9986694aa0e02"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#c7591ee22d92447580e9986694aa0e02"/>
-    <skos:prefLabel>Apple</skos:prefLabel>
-    <rdfs:label>Apple</rdfs:label>
-    <skos:definition>A duplicated definition which, if assigned to kgmeta:Description, ought to be identified as a validation error based on the max-count of definitions allowed for an individual named object. Does/should skos:definition (which this field is mapped to for the purposes of vocabulary mappings) replace kgmeta:Description in this case? There’s strong validation on the kgmeta-field, perhaps there should also be a similar constraint set for equivalent skos-predicates. We probably don’t want multiple definitions for the same term.</skos:definition>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#6a61862535cb4fb98475e6a1ccbaa8b8">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Mouse</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Mouse</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Mouse</skos:prefLabel>
-    <rdfs:label>Mouse</rdfs:label>
-    <skos:definition>A mouse is a small rodent of the genus Mus. Mice typically have pointed snouts, small rounded ears and a long scaly tail. They can be found in multiple environments across the world, including urban environments where they can be considered vermin.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Mouse</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <ns1:Name>TestAlphabetVocab</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/namespace#f599fdb5cd9147768ef9a35d97491950"/>
-    <rdfs:label>Test Alphabet Vocabulary</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#a3f91932321f447990f6191f0583da96">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Umbrella</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Umbrella</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#0d2abc65fcde41f89c0901656f0c6b53"/>
-    <skos:prefLabel>Umbrella</skos:prefLabel>
-    <rdfs:label>Umbrella</rdfs:label>
-    <skos:definition>An umbrella is a folding ribbed canopy supported by an often hand-held central pole designed to protect a person from the effects of the sun (in the case of a parasol) or rain.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Umbrella</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#99b483aea3a240bba2da3b815cf2754a">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Imagination</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Imagination</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Imagination</skos:prefLabel>
-    <rdfs:label>Imagination</rdfs:label>
-    <skos:definition>Imagination is a creative cognitive process in which theories and ideas can be generated, simulated and mentally experienced.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Imagination</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#72d578e4404746abb49ce46c7454f7c2">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Yak</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Yak</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Yak</skos:prefLabel>
-    <rdfs:label>Yak</rdfs:label>
-    <skos:definition>A yak is a bulky framed, long-haired animal belonging to the genus Bos and are found throughout north Asia. They are commonly kept as cattle but can also be found in the wild.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Yak</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#9f2bbe3a080440be86a6284ee6440a7e">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Nest</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Nest</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6732a6b00a164463a0ffc7507db01a6d"/>
-    <skos:prefLabel>Nest</skos:prefLabel>
-    <rdfs:label>Nest</rdfs:label>
-    <skos:definition>A nest is a structure constructed by an animal to hold its eggs or young. Nests are typically attributed to birds, but members of all classes of vertebrates and some invertebrates construct nests.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Nest</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Animal</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Animal</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Animal</skos:prefLabel>
-    <rdfs:label>Animal</rdfs:label>
-    <skos:definition>A multicellular, eukaryotic organism. Animals are different from other living things in that they cannot produce their own food, and tend to have to ingest organic material to survive.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Animal</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#80db852046b741c9968dfd3916e4d5bc">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Jungle</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Jungle</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Jungle</skos:prefLabel>
-    <rdfs:label>Jungle</rdfs:label>
-    <skos:definition>A jungle is a biome consisting of dense forest and tangled vegetation found in tropical climates that feature warm and humid conditions.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Jungle</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#fbe15922cdea483384244233ef363d78">
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#49a20df44be441459bc9a180e0021261">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <ns1:Name>Village</ns1:Name>
     <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Village</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
     <skos:prefLabel>Village</skos:prefLabel>
     <rdfs:label>Village</rdfs:label>
     <skos:definition>A village is a human residential settlement typically consisting of a number of dwellings situated relatively close to one another to form a community.</skos:definition>
     <rdf:seeAlso>https://en.wikipedia.org/wiki/Village</rdf:seeAlso>
   </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#4e2454f4445e45ba80e4401d43fea64f">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Zebra</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Zebra</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Zebra</skos:prefLabel>
-    <rdfs:label>Zebra</rdfs:label>
-    <skos:definition>A zebra is a distinctlvely black-and-white striped animal found in the wild across eastern and southern regions of Africa and belong to the genus Equus. Unlike other animals of this genus, they have never been successfully domesticated.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Zebra</rdf:seeAlso>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <ns1:Name>TestAlphabetVocab</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/namespace#b6aee7061a6a4483bfde6b7ea9f38a87"/>
+    <rdfs:label>Test Alphabet Vocabulary</rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#5856d86c23694cc982f314ca8d9ab9ca">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Goat</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Goat</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Goat</skos:prefLabel>
-    <rdfs:label>Goat</rdfs:label>
-    <skos:definition>A goat is a medium-sized mammal of the family Bovidae. They are ruminants and are often kept as livestock but can also be found in the wild.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Goat</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#6870de0740f043fbbb737158915cb189">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Monarch</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Monarch</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Monarch</skos:prefLabel>
-    <rdfs:label>Monarch</rdfs:label>
-    <skos:definition>A leadership role assigned to a person who rules over a kingdom or realm.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Monarch</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#5bd0e7327a0f43609314a694e43bd363">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Sun</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Sun</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Sun</skos:prefLabel>
-    <rdfs:label>Sun</rdfs:label>
-    <skos:definition>The Sun is the star at the centre of the Solar System that is the main source of light and energy for all life on Planet Earth. As the Earth spins, the sun can be seen to rise over the horizon, traverse across the sky in the day-time before setting at the end of the day below the horizon line. </skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Sun</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#d057aeb54b204118b0baa42e3f0d11f3">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Parrot</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Parrot</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Parrot</skos:prefLabel>
-    <rdfs:label>Parrot</rdfs:label>
-    <skos:definition>A parrot is a bird with a strong curved beak, upright stance and clawed feet. They are broadly classified into four familes and are found in the wild, and sometimes as pets. They are among the most intelligent of birds and typically eat seeds, nuts or fruit.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Parrot</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#31e3dcbcf4bd4694bc96111a25609a2a">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>House</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.House</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6732a6b00a164463a0ffc7507db01a6d"/>
-    <skos:prefLabel>House</skos:prefLabel>
-    <rdfs:label>House</rdfs:label>
-    <skos:definition>A house is a residential building typically split into different functional rooms. Houses can be built from a variety of materials and traditional houses will often reflect materials that are available locally.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/House</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#22c7f64d11e349b89aea9d82b32d46c6">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Rain</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Rain</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Rain</skos:prefLabel>
-    <rdfs:label>Rain</rdfs:label>
-    <skos:definition>Rain is the falling from the sky of water droplets that have condensed from atmospheric water vapour. Rain is a major component of the water cycle and is responsible for depositing most of the fresh-water on earth.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Rain</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#6732a6b00a164463a0ffc7507db01a6d">
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#58949ce40f0f46668049eccf0f9826c5">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <ns1:Name>Structure</ns1:Name>
     <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Structure</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
     <skos:prefLabel>Structure</skos:prefLabel>
     <rdfs:label>Structure</rdfs:label>
     <skos:definition>A physical arrangement of components that conforms to a template or pattern. Can be the result of natural or artificial processes.</skos:definition>
     <rdf:seeAlso>https://en.wikipedia.org/wiki/Structure</rdf:seeAlso>
   </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#323479bf584f4f71826b4e0cb6372117">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Apple</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Apple</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6b8c7d292d374874b5a972dd3499d8ae"/>
-    <skos:prefLabel>Apple</skos:prefLabel>
-    <rdfs:label>Apple</rdfs:label>
-    <skos:definition>An apple is a round, edible fruit borne by deciduous trees of the genus Malus.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Apple</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#6b8c7d292d374874b5a972dd3499d8ae">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Fruit</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Fruit</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Fruit</skos:prefLabel>
-    <rdfs:label>Fruit</rdfs:label>
-    <skos:definition>An often edible component of a plant or vegetable that hosts seeds.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Fruit</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#774e5e06859f451585659516f5dcd826">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Cat</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Cat</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Cat</skos:prefLabel>
-    <rdfs:label>Cat</rdfs:label>
-    <skos:definition>A cat is a small domesticated species of the family Felidae. Cats are kept as pets and are valued for their companionship and ability to catch vermin.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Cat</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#4fd18e3ef2de4765a210c065cfca8177">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Train</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Train</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#0d2abc65fcde41f89c0901656f0c6b53"/>
-    <skos:prefLabel>Train</skos:prefLabel>
-    <rdfs:label>Train</rdfs:label>
-    <skos:definition>A train typically describes a series of connected vehicles that run along a railway track. They can be used to transport people or freight. A train is typically pulled by a locomotive (engine) though some trains might have their propulsion distributed acrooss carriages and powered by an external power-source. </skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Train</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#d7abfc2d8b5649a3b71bf3337b142b3b">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Fox</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Fox</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Fox</skos:prefLabel>
-    <rdfs:label>Fox</rdfs:label>
-    <skos:definition>A fox is a small-to-medium-sized omnivorous mammal belonging to the genus Vulpes. They are known for their cunning and adaptability and can be found in both rural and urban environments. </skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Fox</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#14f6b85fa7634df0be2f94edbc186dee">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Wheel</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Wheel</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#0d2abc65fcde41f89c0901656f0c6b53"/>
-    <skos:prefLabel>Wheel</skos:prefLabel>
-    <rdfs:label>Wheel</rdfs:label>
-    <skos:definition>A wheel is a rotating circular component intended to turn around an axle. Wheels are typically found in transportation as a means to smoothly allow the application of a force to translate into linear motion. </skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Wheel</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#61530936176c4a9b9d3e6fa9efdfd666">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>King</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.King</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6870de0740f043fbbb737158915cb189"/>
-    <skos:related rdf:resource="https://kgraph.foo/skos/kgdmcar#93f6b8be484649c29c5e7e765015898d"/>
-    <skos:prefLabel>King</skos:prefLabel>
-    <rdfs:label>King</rdfs:label>
-    <skos:definition>A King is a royal title given to a male monarch who rules over a nation. A realm or nation over which a monarch reigns is called a Kingdom.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/King</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#b0f3d1d57b534bc4816da55076978bd7">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Elephant</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Elephant</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Elephant</skos:prefLabel>
-    <rdfs:label>Elephant</rdfs:label>
-    <skos:definition>An elephant is a large land animal of the family Loxodonta that features a distinctive proboscis called a trunk, large ears and often tusks. Elephants tend to live in the wild, but can be domesticated in some cultures.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Elephant</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#a8df93a1e4594cae9d379398168a08f9">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Dog</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Dog</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Dog</skos:prefLabel>
-    <rdfs:label>Dog</rdfs:label>
-    <skos:definition>A dog is a domesticated animal of the family Canis. Dogs are valued for their companionship, but are often employed in specialised roles to assist humans in multiple tasks.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Dog</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#0d2abc65fcde41f89c0901656f0c6b53">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Artifact</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Artifact</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:prefLabel>Artifact</skos:prefLabel>
-    <rdfs:label>Artifact</rdfs:label>
-    <skos:definition>An object or thing created as the result of human craftmanship.</skos:definition>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#93f6b8be484649c29c5e7e765015898d">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Queen</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Queen</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6870de0740f043fbbb737158915cb189"/>
-    <skos:related rdf:resource="https://kgraph.foo/skos/kgdmcar#61530936176c4a9b9d3e6fa9efdfd666"/>
-    <skos:prefLabel>Queen</skos:prefLabel>
-    <rdfs:label>Queen</rdfs:label>
-    <skos:definition>A queen is a female monarch, equivalent in rank, title and position to a King. She will reign over a realm known as a kingdom.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Queen_regnant</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#ba1742969aa644d98c292c8ce2827ee2">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Banana</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Banana</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6b8c7d292d374874b5a972dd3499d8ae"/>
-    <skos:prefLabel>Banana</skos:prefLabel>
-    <rdfs:label>Banana</rdfs:label>
-    <skos:definition>A banana is an elongated, edible fruit (botanically a berry) of herbaceous plants of the genus Musa.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Banana</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/schemes#c7591ee22d92447580e9986694aa0e02">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
-    <ns1:Name>TestAlphabetVocab</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.Test.TestAlphabetVocab</ns1:FullyQualifiedName>
-    <rdfs:label>Test Alphabet Vocabulary</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#628306b307f84920a2b49efd6de0717a">
-    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-    <ns1:Name>Octopus</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Octopus</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#fedeb595ae4d4131a7da08df0c509036"/>
-    <skos:prefLabel>Octopus</skos:prefLabel>
-    <rdfs:label>Octopus</rdfs:label>
-    <skos:definition>An octopus is a soft-bodied, eight-limbed mollusc of the class Cephalopod. They live in the ocean and are known for their intelligence, and in some species have the ability to camoflage and expell ink when threatened.</skos:definition>
-    <rdf:seeAlso>https://en.wikipedia.org/wiki/Octopus</rdf:seeAlso>
-  </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#d2801313e2604f0d9177bce45a9e15d4">
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#19f2c1672fa94cfb968183d052058eeb">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <ns1:Name>Xylophone</ns1:Name>
     <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Xylophone</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#0d2abc65fcde41f89c0901656f0c6b53"/>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#37b30ab13d3142a7935548c1ac5f13c3"/>
     <skos:prefLabel>Xylophone</skos:prefLabel>
     <rdfs:label>Xylophone</rdfs:label>
     <skos:definition>A xylophone is a musical instrument consisting of wooden bars which when struck by mallets emit sounds tuned to different pitches. The word comes from ancient Greek xulon (meaning wood) and phone (sound or voice).</skos:definition>
     <rdf:seeAlso>https://en.wikipedia.org/wiki/Xylophone</rdf:seeAlso>
   </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#61d701a412114a6bae91fc5326c8b7d0">
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#50276096920a4ed788bf5695be0baa4c">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Rain</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Rain</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Rain</skos:prefLabel>
+    <rdfs:label>Rain</rdfs:label>
+    <skos:definition>Rain is the falling from the sky of water droplets that have condensed from atmospheric water vapour. Rain is a major component of the water cycle and is responsible for depositing most of the fresh-water on earth.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Rain</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#ee243aff07d84b1ba2f68b23ffa36824">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Queen</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Queen</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#06d8db77220f46679bebcb6ec509465b"/>
+    <skos:related rdf:resource="https://kgraph.foo/skos/kgdmcar#33183f5f60dd46cebcc879beb10cc7bc"/>
+    <skos:prefLabel>Queen</skos:prefLabel>
+    <rdfs:label>Queen</rdfs:label>
+    <skos:definition>A queen is a female monarch, equivalent in rank, title and position to a King. She will reign over a realm known as a kingdom.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Queen_regnant</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#1b9ce82f7ed64984992597b6ad5b14b1">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Train</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Train</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#37b30ab13d3142a7935548c1ac5f13c3"/>
+    <skos:prefLabel>Train</skos:prefLabel>
+    <rdfs:label>Train</rdfs:label>
+    <skos:definition>A train typically describes a series of connected vehicles that run along a railway track. They can be used to transport people or freight. A train is typically pulled by a locomotive (engine) though some trains might have their propulsion distributed acrooss carriages and powered by an external power-source. </skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Train</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Animal</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Animal</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Animal</skos:prefLabel>
+    <rdfs:label>Animal</rdfs:label>
+    <skos:definition>A multicellular, eukaryotic organism. Animals are different from other living things in that they cannot produce their own food, and tend to have to ingest organic material to survive.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Animal</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#53ea1ea693b2417c99396c645c7b089f">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Goat</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Goat</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Goat</skos:prefLabel>
+    <rdfs:label>Goat</rdfs:label>
+    <skos:definition>A goat is a medium-sized mammal of the family Bovidae. They are ruminants and are often kept as livestock but can also be found in the wild.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Goat</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#1c06f6655d4a43488b65ec72b7772531">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Cat</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Cat</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Cat</skos:prefLabel>
+    <rdfs:label>Cat</rdfs:label>
+    <skos:definition>A cat is a small domesticated species of the family Felidae. Cats are kept as pets and are valued for their companionship and ability to catch vermin.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Cat</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#2e8d002ca60843bf965af6815d7c9ad5">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Mouse</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Mouse</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Mouse</skos:prefLabel>
+    <rdfs:label>Mouse</rdfs:label>
+    <skos:definition>A mouse is a small rodent of the genus Mus. Mice typically have pointed snouts, small rounded ears and a long scaly tail. They can be found in multiple environments across the world, including urban environments where they can be considered vermin.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Mouse</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/namespace#b6aee7061a6a4483bfde6b7ea9f38a87">
+    <rdf:type rdf:resource="https://kgraph.foo/onto/kgmeta#Namespace"/>
+    <ns1:Name>Vocabularies</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies</ns1:FullyQualifiedName>
+    <rdfs:label>Vocabularies</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#2868e6d07b2548a6bdfafd6373686f2a">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Fruit</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Fruit</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Fruit</skos:prefLabel>
+    <rdfs:label>Fruit</rdfs:label>
+    <skos:definition>An often edible component of a plant or vegetable that hosts seeds.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Fruit</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#306c1592d466466b86e7c243bf4419e7">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Yak</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Yak</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Yak</skos:prefLabel>
+    <rdfs:label>Yak</rdfs:label>
+    <skos:definition>A yak is a bulky framed, long-haired animal belonging to the genus Bos and are found throughout north Asia. They are commonly kept as cattle but can also be found in the wild.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Yak</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#33183f5f60dd46cebcc879beb10cc7bc">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>King</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.King</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#06d8db77220f46679bebcb6ec509465b"/>
+    <skos:related rdf:resource="https://kgraph.foo/skos/kgdmcar#ee243aff07d84b1ba2f68b23ffa36824"/>
+    <skos:prefLabel>King</skos:prefLabel>
+    <rdfs:label>King</rdfs:label>
+    <skos:definition>A King is a royal title given to a male monarch who rules over a nation. A realm or nation over which a monarch reigns is called a Kingdom.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/King</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#15e7850ff781406a8a8c2cf11bd1eba4">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Sun</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Sun</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Sun</skos:prefLabel>
+    <rdfs:label>Sun</rdfs:label>
+    <skos:definition>The Sun is the star at the centre of the Solar System that is the main source of light and energy for all life on Planet Earth. As the Earth spins, the sun can be seen to rise over the horizon, traverse across the sky in the day-time before setting at the end of the day below the horizon line. </skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Sun</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#4733039320454484996ac3d059355a8a">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Octopus</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Octopus</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Octopus</skos:prefLabel>
+    <rdfs:label>Octopus</rdfs:label>
+    <skos:definition>An octopus is a soft-bodied, eight-limbed mollusc of the class Cephalopod. They live in the ocean and are known for their intelligence, and in some species have the ability to camoflage and expell ink when threatened.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Octopus</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#8d5d2e34bc5a4651823dad569520ea09">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Zebra</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Zebra</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Zebra</skos:prefLabel>
+    <rdfs:label>Zebra</rdfs:label>
+    <skos:definition>A zebra is a distinctlvely black-and-white striped animal found in the wild across eastern and southern regions of Africa and belong to the genus Equus. Unlike other animals of this genus, they have never been successfully domesticated.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Zebra</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#3f58f4008e084b78906799f5dc472bc5">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Nest</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Nest</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#58949ce40f0f46668049eccf0f9826c5"/>
+    <skos:prefLabel>Nest</skos:prefLabel>
+    <rdfs:label>Nest</rdfs:label>
+    <skos:definition>A nest is a structure constructed by an animal to hold its eggs or young. Nests are typically attributed to birds, but members of all classes of vertebrates and some invertebrates construct nests.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Nest</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#37b30ab13d3142a7935548c1ac5f13c3">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Artifact</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Artifact</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Artifact</skos:prefLabel>
+    <rdfs:label>Artifact</rdfs:label>
+    <skos:definition>An object or thing created as the result of human craftmanship.</skos:definition>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#c8c9117de4684dac8dc9925b5c31fb5b">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Fox</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Fox</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Fox</skos:prefLabel>
+    <rdfs:label>Fox</rdfs:label>
+    <skos:definition>A fox is a small-to-medium-sized omnivorous mammal belonging to the genus Vulpes. They are known for their cunning and adaptability and can be found in both rural and urban environments. </skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Fox</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#52067038c97b4510ad39da2905ba5370">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Dog</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Dog</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Dog</skos:prefLabel>
+    <rdfs:label>Dog</rdfs:label>
+    <skos:definition>A dog is a domesticated animal of the family Canis. Dogs are valued for their companionship, but are often employed in specialised roles to assist humans in multiple tasks.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Dog</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#48a4cbfbab184bd28be5145de94cbd68">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Banana</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Banana</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#2868e6d07b2548a6bdfafd6373686f2a"/>
+    <skos:prefLabel>Banana</skos:prefLabel>
+    <rdfs:label>Banana</rdfs:label>
+    <skos:definition>A banana is an elongated, edible fruit (botanically a berry) of herbaceous plants of the genus Musa.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Banana</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#cba0771999ce4b5d8613be8956555152">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Apple</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.Test.TestAlphabetVocab.Apple</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#0946580a30a64a8c8f74eec459d2874e"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#0946580a30a64a8c8f74eec459d2874e"/>
+    <skos:prefLabel>Apple</skos:prefLabel>
+    <rdfs:label>Apple</rdfs:label>
+    <skos:definition>A duplicated definition which, if assigned to kgmeta:Description, ought to be identified as a validation error based on the max-count of definitions allowed for an individual named object. Does/should skos:definition (which this field is mapped to for the purposes of vocabulary mappings) replace kgmeta:Description in this case? There’s strong validation on the kgmeta-field, perhaps there should also be a similar constraint set for equivalent skos-predicates. We probably don’t want multiple definitions for the same term.</skos:definition>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#6b6eec58a67e485cb2ee642801e792e3">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Wheel</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Wheel</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#37b30ab13d3142a7935548c1ac5f13c3"/>
+    <skos:prefLabel>Wheel</skos:prefLabel>
+    <rdfs:label>Wheel</rdfs:label>
+    <skos:definition>A wheel is a rotating circular component intended to turn around an axle. Wheels are typically found in transportation as a means to smoothly allow the application of a force to translate into linear motion. </skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Wheel</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#5f066c83d09e4ac9aa8b69be16d3bbfd">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Parrot</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Parrot</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Parrot</skos:prefLabel>
+    <rdfs:label>Parrot</rdfs:label>
+    <skos:definition>A parrot is a bird with a strong curved beak, upright stance and clawed feet. They are broadly classified into four familes and are found in the wild, and sometimes as pets. They are among the most intelligent of birds and typically eat seeds, nuts or fruit.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Parrot</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#3a3e1beafeac4f2eb548717952ff14f0">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Jungle</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Jungle</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Jungle</skos:prefLabel>
+    <rdfs:label>Jungle</rdfs:label>
+    <skos:definition>A jungle is a biome consisting of dense forest and tangled vegetation found in tropical climates that feature warm and humid conditions.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Jungle</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#2923c4549de24a06a1277e5a7fa4636e">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>House</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.House</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#58949ce40f0f46668049eccf0f9826c5"/>
+    <skos:prefLabel>House</skos:prefLabel>
+    <rdfs:label>House</rdfs:label>
+    <skos:definition>A house is a residential building typically split into different functional rooms. Houses can be built from a variety of materials and traditional houses will often reflect materials that are available locally.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/House</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#c6f5f79a66b94814baa985466ccac238">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Umbrella</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Umbrella</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#37b30ab13d3142a7935548c1ac5f13c3"/>
+    <skos:prefLabel>Umbrella</skos:prefLabel>
+    <rdfs:label>Umbrella</rdfs:label>
+    <skos:definition>An umbrella is a folding ribbed canopy supported by an often hand-held central pole designed to protect a person from the effects of the sun (in the case of a parasol) or rain.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Umbrella</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#06d8db77220f46679bebcb6ec509465b">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Monarch</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Monarch</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Monarch</skos:prefLabel>
+    <rdfs:label>Monarch</rdfs:label>
+    <skos:definition>A leadership role assigned to a person who rules over a kingdom or realm.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Monarch</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#3d1118a4ad084df0952da6d086ac9db9">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Elephant</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Elephant</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#e79ad2350af94f748a385e5e075cbdd8"/>
+    <skos:prefLabel>Elephant</skos:prefLabel>
+    <rdfs:label>Elephant</rdfs:label>
+    <skos:definition>An elephant is a large land animal of the family Loxodonta that features a distinctive proboscis called a trunk, large ears and often tusks. Elephants tend to live in the wild, but can be domesticated in some cultures.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Elephant</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#f205a011c55b49a58ce919868ea1257d">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Apple</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Apple</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#2868e6d07b2548a6bdfafd6373686f2a"/>
+    <skos:prefLabel>Apple</skos:prefLabel>
+    <rdfs:label>Apple</rdfs:label>
+    <skos:definition>An apple is a round, edible fruit borne by deciduous trees of the genus Malus.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Apple</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#73650c7e85d34a7ebd5b86d79114eab1">
     <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
     <ns1:Name>Lemon</ns1:Name>
     <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Lemon</ns1:FullyQualifiedName>
-    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#ccfbb1043e1d4f8e92afbcf0454fab0c"/>
-    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#6b8c7d292d374874b5a972dd3499d8ae"/>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:narrower rdf:resource="https://kgraph.foo/skos/kgdmcar#2868e6d07b2548a6bdfafd6373686f2a"/>
     <skos:prefLabel>Lemon</skos:prefLabel>
     <rdfs:label>Lemon</rdfs:label>
     <skos:definition>A lemon is the pointed oval yellow fruit of small evergreen trees of the genus Citrus.</skos:definition>
     <rdf:seeAlso>https://en.wikipedia.org/wiki/Lemon</rdf:seeAlso>
   </rdf:Description>
-  <rdf:Description rdf:about="https://kgraph.foo/namespace#f599fdb5cd9147768ef9a35d97491950">
-    <rdf:type rdf:resource="https://kgraph.foo/onto/kgmeta#Namespace"/>
-    <ns1:Name>Vocabularies</ns1:Name>
-    <ns1:FullyQualifiedName>Vocabularies</ns1:FullyQualifiedName>
-    <rdfs:label>Vocabularies</rdfs:label>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/kgdmcar#4d9cbb1669624e4db38f4024cd0abb8c">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+    <ns1:Name>Imagination</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.TestAlphabetVocab.Imagination</ns1:FullyQualifiedName>
+    <ns1:isScopedWithin rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:inScheme rdf:resource="https://kgraph.foo/skos/schemes#14469987be024cbdb027829196934a65"/>
+    <skos:prefLabel>Imagination</skos:prefLabel>
+    <rdfs:label>Imagination</rdfs:label>
+    <skos:definition>Imagination is a creative cognitive process in which theories and ideas can be generated, simulated and mentally experienced.</skos:definition>
+    <rdf:seeAlso>https://en.wikipedia.org/wiki/Imagination</rdf:seeAlso>
+  </rdf:Description>
+  <rdf:Description rdf:about="https://kgraph.foo/skos/schemes#0946580a30a64a8c8f74eec459d2874e">
+    <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#ConceptScheme"/>
+    <ns1:Name>TestAlphabetVocab</ns1:Name>
+    <ns1:FullyQualifiedName>Vocabularies.Test.TestAlphabetVocab</ns1:FullyQualifiedName>
+    <rdfs:label>Test Alphabet Vocabulary</rdfs:label>
   </rdf:Description>
 </rdf:RDF>

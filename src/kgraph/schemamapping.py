@@ -116,7 +116,7 @@ class SchemaMapping:
         for iname, instance_object in self.specifications.items():
             if isinstance(instance_object, NamedObjectInstanceSpecification):
                 instance_object.populate_naming_hierarchy_path()
-            referenced_columns.extend(instance_object.column_list)
+            referenced_columns.extend([c for c in instance_object.column_list if c != '<root>'])
 
         self.referenced_columns = list(set(referenced_columns))
         multivalue_columns = []
@@ -228,8 +228,8 @@ class SchemaMapping:
             p for p in raw_fqn_parents if p not in self.entity_fqn_index.keys()
         ]
         print(
-            f"Warning - the following FullyQualifiedNames are inferred \
-                but not directly referenced in this file: {nameless_parents}"
+            f"Warning - the following FullyQualifiedNames are inferred " +
+            f"but not directly referenced in this file: {nameless_parents}"
         )
 
         for fqn, o in self.entity_fqn_index.items():
@@ -240,8 +240,8 @@ class SchemaMapping:
                 triple_generating_objects.extend([scope_r])
             else:
                 print(
-                    f"Warning, object {fqn} unable to connect to its \
-                        parent {o.parent_fqn} - doesn't exist in file"
+                    f"Warning, object {fqn} unable to connect to its " +
+                    f"parent {o.parent_fqn} - doesn't exist in file"
                 )
 
         # Once the entities are defined, next it's time to link them all via the various

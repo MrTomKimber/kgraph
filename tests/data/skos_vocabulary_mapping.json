@@ -122,7 +122,7 @@
                 },
                                 {
                     "InstanceName": "RelatedConceptIsInScheme",
-                    "SubjectTag": "RelatedConcept",
+                    "SubjectTag": "Related",
                     "ObjectTag": "RelatedScheme"
                 },
                                 {
