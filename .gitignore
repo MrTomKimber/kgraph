@@ -3,4 +3,5 @@ ide/
 ontologies/catalog-v001.xml
 tests/.pytest_cache/
 .coverage
-:memory
+.~lock.*.xlsx#
+

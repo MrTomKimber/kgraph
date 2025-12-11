@@ -14,6 +14,7 @@ from pyshacl import validate
 from kgraph import declarations
 from kgraph import schemamapping
 from kgraph import kgpipeline
+from kgraph import rdfexplorer
 
 
 @pytest.fixture(scope='session')

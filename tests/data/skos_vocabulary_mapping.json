@@ -2,6 +2,8 @@
     "$schema": "../../src/kgraph/jschema/serialisationschema.json",
     "Namespaces": {
         "DMCAR": "https://kgraph.foo/onto/kgdmcar#",
+        "vocg" : "https://kgraph.foo/skos/individuals#",
+        "nsdef" : "https://kgraph.foo/namespace#",
         "KGMETA": "https://kgraph.foo/onto/kgmeta#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
@@ -24,7 +26,7 @@
         },
         {
             "TargetClass": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
-            "URIBase": "https://kgraph.foo/skos/schemes#",
+            "URIBase": "https://kgraph.foo/skos/individuals#",
             "Instances": [
                 {
                     "InstanceName": "ConceptScheme",
@@ -55,7 +57,7 @@
         },
         {
             "TargetClass": "http://www.w3.org/2004/02/skos/core#Concept",
-            "URIBase": "https://kgraph.foo/skos/kgdmcar#",
+            "URIBase": "https://kgraph.foo/skos/individuals#",
             "Instances": [
                 {
                     "InstanceName": "Concept",

@@ -5,7 +5,7 @@ from enum import Enum, StrEnum
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
-
+import re
 from html import escape
 
 from kgraph.declarations import (
@@ -67,6 +67,7 @@ class GraphLiteralData(GraphData):
     subject: Literal
     value: object
     subject_types: list
+    is_possible_url: bool
 
 
 @dataclass
@@ -78,7 +79,11 @@ class GraphEntityData(GraphData):
     subject_types: list[URIRef]
 
 
-class GraphEntity(object):
+class GraphEntity:
+
+    __find_url_regex = re.compile(
+        r"^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$"
+    )
 
     __default_technical_label_prefs = [
         KGMETA.FullyQualifiedName,
@@ -113,7 +118,7 @@ class GraphEntity(object):
         if entity_store is not None:
             self.entity_store = entity_store
         else:
-            self.entity_store = dict()
+            self.entity_store = {}
 
         if isinstance(uri, URIRef):
             self.uri = uri
@@ -127,6 +132,8 @@ class GraphEntity(object):
             self._setup_literal()
 
         self.got_neighbours = False
+        self.outgoing_linked_neighbours = []
+        self.incoming_linked_neighbours = []
 
     def get_outgoing_linked_entity_data(
         self,
@@ -149,7 +156,7 @@ class GraphEntity(object):
             pass
 
         link_pointers = {o for _, olist in link_paths for o in olist}
-        link_objects_dict = dict()
+        link_objects_dict = {}
 
         for candidate_object in link_pointers:
             if candidate_object in self.entity_store.keys():
@@ -177,17 +184,19 @@ class GraphEntity(object):
 
         # Identify what objects are at the other end of the links
         if self.type == "object":
-            object = self.uri
+            obj = self.uri
         elif self.type == "literal":
-            object = self.literal
+            obj = self.literal
+        else:
+            raise TypeError("Object is of type: {self.type}")
 
         for p in predicate_list:
             link_paths.append(
-                (p, list(self.graph.subjects(object=object, predicate=p, unique=True)))
+                (p, list(self.graph.subjects(object=obj, predicate=p, unique=True)))
             )
 
         link_pointers = set([s for _, slist in link_paths for s in slist])
-        link_objects_dict = dict()
+        link_objects_dict = {}
 
         for candidate_object in link_pointers:
             if candidate_object in self.entity_store.keys():
@@ -210,6 +219,15 @@ class GraphEntity(object):
         """Where the entity has been identified as being a Literal,
         capture appropriate dataclass values"""
         value = self.literal.toPython()
+
+        url_match = False
+        if isinstance(value, str):
+            url_match = GraphEntity.__find_url_regex.match(escape(value.strip()))
+            if url_match is not None:
+                url_match = True
+            else:
+                url_match = False
+
         if self.literal.datatype is None:
             types = [
                 PYTHON2XSDDATATYPEMAPPING.get(
@@ -243,6 +261,7 @@ class GraphEntity(object):
             outgoing_predicate_labels=[],
             incoming_predicates=incoming_predicates,
             incoming_predicate_labels=incoming_predicate_labels,
+            is_possible_url=url_match,
         )
 
     def _setup_uriref(self):
@@ -303,7 +322,7 @@ class GraphEntity(object):
 
     def get_neighbours(self):
         """Populate the incoming and outgoing linked neighbours with
-        tuples consisting of (<predicate>, <object>), while updating 
+        tuples consisting of (<predicate>, <object>), while updating
         the underlying entity_store to contain all entities extracted
         from the graph in the process"""
 
@@ -347,9 +366,9 @@ class GraphEntity(object):
             [p for p in self.graph.predicates(subject=subject, object=None)]
         )  # pyright: ignore[reportReturnType]
 
-    def _get_object_predicates(self, object: Identifier) -> set[URIRef]:
+    def _get_object_predicates(self, obj: Identifier) -> set[URIRef]:
         return set(
-            [p for p in self.graph.predicates(subject=None, object=object)]
+            [p for p in self.graph.predicates(subject=None, object=obj)]
         )  # pyright: ignore[reportReturnType]
 
     def _get_subject_human_label(self, subject: URIRef) -> str:
@@ -372,6 +391,17 @@ class GraphEntity(object):
         types = set()
         for t in self.graph.objects(subject=subject, predicate=RDF.type):
             types.add(t)
+
+        if len(types) == 0:
+            if (
+                len(
+                    list(
+                        self.graph.subjects(predicate=RDF.type, object=self.identifier)
+                    )
+                )
+                > 0
+            ):
+                types.add(RDFS.Class)
         return types
 
     def _get_objects(self, subject: URIRef, predicate: URIRef) -> set[URIRef]:
@@ -380,9 +410,9 @@ class GraphEntity(object):
             predicate_objects.add(o)
         return predicate_objects
 
-    def _get_subjects(self, object: Identifier, predicate: URIRef) -> set[URIRef]:
+    def _get_subjects(self, obj: Identifier, predicate: URIRef) -> set[URIRef]:
         predicate_subjects = set()
-        for s in self.graph.subjects(object=object, predicate=predicate):
+        for s in self.graph.subjects(object=obj, predicate=predicate):
             predicate_subjects.add(s)
         return predicate_subjects
 
@@ -399,49 +429,106 @@ class GraphEntity(object):
         # (Ideally shortened depending on the namespace_manager associated
         # with the graph)
         return Literal(subject.n3(self.graph.namespace_manager))
-    
+
     def html_panel(self, configuration):
         property_panel_orientation = "vertical"
 
-        if self.type == 'object':
-            if 'html_title_template' not in configuration.keys():
+        if self.type == "object":
 
-                subject_types_string = ",".join (
-                                                [
-                                                f"""<a href="{st.toPython()}">{escape(sl)}</a>"""
-                                                    for st, sl in
-                                                        zip(self.data.subject_types, self.data.subject_type_labels)
-                                                ] )
-                html_title_stub = f""" <h1><a href="{self.uri}" title="{escape(self.data.subject_t_label)}">{escape(self.data.subject_h_label)}</a> | {subject_types_string} <h1> """
-            if 'html_property_panel_template' not in configuration.keys():
-            
-                property_rows_string = "".join(
-                                        [
-                                            f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{escape(o.literal.toPython())}</td></tr>"""
-                                            for p,o in sorted(self.outgoing_linked_neighbours, key=lambda x : x[0].data.subject_h_label)
-                                            if o.type=='literal'
-                                        ]
-                )
-                html_property_panel_stub = f"""<table><tr><th>Property</th><th>Value</th></tr>
+            # Define title_stub
+            subject_types_string = ",".join(
+                [
+                    f"""<a href="{st.toPython()}">{escape(sl)}</a>"""
+                    for st, sl in zip(
+                        self.data.subject_types, self.data.subject_type_labels
+                    )
+                ]
+            )
+            html_title_stub = f""" <h1><a href="{self.uri}" title="{escape(self.data.subject_t_label)}">{escape(self.data.subject_h_label)}</a> | {subject_types_string} <h1> """
+            # Define Literal Property Table
+            href_lambda = lambda x: (
+                f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
+                if x.data.is_possible_url
+                else f"{escape(x.literal.toPython())}"
+            )
+            property_rows_string = "".join(
+                [
+                    f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
+                    for p, o in sorted(
+                        self.outgoing_linked_neighbours,
+                        key=lambda x: x[0].data.subject_h_label,
+                    )
+                    if o.type == "literal"
+                ]
+            )
+            if len(property_rows_string) > 0:
+                html_property_panel_stub = f"""<table><caption>Properties</caption><tr><th>Property</th><th>Value</th></tr>
                 {property_rows_string}
                 </table>"""
+            else:
+                html_property_panel_stub = ""
 
-        return html_title_stub + html_property_panel_stub
+            # Define Incoming and Outgoing Object Links
+
+            href_lambda = (
+                lambda x: f"""<a href="{x.uri}" title="{escape(x.data.subject_t_label)}">{escape(x.data.subject_h_label)}</a>"""
+            )
+            outbound_links_string = "".join(
+                [
+                    f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
+                    for p, o in sorted(
+                        self.outgoing_linked_neighbours,
+                        key=lambda x: x[0].data.subject_h_label,
+                    )
+                    if o.type == "object"
+                ]
+            )
+            if len(outbound_links_string) > 0:
+                html_outbound_links_panel_stub = f"""<table><caption>Outgoing Links</caption><tr><th>Property</th><th>Value</th></tr>
+                {outbound_links_string}
+                </table>"""
+            else:
+                html_outbound_links_panel_stub = ""
+
+            inbound_links_string = "".join(
+                [
+                    f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
+                    for p, o in sorted(
+                        self.incoming_linked_neighbours,
+                        key=lambda x: x[0].data.subject_h_label,
+                    )
+                    if o.type == "object"
+                ]
+            )
+            if len(inbound_links_string) > 0:
+                html_inbound_links_panel_stub = f"""<table><caption>Incoming Links</caption><tr><th>Property</th><th>Value</th></tr>
+                {inbound_links_string}
+                </table>"""
+            else:
+                html_inbound_links_panel_stub = ""
+
+        return (
+            html_title_stub
+            + html_property_panel_stub
+            + html_outbound_links_panel_stub
+            + html_inbound_links_panel_stub
+        )
+
 
 # Collection of base methods for generating triples given various
 # input combinations
 def create_triples_from_slist_p_o(
-    subjects: list[URIRef], predicate: URIRef, object: RDFObjectAtom
+    subjects: list[URIRef], predicate: URIRef, obj: RDFObjectAtom
 ) -> set[RDFTriple]:
     """With a list of subjects, and a fixed predicate/object combination,
     generate a set of RDFTriples"""
     triples = set()
     for s in subjects:
-        triples.add((s, predicate, object))
+        triples.add((s, predicate, obj))
     return triples
 
 
-class RDFExplorer(object):
+class RDFExplorer:
     """A utility class for extracting content from an rdflib graph object
     After initial setup, various methods exist for generating lists of
     objects, perhaps selecting by type, or as the result of a query.
@@ -457,29 +544,37 @@ class RDFExplorer(object):
         expose it as a set of type-centric python-dicts"""
         self.graph = rdf_g
         if entity_store is None:
-            self.entity_store = dict()
+            self.entity_store = {}
         else:
             self.entity_store = entity_store
+
+    def gen_entity_report_dict_for_types(
+        self, types: list[URIRef]
+    ) -> dict[URIRef, GraphEntity]:
+        entities = []
+        for t in types:
+            entities.extend(self._get_subjs_by_type(t))
+
+        return self.gen_entity_report_dict(entities)
 
     def get_entity_details(self, subject: URIRef) -> GraphEntity:
         return GraphEntity(self.graph, subject, self.entity_store)
 
     def gen_entity_report_dict(
-        self, 
-        subjects: list[URIRef]
-                              ) -> dict[URIRef, GraphEntity]:
+        self, subjects: list[URIRef]
+    ) -> dict[URIRef, GraphEntity]:
         """Generate a collection of entity details based on the list
         of subjects provided in the parameters.
         Note that a side-effect of the fetch process updates the
         self.entity_store object which serves as an index/memory
         cache. If the object has already been fetched previously,
         the detail will be returned from there.
-        What we're essentially doing here is building an in-memory, 
+        What we're essentially doing here is building an in-memory,
         indexed cache of selected data items that can be interrogated
         independently of the original graph.
         """
 
-        sdict = dict()
+        sdict = {}
         for subject in subjects:
             sdict[subject] = self.get_subject_and_neighbours(subject)
         return sdict
@@ -487,6 +582,7 @@ class RDFExplorer(object):
     def get_subject_and_neighbours(self, subject: URIRef):
         entity = self.get_entity_details(subject)
         entity.get_neighbours()
+        self.entity_store[entity.identifier] = entity
         return entity
 
     def _get_subjs_by_type(self, type_uri: URIRef) -> set[Identifier]:
@@ -494,17 +590,21 @@ class RDFExplorer(object):
             [s for s, _, _ in list(self.graph.triples((None, RDF.type, type_uri)))]
         )
         return subj_uris  # pyright: ignore[reportReturnType]
-    
+
     def _get_all_types_in_graph(self) -> set[URIRef]:
         type_uris = set(
-            [o for _, _,o in list(self.graph.triples( (None, RDF.type, None) )) if isinstance(o, URIRef) ] 
+            [
+                o
+                for _, _, o in list(self.graph.triples((None, RDF.type, None)))
+                if isinstance(o, URIRef)
+            ]
         )
         return type_uris
 
     def gen_index(self, data_attribute):
         """Create an unsorted index from data_attribute (as key) to
         a set of references on self.entity_store keys"""
-        index = dict()
+        index = {}
         for k, v in self.entity_store.items():
             if hasattr(v.data, data_attribute):
                 data = getattr(v.data, data_attribute)
