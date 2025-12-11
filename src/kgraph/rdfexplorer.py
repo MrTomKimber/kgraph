@@ -430,9 +430,10 @@ class GraphEntity:
         # with the graph)
         return Literal(subject.n3(self.graph.namespace_manager))
 
-    def html_panel(self, configuration):
-        property_panel_orientation = "vertical"
+    def html_components(self, configuration):
 
+        components={}
+        
         if self.type == "object":
 
             # Define title_stub
@@ -445,6 +446,7 @@ class GraphEntity:
                 ]
             )
             html_title_stub = f""" <h1><a href="{self.uri}" title="{escape(self.data.subject_t_label)}">{escape(self.data.subject_h_label)}</a> | {subject_types_string} <h1> """
+            components['title']=html_title_stub
             # Define Literal Property Table
             href_lambda = lambda x: (
                 f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
@@ -467,7 +469,7 @@ class GraphEntity:
                 </table>"""
             else:
                 html_property_panel_stub = ""
-
+            components['property_table']=html_property_panel_stub
             # Define Incoming and Outgoing Object Links
 
             href_lambda = (
@@ -489,7 +491,7 @@ class GraphEntity:
                 </table>"""
             else:
                 html_outbound_links_panel_stub = ""
-
+            components['outbound_links']=html_outbound_links_panel_stub
             inbound_links_string = "".join(
                 [
                     f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
@@ -506,13 +508,8 @@ class GraphEntity:
                 </table>"""
             else:
                 html_inbound_links_panel_stub = ""
-
-        return (
-            html_title_stub
-            + html_property_panel_stub
-            + html_outbound_links_panel_stub
-            + html_inbound_links_panel_stub
-        )
+            components['inbound_links']=html_inbound_links_panel_stub
+        return components
 
 
 # Collection of base methods for generating triples given various

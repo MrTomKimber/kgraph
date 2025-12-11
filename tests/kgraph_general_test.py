@@ -112,3 +112,12 @@ def test_rdfexplorer_gen_entity_report(explorer_obj):
     assert len(e_dict.keys())==35
     assert all(v.got_neighbours for v in e_dict.values())
 
+def test_rdfexplorer_gen_entity_report_all_keys(explorer_obj):
+    s_types = explorer_obj._get_all_types_in_graph().union(set([RDF.type]))
+    e_dict = explorer_obj.gen_entity_report_dict_for_types(s_types)
+    e_store_objects = {k:v for k,v in explorer_obj.entity_store.items() if v.type=='object'}
+    assert all([all([k in ['title', 'property_table','outbound_links','inbound_links']]) for q in [
+        v.html_components(configuration={})
+        for k,v in e_store_objects.items()
+    ] for k in q.keys()])
+
