@@ -30,7 +30,7 @@ def raw_data_df() -> pd.DataFrame:
 @pytest.fixture(scope='session')
 def serialised_graph(schema_mapping_object, raw_data_df) -> Graph:
     g = schema_mapping_object.to_rdf_graph(raw_data_df)
-    g.serialize(os.path.join(current_dir, "data/alphabet_graph.rdf"), format="xml")
+    g.serialize(os.path.join(current_dir, "data/ignore_alphabet_graph.rdf"), format="xml")
     return g
 
 @pytest.fixture(scope='session')
