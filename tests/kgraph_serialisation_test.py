@@ -16,46 +16,12 @@ from kgraph import schemamapping
 from kgraph import kgpipeline
 from kgraph import rdfexplorer
 
-
-@pytest.fixture(scope='session')
-def schema_mapping_object() -> schemamapping.SchemaMapping:
-    S = schemamapping.SchemaMapping(os.path.join(current_dir, "data/skos_vocabulary_mapping.json"))
-    return S
-
-@pytest.fixture(scope='session')
-def raw_data_df() -> pd.DataFrame:
-    rd_df = pd.read_excel(os.path.join(current_dir, "data/alphabet_vocab.xlsx"))
-    return rd_df
-
-@pytest.fixture(scope='session')
-def serialised_graph(schema_mapping_object, raw_data_df) -> Graph:
-    g = schema_mapping_object.to_rdf_graph(raw_data_df)
-    g.serialize(os.path.join(current_dir, "data/ignore_alphabet_graph.rdf"), format="xml")
-    return g
-
-@pytest.fixture(scope='session')
-def shacl_graph() -> Graph:
-    g = Graph()
-    g.parse(os.path.join(current_dir, "data/skos_vocabulary_mapping.json"))
-    return g
-
-@pytest.fixture(scope='session')
-def kgp_pipeline() -> kgpipeline.KGraphPipeline:
-    mapping_config_at = os.path.join(current_dir, "data/skos_vocabulary_mapping.json")
-    ontology_list = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta.owl"), 
-                    os.path.join(current_dir, "../src/kgraph/ontologies/skos.rdf")]
-    validation_shacl = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta_shacl.ttl")]
-
-    kgp = kgpipeline.KGraphPipeline(mapping_config_at,
-                                ontology_list,
-                                validation_shacl)
-    
-    return kgp
-
-@pytest.fixture(scope='session') 
-def kgp_graph(kgp_pipeline, raw_data_df) -> Graph:
-    g = kgp_pipeline.process(raw_data_df)
-    return g
+from kgraph_fixtures_test import (raw_data_df, 
+                                  schema_mapping_object, 
+                                  serialised_graph, 
+                                  kgp_pipeline, 
+                                  kgp_graph, 
+                                  explorer_obj)
 
 
 def test_instantiate_schema_mapping_isdataframe(schema_mapping_object):
@@ -129,4 +95,20 @@ def test_kgpipeline_graph_validation_is_true(kgp_pipeline, kgp_graph):
 def test_kgpipeline_graph_matches_alt_graph(kgp_graph, serialised_graph):
     assert len(kgp_graph)==len(serialised_graph)
 
+def test_rdfexplorer_is_instance_of(explorer_obj):
+    assert isinstance(explorer_obj, rdfexplorer.RDFExplorer)
+
+def test_rdfexplorer_get_types(explorer_obj):
+    s_types = explorer_obj._get_all_types_in_graph().union(set([RDF.type]))
+    assert s_types == {URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
+                        URIRef('http://www.w3.org/2004/02/skos/core#Concept'),
+                        URIRef('http://www.w3.org/2004/02/skos/core#ConceptScheme'),
+                        URIRef('https://kgraph.foo/onto/kgmeta#Namespace')}
+
+
+def test_rdfexplorer_gen_entity_report(explorer_obj):
+    s_types = explorer_obj._get_all_types_in_graph().union(set([RDF.type]))
+    e_dict = explorer_obj.gen_entity_report_dict_for_types(s_types)
+    assert len(e_dict.keys())==35
+    assert all(v.got_neighbours for v in e_dict.values())
 
