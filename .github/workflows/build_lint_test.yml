@@ -22,6 +22,6 @@ jobs:
     - name: Analyse code with pylint
       run: |
         pipenv run pylint $(git ls-files 'src/kgraph/*.py') --fail-under=7.5 --recursive=y
-    - name: Perform unit testing with pytest
+    - name: Perform unit testing with pytest - fail if coverage < 75%
       run: |
-        pipenv run pytest
+        pipenv run pytest --cov --cov-fail-under=75

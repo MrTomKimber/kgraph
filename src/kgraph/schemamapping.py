@@ -1,25 +1,34 @@
+"""This module provides the SchemaMapping class which is used
+to decode a schemamapping.json configuration file and create
+an object which (via the .to_rdf_graph() method), provided a
+dataframe, will return an rdflib.Graph object reflecting the
+result of the mappings.
+"""
+
 # General Imports
 from itertools import product
 from datetime import datetime
 import uuid
 import re
-from hashlib import md5
 import urllib.parse
-import json, jsonschema, jsonschema.exceptions
-from rdflib import Graph as rdflibGraph, Namespace, URIRef, BNode, Literal
-from rdflib.namespace import RDF, RDFS, OWL, SH
+import json
+import jsonschema, jsonschema.exceptions
+from rdflib import Graph as rdflibGraph, Namespace, URIRef, Literal
+from rdflib.namespace import RDF, RDFS, OWL
 import numpy as np
 import pandas as pd
 
 
 # Local package imports
-from kgraph.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGMETA, KGMETA_G
+from kgraph.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGMETA
 
 
 def split_on_comma_respecting_quotes(some_string):
+    """A crude delimiter parser using comma as delimiter,
+    respects common quote-masking."""
     quote_respecter = re.compile(r"(?<!\\)(\".+?(?<!\\)\")")
-    in_d = dict()
-    text = "".join([c for c in some_string])
+    in_d = {}
+    text = "".join(list(some_string))
     fms = quote_respecter.findall(text)
     for m in fms:
         key = uuid.uuid4().hex
@@ -27,7 +36,7 @@ def split_on_comma_respecting_quotes(some_string):
         text = text.replace(m, key)
     values = []
     for value in text.split(","):
-        if any([k in value for k in in_d.keys()]):
+        if any((k in value for k in in_d.keys())):
             for k, v in in_d.items():
                 if k in value:
                     values.append(value.replace(k, v).strip())
@@ -37,10 +46,12 @@ def split_on_comma_respecting_quotes(some_string):
 
 
 def retrieve_fqn_parent(fqn):
+    """Return the parental portion from a provided fqn string"""
     return ".".join(fqn.split(".")[:-1])
 
 
 def collate_fqn_parents(fqn: str) -> list[str]:
+    """Return all the ancestors referenced in an fqn string"""
     stub = fqn
     parents = []
     while len(stub.split(".")) > 1:
@@ -51,14 +62,22 @@ def collate_fqn_parents(fqn: str) -> list[str]:
 
 
 class SchemaMapping:
+    """A SchemaMapping is a collection of individual column->rdf data
+    mappings which defines how data in a tabular format should be
+    consumed to create an rdf graph. The configuration used to
+    define a given schema-mapping is provided at instantiation
+    via a suitably formatted json file."""
+
     schema = SCHEMAMAPPINGSCHEMA
     # Assign the namespace "DATA" to be used for temporary in-memory raw data graph
     DATA = Namespace("http://data#")
 
-    def __init__(self, SchemaMapping_config):
+    def __init__(self, config_filename):
         """Read in a configuration file, validate it and generate a
         well-populated SchemaMapping object"""
-        self.config = json.load(open(SchemaMapping_config, "r"))
+
+        with open(config_filename, "r") as jsonfile:
+            self.config = json.load(jsonfile)
         try:
             jsonschema.validate(self.config, schema=SchemaMapping.schema)
         except jsonschema.exceptions.ValidationError as err:
@@ -67,9 +86,9 @@ class SchemaMapping:
         # Note that this forces any NamedObject Instances to mirror their associated
         # SubjectTag column-names
         # A discrepancy between these two would cause the lineage to break.
-        self.specifications = dict()
-        self.fully_qualified_names_tree = dict()
-        self.glob_vars = dict()
+        self.specifications = {}
+        self.fully_qualified_names_tree = {}
+        self.glob_vars = {}
         for varname, varvalue in self.config["GlobalVariables"].items():
             self.glob_vars[varname] = varvalue
 
@@ -115,8 +134,10 @@ class SchemaMapping:
         referenced_columns = []
         for iname, instance_object in self.specifications.items():
             if isinstance(instance_object, NamedObjectInstanceSpecification):
-                instance_object.populate_naming_hierarchy_path()
-            referenced_columns.extend(instance_object.column_list)
+                instance_object._populate_naming_hierarchy_path()
+            referenced_columns.extend(
+                [c for c in instance_object.column_list if c != "<root>"]
+            )
 
         self.referenced_columns = list(set(referenced_columns))
         multivalue_columns = []
@@ -135,24 +156,24 @@ class SchemaMapping:
         ]
         return c_specs
 
-    def _traverse_hierarchy_path(self, start, acc=None):
-        # Given a dictionary containing node-to-node parental linkages {child:parent}
-        # and a start node,
-        # traverse the hierarchy and return the path taken from start node, all the way
-        # up the tree, until it reaches the (local) top.
+    def traverse_hierarchy_path(self, start, acc=None):
+        """Given a dictionary containing node-to-node parental linkages {child:parent}
+        and a start node,
+        traverse the hierarchy and return the path taken from start node, all the way
+        up the tree, until it reaches the (local) top."""
         if acc is None:
             acc = [start]
         next_value = self.fully_qualified_names_tree.get(start)
         if next_value is not None:
             acc.append(next_value)
-            self._traverse_hierarchy_path(next_value, acc)
+            self.traverse_hierarchy_path(next_value, acc)
         return acc
 
     def populate_entity_fqn_index(self, raw_graph):
-        # Create set of entities from the raw graph
+        """Create set of entities from the raw graph"""
         entities = []
         defined_entities = set()
-        entity_fqn_index = dict()
+        entity_fqn_index = {}
         for datarow in [
             r[0] for r in raw_graph.triples((None, RDF.type, SchemaMapping.DATA["row"]))
         ]:
@@ -205,10 +226,10 @@ class SchemaMapping:
         self.entity_fqn_index = entity_fqn_index
 
     def to_rdf_graph(self, dataframe) -> rdflibGraph:
-        # Convert the dataframe into a raw graph where rows are "triplified" with
-        # minimal steer from the SchemaMapping.
-        # This raw graph is expressed in the raw data namespace and consists of rows with
-        # floating column(name) predicates linking to properties in the dataframe
+        """Convert the dataframe into a raw graph where rows are "triplified" with
+        minimal steer from the SchemaMapping.
+        This raw graph is expressed in the raw data namespace and consists of rows with
+        floating column(name) predicates linking to properties in the dataframe."""
         print(f"rdf_parse:start {datetime.now()}")
         raw_graph = self._rdflib_graph_from_dataframe(dataframe)
         self.populate_entity_fqn_index(raw_graph)
@@ -228,8 +249,8 @@ class SchemaMapping:
             p for p in raw_fqn_parents if p not in self.entity_fqn_index.keys()
         ]
         print(
-            f"Warning - the following FullyQualifiedNames are inferred \
-                but not directly referenced in this file: {nameless_parents}"
+            f"Warning - the following FullyQualifiedNames are inferred "
+            + f"but not directly referenced in this file: {nameless_parents}"
         )
 
         for fqn, o in self.entity_fqn_index.items():
@@ -240,8 +261,8 @@ class SchemaMapping:
                 triple_generating_objects.extend([scope_r])
             else:
                 print(
-                    f"Warning, object {fqn} unable to connect to its \
-                        parent {o.parent_fqn} - doesn't exist in file"
+                    f"Warning, object {fqn} unable to connect to its "
+                    + f"parent {o.parent_fqn} - doesn't exist in file"
                 )
 
         # Once the entities are defined, next it's time to link them all via the various
@@ -249,7 +270,7 @@ class SchemaMapping:
         for datarow in [
             r[0] for r in raw_graph.triples((None, RDF.type, SchemaMapping.DATA["row"]))
         ]:
-            for s in [s for s in self.specifications.values()]:
+            for s in list(self.specifications.values()):
                 if isinstance(s, RelationshipInstanceSpecification):
                     triple_generating_objects.extend(
                         s.constructRelationFromDataGraphRow(
@@ -267,6 +288,11 @@ class SchemaMapping:
         print(len(triple_generating_objects), len(set(triple_generating_objects)))
 
         return_graph = rdflibGraph(bind_namespaces="rdflib")
+
+        ns_d = self.config.get("Namespaces", {})
+        for ns_prefix, nsuri in ns_d.items():
+            return_graph.bind(ns_prefix, nsuri)
+
         for e in triple_generating_objects:
             for t in e.to_triples():
                 return_graph.add(t)
@@ -368,6 +394,11 @@ class SchemaMapping:
 
 
 class SchemaMappingInstanceSpecification:
+    """A SchemaMappingInstanceSpecification is the root class for
+    NamedObjectInstanceSpecification, RelationshipInstanceSpecification
+    and PropertyInstanceSpecification classes.
+    Each class reflects the different expectations for mappings depending
+    on the mapping type."""
 
     def __init__(self, parent):
         self.parent_SchemaMapping = parent
@@ -376,6 +407,8 @@ class SchemaMappingInstanceSpecification:
 
     @staticmethod
     def extract_valid_fqns(rowurl, data_graph, fetch_key):
+        """Expand the fetch_key specification to list all
+        possible index values"""
         f_key = [f for f in fetch_key if f != "<root>"]
         raw_fqn = SchemaMappingInstanceSpecification.get_keylist_from_datarow(
             rowurl, data_graph, f_key
@@ -397,9 +430,10 @@ class SchemaMappingInstanceSpecification:
 
     @staticmethod
     def get_keylist_from_datarow(rowurl, data_graph, spec):
+        """Given a specification, extract all matching keylist
+        information from the provided data_graph"""
         fetched_values = []
         for fetch_key in spec:
-            # data_key = URIRef(SchemaMapping.DATA[f"column({fetch_key})"] )
             fetched_key_values = (
                 SchemaMappingInstanceSpecification.get_values_from_datarow(
                     rowurl, data_graph, fetch_key
@@ -410,18 +444,23 @@ class SchemaMappingInstanceSpecification:
 
     @staticmethod
     def get_values_from_datarow(rowurl, data_graph, key):
-        # Given a row url and predicate key, return all the values that match
+        """Given a row url and predicate key, return all the values that match."""
         data_key = URIRef(SchemaMapping.DATA[f"column({key})"])
         key_values = [r[2] for r in data_graph.triples((rowurl, data_key, None))]
         return key_values
 
     def _populate_column_list(self):
-
+        """Extract column names from class and assign
+        to self.column_list"""
         for attr_name, attr_value in vars(self).items():
             if attr_name.endswith("__column"):
                 self.column_list.append(attr_value)
 
     def _expose_multi_value_field(self):
+        """Some fields in the mapping specification can have their
+        multivalue set. Where this is true, the appropriate field
+        on which multivalues are defined is returned - if this is
+        not, then the function returns None."""
         if self._multivalues:
             if isinstance(self, NamedObjectInstanceSpecification):
                 return self._subject__column
@@ -439,6 +478,9 @@ class SchemaMappingInstanceSpecification:
 
 
 class NamedObject:
+    """A NamedObject encapsulates the output of applying a NamedObjectInstanceSpecification
+    extraction against a given row of data"""
+
     def __init__(
         self, type_uris, fully_qualified_name, names, namespace, is_definition: bool
     ):
@@ -457,6 +499,7 @@ class NamedObject:
                 self.types.append(uri.toPython())
 
     def to_triples(self) -> list[RDFTriple]:
+        """Return the contents of the object as a suitable collection of rdf triples"""
         triples = []
         for t in self.types:
             triples.append((URIRef(self.uri), RDF.type, URIRef(t)))
@@ -487,6 +530,10 @@ class NamedObject:
 
 
 class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
+    """A NamedObjectInstanceSpecification defines, for a given mapping,
+    what information should be extracted from a data row in order to
+    generate a NamedObject"""
+
     def __init__(self, parent, target_class, classbase, instance_d):
         """Extract the values hosted in the configuration and store as
         object properties"""
@@ -510,44 +557,40 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
         return f"<{self.__class__.__name__}:{self._instance_name}\
             /{self._parent__column}/{self._subject__column}>"
 
-    def populate_naming_hierarchy_path(self):
+    def _populate_naming_hierarchy_path(self):
+        """Internal function to perform a hierarchy_path traversal
+        the outcome of which is stored in self.naming_hierarchy_path"""
         if isinstance(self, NamedObjectInstanceSpecification):
             # Needs parent column to determine naming_hierarchy - only works for NamedObjects
             self.naming_hierarchy_path = (
-                self.parent_SchemaMapping._traverse_hierarchy_path(
-                    self._subject__column
-                )
+                self.parent_SchemaMapping.traverse_hierarchy_path(self._subject__column)
             )
         else:
             raise TypeError(
-                f"This function can only be called on InstanceSpecifications \
+                "This function can only be called on InstanceSpecifications \
                     that reference a parent"
             )
 
     def NamedObjectListFromDataGraphRow(self, row_uri, data_graph) -> list[NamedObject]:
-        # A NamedObject must have one or more principle:
-        #       types
-        #       names (KGNAM)
-        #       labels (KGNAM)
-        #       namespace
-        #       FullyQualifiedNames (KGNAM)
-        # In addition, it might have any additional, overlapping properties that describe the
-        # object, but for basic construction, we start with this list to populate the minimal,
-        # KGNAM based content (...or do we??)
+        """For a given row_uri, using the data_graph, extract a list
+        of NamedObjects per the NamedObjectListFromDataGraphRow specification
+        A NamedObject must have one or more principle:
+              types
+              names (KGMETA)
+              labels (KGMETA)
+              namespace
+              FullyQualifiedNames (KGMETA)
+        In addition, it might have any additional, overlapping properties that describe the
+        object, but for basic construction, we start with this list to populate the minimal,
+        KGMETA based content (...or do we??)"""
 
         type_uris = [URIRef(self.target_class)]
 
-        # fqn_parts = SchemaMappingInstanceSpecification.get_keylist_from_datarow(row_uri,
-        # data_graph, self.naming_hierarchy_path)
-        # fqn = ".".join([n[0].toPython() for n in fqn_parts[::-1] if n != []])
         fqns = SchemaMappingInstanceSpecification.extract_valid_fqns(
             row_uri, data_graph, self.naming_hierarchy_path
         )
-        # print("fqns: ", fqns)
         # What instances exist that contain name values?
         # Let's use the final value from each fqn as a proxy for Name
-        # names = SchemaMappingInstanceSpecification.get_values_from_datarow(row_uri,
-        # data_graph, self._subject__column)
         namespace = self._classbase_uri
         object_list = []
         if fqns is not None:
@@ -559,19 +602,21 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
                             type_uris, fqn, names, namespace, self._is_definition
                         )
                     )
-        else:
-            # print(f"{self._instance_name} generated no objects for this row")
-            pass
         return object_list
 
 
 class RelationObject:
+    """A RelationObject defines the expected data values (and utility methods)
+    to be extracted by applying a RelationshipInstanceSpecification against
+    a data-row"""
+
     def __init__(self, subject: NamedObject, object: NamedObject, relation_uri: str):
         self.subject = subject
         self.object = object
         self.relation_uri = relation_uri
 
     def to_triples(self) -> list[RDFTriple]:
+        """Return the contents of the object as a suitable collection of rdf triples"""
         triples = []
 
         triples.append(
@@ -591,6 +636,10 @@ class RelationObject:
 
 
 class RelationshipInstanceSpecification(SchemaMappingInstanceSpecification):
+    """A RelationshipInstanceSpecification defines, for a given mapping,
+    what information should be extracted from a data row in order to
+    generate a RelationObject"""
+
     def __init__(self, parent, target_class, instance_d):
         """Extract the values hosted in the configuration and store as
         object properties"""
@@ -609,14 +658,17 @@ class RelationshipInstanceSpecification(SchemaMappingInstanceSpecification):
     def constructRelationFromDataGraphRow(
         self, row_uri, data_graph, entity_fqn_index
     ) -> list[RelationObject]:
+        """For a given row_uri, using the data_graph, extract all
+        RelationObject per the RelationshipInstanceSpecification specification"""
+
         # Collect the set of candidate fqn specifications (i.e. the columns used to fetch the
         # FQNs from the data row) for both sides of the relationship (subject, object)
         # These are expressed as lists containing string values that describe the original
         # column names
-        candidate_subject_spec = self.parent_SchemaMapping._traverse_hierarchy_path(
+        candidate_subject_spec = self.parent_SchemaMapping.traverse_hierarchy_path(
             self._subject__column
         )
-        candidate_object_spec = self.parent_SchemaMapping._traverse_hierarchy_path(
+        candidate_object_spec = self.parent_SchemaMapping.traverse_hierarchy_path(
             self._object__column
         )
 
@@ -654,7 +706,7 @@ class RelationshipInstanceSpecification(SchemaMappingInstanceSpecification):
         relations = list(product(*[subject_entities, object_entities]))
         relation_list = []
         for relation in relations:
-            if all([v is not None for v in relation]):
+            if all((v is not None for v in relation)):
                 sobj, oobj = relation
                 relation_list.append(RelationObject(sobj, oobj, self.target_class))
 
@@ -662,12 +714,17 @@ class RelationshipInstanceSpecification(SchemaMappingInstanceSpecification):
 
 
 class PropertyObject:
+    """A PropertyObject defines the expected data values (and utility methods)
+    to be extracted by applying a PropertyInstanceSpecification against
+    a data-row"""
+
     def __init__(self, subject: NamedObject, property_value, relation_uri: str):
         self.subject = subject
         self.property = property_value
         self.relation_uri = relation_uri
 
     def to_triples(self) -> list[RDFTriple]:
+        """Return the contents of the object as a suitable collection of rdf triples"""
         triples = []
 
         triples.append(
@@ -685,6 +742,10 @@ class PropertyObject:
 
 
 class PropertyInstanceSpecification(SchemaMappingInstanceSpecification):
+    """A PropertyInstanceSpecification defines, for a given mapping,
+    what information should be extracted from a data row in order to
+    generate a PropertyObject"""
+
     def __init__(self, parent, target_class, instance_d):
         """Extract the values hosted in the configuration and store as
         object properties"""
@@ -699,8 +760,10 @@ class PropertyInstanceSpecification(SchemaMappingInstanceSpecification):
     def constructPropertyFromDataGraphRow(
         self, row_uri, data_graph, entity_fqn_index
     ) -> list[PropertyObject]:
+        """For a given row_uri, using the data_graph, extract all
+        PropertyObjects per the PropertyInstanceSpecification specification"""
         # Get the subject fqn
-        candidate_subject_spec = self.parent_SchemaMapping._traverse_hierarchy_path(
+        candidate_subject_spec = self.parent_SchemaMapping.traverse_hierarchy_path(
             self._subject__column
         )
 
@@ -733,7 +796,7 @@ class PropertyInstanceSpecification(SchemaMappingInstanceSpecification):
         relations = list(product(*[subject_entities, literal_values]))
         relation_list = []
         for relation in relations:
-            if all([v is not None for v in relation]):
+            if all((v is not None for v in relation)):
                 sobj, oobj = relation
                 relation_list.append(PropertyObject(sobj, oobj, self.target_class))
 
