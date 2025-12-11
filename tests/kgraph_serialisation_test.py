@@ -9,9 +9,11 @@ import pytest
 import pandas as pd
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import SKOS, RDF, RDFS
+from pyshacl import validate
+
 from kgraph import declarations
 from kgraph import schemamapping
-from pyshacl import validate
+from kgraph import kgpipeline
 
 
 @pytest.fixture(scope='session')
@@ -35,6 +37,25 @@ def shacl_graph() -> Graph:
     g = Graph()
     g.parse(os.path.join(current_dir, "data/skos_vocabulary_mapping.json"))
     return g
+
+@pytest.fixture(scope='session')
+def kgp_pipeline() -> kgpipeline.KGraphPipeline:
+    mapping_config_at = os.path.join(current_dir, "data/skos_vocabulary_mapping.json")
+    ontology_list = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta.owl"), 
+                    os.path.join(current_dir, "../src/kgraph/ontologies/skos.rdf")]
+    validation_shacl = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta_shacl.ttl")]
+
+    kgp = kgpipeline.KGraphPipeline(mapping_config_at,
+                                ontology_list,
+                                validation_shacl)
+    
+    return kgp
+
+@pytest.fixture(scope='session') 
+def kgp_graph(kgp_pipeline, raw_data_df) -> Graph:
+    g = kgp_pipeline.process(raw_data_df)
+    return g
+
 
 def test_instantiate_schema_mapping_isdataframe(schema_mapping_object):
     """Instantiate a schema_mapping object"""
@@ -93,5 +114,18 @@ def test_post_schema_mapping_shacl_validation(serialised_graph):
                                             debug=False
                                         )
     assert conforms == True
+
+def test_kgpipeline_is_a_pipeline(kgp_pipeline):
+    assert isinstance(kgp_pipeline, kgpipeline.KGraphPipeline)
+
+def test_kgpipeline_graph_is_a_graph(kgp_graph):
+    assert isinstance(kgp_graph, Graph)
+
+def test_kgpipeline_graph_validation_is_true(kgp_pipeline, kgp_graph):
+    assert kgp_pipeline.shacl_validation_results[0][0]==True
+
+
+def test_kgpipeline_graph_matches_alt_graph(kgp_graph, serialised_graph):
+    assert len(kgp_graph)==len(serialised_graph)
 
 

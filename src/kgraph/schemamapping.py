@@ -267,6 +267,11 @@ class SchemaMapping:
         print(len(triple_generating_objects), len(set(triple_generating_objects)))
 
         return_graph = rdflibGraph(bind_namespaces="rdflib")
+
+        ns_d = self.config.get("Namespaces", {})
+        for ns_prefix, nsuri in ns_d.items():
+            return_graph.bind(ns_prefix, nsuri)
+
         for e in triple_generating_objects:
             for t in e.to_triples():
                 return_graph.add(t)

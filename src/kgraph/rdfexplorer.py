@@ -5,6 +5,9 @@ from enum import Enum, StrEnum
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
+
+from html import escape
+
 from kgraph.declarations import (
     RDFTriple,
     RDFQuad,
@@ -299,6 +302,10 @@ class GraphEntity(object):
         )
 
     def get_neighbours(self):
+        """Populate the incoming and outgoing linked neighbours with
+        tuples consisting of (<predicate>, <object>), while updating 
+        the underlying entity_store to contain all entities extracted
+        from the graph in the process"""
 
         self.get_outgoing_linked_entity_data()
         outgoing_linked_neighbours = []
@@ -392,7 +399,34 @@ class GraphEntity(object):
         # (Ideally shortened depending on the namespace_manager associated
         # with the graph)
         return Literal(subject.n3(self.graph.namespace_manager))
+    
+    def html_panel(self, configuration):
+        property_panel_orientation = "vertical"
 
+        if self.type == 'object':
+            if 'html_title_template' not in configuration.keys():
+
+                subject_types_string = ",".join (
+                                                [
+                                                f"""<a href="{st.toPython()}">{escape(sl)}</a>"""
+                                                    for st, sl in
+                                                        zip(self.data.subject_types, self.data.subject_type_labels)
+                                                ] )
+                html_title_stub = f""" <h1><a href="{self.uri}" title="{escape(self.data.subject_t_label)}">{escape(self.data.subject_h_label)}</a> | {subject_types_string} <h1> """
+            if 'html_property_panel_template' not in configuration.keys():
+            
+                property_rows_string = "".join(
+                                        [
+                                            f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{escape(o.literal.toPython())}</td></tr>"""
+                                            for p,o in sorted(self.outgoing_linked_neighbours, key=lambda x : x[0].data.subject_h_label)
+                                            if o.type=='literal'
+                                        ]
+                )
+                html_property_panel_stub = f"""<table><tr><th>Property</th><th>Value</th></tr>
+                {property_rows_string}
+                </table>"""
+
+        return html_title_stub + html_property_panel_stub
 
 # Collection of base methods for generating triples given various
 # input combinations
@@ -431,14 +465,19 @@ class RDFExplorer(object):
         return GraphEntity(self.graph, subject, self.entity_store)
 
     def gen_entity_report_dict(
-        self, subjects: list[URIRef]
-    ) -> dict[URIRef, GraphEntity]:
+        self, 
+        subjects: list[URIRef]
+                              ) -> dict[URIRef, GraphEntity]:
         """Generate a collection of entity details based on the list
         of subjects provided in the parameters.
         Note that a side-effect of the fetch process updates the
         self.entity_store object which serves as an index/memory
         cache. If the object has already been fetched previously,
-        the detail will be returned from there."""
+        the detail will be returned from there.
+        What we're essentially doing here is building an in-memory, 
+        indexed cache of selected data items that can be interrogated
+        independently of the original graph.
+        """
 
         sdict = dict()
         for subject in subjects:
@@ -455,6 +494,12 @@ class RDFExplorer(object):
             [s for s, _, _ in list(self.graph.triples((None, RDF.type, type_uri)))]
         )
         return subj_uris  # pyright: ignore[reportReturnType]
+    
+    def _get_all_types_in_graph(self) -> set[URIRef]:
+        type_uris = set(
+            [o for _, _,o in list(self.graph.triples( (None, RDF.type, None) )) if isinstance(o, URIRef) ] 
+        )
+        return type_uris
 
     def gen_index(self, data_attribute):
         """Create an unsorted index from data_attribute (as key) to
