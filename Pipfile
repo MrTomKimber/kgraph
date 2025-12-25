@@ -17,6 +17,7 @@ jsonschema = "*"
 sqlitedict = "*"
 gravis = "*"
 spacy = "*"
+lxml = "*"
 
 [dev-packages]
 jupyter = "*"
