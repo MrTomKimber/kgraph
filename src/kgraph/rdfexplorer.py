@@ -40,9 +40,19 @@ def uri_split(uriref):
     prefrag = str(uriref)[0 : -len(frag)]
     return prefrag, frag
 
+@dataclass
+class EdgeData:
+    """Dataclass for expressing edges between entities in the graph"""
+    subject: Identifier  # used to store the uri-ref of the subject
+    predicate: Identifier # used to store the uri-ref of the predicate
+    object: Identifier # used to store the uri-ref of the object
+    predicate_label: str # contains the predicate-label for display
+
+    def to_dict(self):
+        return asdict(self)
 
 @dataclass
-class GraphData:
+class NodeData:
     """Dataclass for handling graph-links from an object to other objects"""
 
     subject: Identifier
@@ -61,7 +71,7 @@ class GraphData:
 
 
 @dataclass
-class GraphLiteralData(GraphData):
+class GraphLiteralData(NodeData):
     """Dataclass for handling graph-links from an object to other objects"""
 
     subject: Literal
@@ -71,7 +81,7 @@ class GraphLiteralData(GraphData):
 
 
 @dataclass
-class GraphEntityData(GraphData):
+class GraphEntityData(NodeData):
     """Dataclass for handling graph-links from an object to other objects"""
 
     subject: URIRef
@@ -515,7 +525,9 @@ class GraphEntity:
 # Collection of base methods for generating triples given various
 # input combinations
 def create_triples_from_slist_p_o(
-    subjects: list[URIRef], predicate: URIRef, obj: RDFObjectAtom
+    subjects: list[URIRef], 
+    predicate: URIRef, 
+    obj: RDFObjectAtom
 ) -> set[RDFTriple]:
     """With a list of subjects, and a fixed predicate/object combination,
     generate a set of RDFTriples"""
@@ -540,10 +552,27 @@ class RDFExplorer:
         """An object wrapper used to extract data from the graph and
         expose it as a set of type-centric python-dicts"""
         self.graph = rdf_g
+        self.populate_link_store()
         if entity_store is None:
             self.entity_store = {}
         else:
             self.entity_store = entity_store
+
+    def populate_link_store(self):
+        """extract all the triples linking entities and
+        prepare data packets for each unique s,p,o combination"""
+        self.link_store={}
+        for e,t in enumerate(self.graph.triples((None, None, None))):
+            s,p,o = t
+            if isinstance(s,URIRef) and isinstance(p,URIRef) and isinstance(o,URIRef):
+                edge_data = EdgeData(
+                    subject = s, 
+                    predicate = p, 
+                    object = o,
+                    predicate_label=p.n3(self.graph.namespace_manager)
+                )
+                self.link_store[e]=edge_data
+
 
     def gen_entity_report_dict_for_types(
         self, types: list[URIRef]
@@ -555,7 +584,8 @@ class RDFExplorer:
         return self.gen_entity_report_dict(entities)
 
     def get_entity_details(self, subject: URIRef) -> GraphEntity:
-        return GraphEntity(self.graph, subject, self.entity_store)
+        entity = GraphEntity(self.graph, subject, self.entity_store)
+        return entity
 
     def gen_entity_report_dict(
         self, subjects: list[URIRef]

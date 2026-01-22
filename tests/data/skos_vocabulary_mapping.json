@@ -1,5 +1,5 @@
 {
-    "$schema": "../../src/kgraph/jschema/serialisationschema.json",
+    "$schema": "../../src/kgraph/jschema/schemamappingschema.json",
     "Namespaces": {
         "DMCAR": "https://kgraph.foo/onto/kgdmcar#",
         "vocg" : "https://kgraph.foo/skos/individuals#",

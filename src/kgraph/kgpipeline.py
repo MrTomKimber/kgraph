@@ -50,7 +50,7 @@ class KGraphPipeline:
         self.expected_columns = set(self.mapping_object.referenced_columns) - set(
             self.mapping_object.glob_vars.keys()
         )
-        self.o_list = ontology_list
+        self.o_list = ontology_list # TODO: expand the ontology awareness of the pipeline
         self.shacl_validations = validation_shacl_list
         self.shacl_validation_results = []
 
@@ -58,7 +58,9 @@ class KGraphPipeline:
             name_master_location = ":memory:"
         self.namemaster = NameMaster(name_master_location)
 
-    def process(self, data: pd.DataFrame) -> Graph:
+    def process(self, 
+                data: pd.DataFrame,
+                ignore_validate : bool = False) -> Graph:
         """Accept some data input as a dataframe and convert it
         into an rdflib graph using the parameterised process"""
 
@@ -66,15 +68,16 @@ class KGraphPipeline:
         _, _, f_score = KGraphPipeline._lir_stats(
             set(data.columns), self.expected_columns
         )
-        if f_score < 0.95:
-            # There's likely a problem with the file, in that there's not a high
-            # correlation between the columns present and those expected by the
-            # serialisation config
-            raise ValueError(
-                f"Not a close enough match between expected columns {self.expected_columns} "
-                + f"and the columns presented in the data {data.columns}. Recheck and "
-                + "try again"
-            )
+        if not ignore_validate:
+            if f_score < 0.95:
+                # There's likely a problem with the file, in that there's not a high
+                # correlation between the columns present and those expected by the
+                # serialisation config
+                raise ValueError(
+                    f"Not a close enough match between expected columns {self.expected_columns} "
+                    + f"and the columns presented in the data {data.columns}. Recheck and "
+                    + "try again"
+                )
 
         raw_g = self.mapping_object.to_rdf_graph(data)
 
