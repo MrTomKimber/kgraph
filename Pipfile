@@ -16,6 +16,7 @@ pyshacl = "*"
 jsonschema = "*"
 sqlitedict = "*"
 gravis = "*"
+selenium = "*"
 
 [dev-packages]
 jupyter = "*"

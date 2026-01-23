@@ -43,7 +43,7 @@ class KGraphPipeline:
             else:
                 if v is not None and not self._validate_file_exists(v):
                     raise FileExistsError(
-                        f"Problem with parameter `{k}` " + "there is no file at :`{v}`"
+                        f"Problem with parameter `{k}` there is no file at :`{v}`"
                     )
 
         self.mapping_object = SchemaMapping(mapping_config_location)

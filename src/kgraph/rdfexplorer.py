@@ -6,6 +6,7 @@ from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
 import re
+import networkx as nx
 from html import escape
 
 from kgraph.declarations import (
@@ -51,7 +52,7 @@ class EdgeData:
     def to_dict(self):
         return asdict(self)
 
-@dataclass
+@dataclass(frozen=True)
 class NodeData:
     """Dataclass for handling graph-links from an object to other objects"""
 
@@ -70,7 +71,7 @@ class NodeData:
         return asdict(self)
 
 
-@dataclass
+@dataclass(frozen=True)
 class GraphLiteralData(NodeData):
     """Dataclass for handling graph-links from an object to other objects"""
 
@@ -80,11 +81,11 @@ class GraphLiteralData(NodeData):
     is_possible_url: bool
 
 
-@dataclass
+@dataclass(frozen=True)
 class GraphEntityData(NodeData):
     """Dataclass for handling graph-links from an object to other objects"""
 
-    subject: URIRef
+    subject: URIRef 
     value: URIRef
     subject_types: list[URIRef]
 
@@ -135,6 +136,7 @@ class GraphEntity:
             self.identifier = uri
             self.type = GraphEntity.__entity_types.object
             self._setup_uriref()
+            self.property_list = []
         elif isinstance(uri, Literal):
             self.literal = uri
             self.identifier = uri
@@ -316,6 +318,8 @@ class GraphEntity:
             for t in incoming_predicates
         ]
 
+        
+
         self.data = GraphEntityData(
             subject=self.uri,
             subject_namespace_str=uri_split(self.uri)[0],
@@ -327,7 +331,7 @@ class GraphEntity:
             outgoing_predicates=outgoing_predicates,
             outgoing_predicate_labels=outgoing_predicate_labels,
             incoming_predicates=incoming_predicates,
-            incoming_predicate_labels=incoming_predicate_labels,
+            incoming_predicate_labels=incoming_predicate_labels
         )
 
     def get_neighbours(self):
@@ -338,16 +342,29 @@ class GraphEntity:
 
         self.get_outgoing_linked_entity_data()
         outgoing_linked_neighbours = []
+        property_list = []
 
         for p in self.data.outgoing_predicates:
             for o in self._get_objects(self.uri, p):
+                fetched_predicate_entity = GraphEntity(self.graph, p, self.entity_store)
+                fetched_object_entity = GraphEntity(self.graph, o, self.entity_store)
                 outgoing_linked_neighbours.append(
                     (
-                        GraphEntity(self.graph, p, self.entity_store),
-                        GraphEntity(self.graph, o, self.entity_store),
-                    ),
+                        fetched_predicate_entity,
+                        fetched_object_entity,
+                    )
                 )
+
+                if fetched_object_entity.type=='literal':
+                    property_list.append(
+                        (
+                            fetched_predicate_entity.data.subject_h_label,
+                            fetched_object_entity.data.value
+                        )
+                    )
+                
         self.outgoing_linked_neighbours = outgoing_linked_neighbours
+        self.property_list = property_list
 
         self.get_incoming_linked_entity_data()
         incoming_linked_neighbours = []
@@ -648,3 +665,42 @@ class RDFExplorer:
 
             index[data].add(k)
         return index
+
+    def to_gravis_nx(self):
+        nx_g = nx.MultiDiGraph()
+
+        for node, entity in self.entity_store.items():
+            
+            # Filter out nodes that are objects (exclude literals)
+            if entity.type=='object':
+                print(entity.property_list)
+                html_components = entity.html_components(configuration={})
+                html_stuff = ""
+                for k, content in html_components.items():
+                    html_stuff = html_stuff + content
+                try:
+                    nx_g.add_node(node, 
+                                label=entity.data.subject_h_label, 
+                                click=html_stuff, 
+                                hover=html_components['title'],
+                                rdfclass=entity.data.subject_type_labels[0],
+                                property_list=entity.property_list
+                                )
+                except Exception as e:
+                    print(entity, e)
+                    
+        for edge_id, edge in self.link_store.items():
+            if edge.predicate != RDF.type:
+                try:
+                    nx_g.add_edge(edge.subject,
+                                edge.object,
+                                label=edge.predicate_label, 
+                                uri=edge.predicate,
+                                rdfclass=edge.predicate.n3(self.graph.namespace_manager)
+                                )
+
+                except Exception as e:
+                    print(edge, e)
+
+        return nx_g
+        

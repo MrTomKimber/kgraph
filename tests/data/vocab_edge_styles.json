@@ -1,0 +1,34 @@
+{
+    "KGMETA:isScopedWithin" : {
+        "color" : "#bbbbbb", 
+        "border_color" : "#aaaaaa",
+        "border_size" : 1,
+        "size" : 1, 
+        "label_size" : 10,
+        "hover" : "Parent Layer"
+    }, 
+    "skos:inScheme" : {
+        "color" : "#eebb30", 
+        "border_color" : "#eebb30",
+        "border_size" : 2,
+        "size" : 2, 
+        "label_size" : 10,
+        "hover" : "Part Of"
+    }, 
+    "skos:related" : {
+        "color" : "#eeaaaa", 
+        "border_color" : "#eeaaaa",
+        "border_size" : 2,
+        "size" : 2, 
+        "label_size" : 20,
+        "hover" : "Realises"
+    }, 
+    "skos:narrower" : {
+        "color" : "#8090ee", 
+        "border_color" : "#8090ee",
+        "border_size" : 2,
+        "size" : 3, 
+        "label_size" : 20,
+        "hover" : "HasDependencyOn"
+    }
+}

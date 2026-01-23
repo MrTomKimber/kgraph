@@ -5,16 +5,20 @@ repo_path = os.path.abspath(os.path.join(current_dir, "../src"))
 if repo_path not in sys.path:
     sys.path.append(repo_path)
 
-import pytest
-import pandas as pd
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import SKOS, RDF, RDFS
 from pyshacl import validate
+
+import pytest
+import pandas as pd
+import json
+import networkx as nx
 
 from kgraph import declarations
 from kgraph import schemamapping
 from kgraph import kgpipeline
 from kgraph import rdfexplorer
+from kgraph import gvis
 
 from kgraph_fixtures_test import (raw_data_df, 
                                   schema_mapping_object, 
@@ -22,7 +26,6 @@ from kgraph_fixtures_test import (raw_data_df,
                                   kgp_pipeline, 
                                   kgp_graph, 
                                   explorer_obj)
-
 
 def test_instantiate_schema_mapping_isdataframe(schema_mapping_object):
     """Instantiate a schema_mapping object"""
@@ -121,3 +124,32 @@ def test_rdfexplorer_gen_entity_report_all_keys(explorer_obj):
         for k,v in e_store_objects.items()
     ] for k in q.keys()])
 
+def test_rdfexplorer_gen_visualisation(explorer_obj):
+    nxg = explorer_obj.to_gravis_nx()
+    node_style_mappings = json.load(open(os.path.join(current_dir, "data/vocab_node_styles.json"), "r"))
+    edge_style_mappings = json.load(open(os.path.join(current_dir, "data/vocab_edge_styles.json"), "r"))
+    map_node_styles_on_rdfclass_f = gvis.partial(gvis.get_attribute, attribute="rdfclass")
+    map_edge_styles_on_rdfclass_f = gvis.partial(gvis.get_attribute, attribute="rdfclass")
+    
+
+    visualisation_g = nx.MultiDiGraph()
+    #print({node: value for node, value in nx.get_node_attributes(nxg, 'POS').items() if value in ('AUX', 'VERB')})
+    # Retrieve content from sentence_list *if* the number of nsubj's is > 0
+
+    visualisation_g = gvis.decorate_networkx_nodes_with_function(nxg,
+                                        map_node_styles_on_rdfclass_f,
+                                        node_style_mappings)
+    visualisation_g = gvis.decorate_networkx_edges_with_function(visualisation_g,
+                                        map_edge_styles_on_rdfclass_f,
+                                        edge_style_mappings)
+    
+    if isinstance(visualisation_g, (nx.MultiDiGraph, nx.MultiGraph)):
+        print([d
+            for s,f,k,d in visualisation_g.edges(data=True, keys=True)
+            ])
+    else:
+        print([d
+            for s,f,d in visualisation_g.edges(data=True)
+            ])
+
+    

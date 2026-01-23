@@ -1,0 +1,32 @@
+{
+
+    "rdfs:Class" : {
+        "color" : "#23b4dc", 
+        "border_color" : "#23b4dc",
+        "border_size" : 3,
+        "size" : 40, 
+        "shape" : "rectangle"
+    },
+	"skos:ConceptScheme" : {
+        "color" : "#b4dc23", 
+        "border_color" : "#23b4dc",
+        "border_size" : 2,
+        "size" : 30, 
+        "shape" : "circle"
+    },
+    "skos:Concept" : {
+        "color" : "#b4dc23", 
+        "border_color" : "#23b4dc",
+        "border_size" : 2,
+        "size" : 30, 
+        "shape" : "circle"
+    }, 
+    "KGMETA:Namespace" : {
+        "color" : "#b4dc23", 
+        "border_color" : "#23b4dc",
+        "border_size" : 2,
+        "size" : 30, 
+        "shape" : "circle"
+    }
+    
+}

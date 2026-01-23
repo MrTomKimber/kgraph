@@ -363,7 +363,7 @@ class SchemaMapping:
                 url_c = urllib.parse.quote(c)
                 p_url = SchemaMapping.DATA[f"column({url_c})"]
 
-                if data[c] is not None:
+                if data[c] is not None and not pd.isna(data[c]):
                     # print(c, ":", data[c])
                     raw_data_value = data[c]
                     if c in self.referenced_columns:
@@ -375,10 +375,14 @@ class SchemaMapping:
                         # multivalues flag, then *all* specifications must treat it as such.
                         if c in self.multivalue_columns:
                             # Apply explosion transformation on the value presented
-                            data_fetched = split_on_comma_respecting_quotes(
-                                raw_data_value
-                            )
-                            # print( c, raw_data_value, data_fetched)
+                            try:
+                                data_fetched = split_on_comma_respecting_quotes(
+                                    raw_data_value
+                                )
+                            except Exception as e:
+                                print( f"`{e}`", c, raw_data_value, )
+                                raise e
+
                         else:
                             data_fetched = [raw_data_value]
                     else:
