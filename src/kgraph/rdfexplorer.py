@@ -66,6 +66,7 @@ class NodeData:
     outgoing_predicate_labels: list[str]
     incoming_predicates: list[URIRef]
     incoming_predicate_labels: list[str]
+    is_possible_url: bool
 
     def to_dict(self):
         return asdict(self)
@@ -78,7 +79,7 @@ class GraphLiteralData(NodeData):
     subject: Literal
     value: object
     subject_types: list
-    is_possible_url: bool
+    
 
 
 @dataclass(frozen=True)
@@ -331,7 +332,8 @@ class GraphEntity:
             outgoing_predicates=outgoing_predicates,
             outgoing_predicate_labels=outgoing_predicate_labels,
             incoming_predicates=incoming_predicates,
-            incoming_predicate_labels=incoming_predicate_labels
+            incoming_predicate_labels=incoming_predicate_labels,
+            is_possible_url=True
         )
 
     def get_neighbours(self):
@@ -460,7 +462,16 @@ class GraphEntity:
     def html_components(self, configuration):
 
         components={}
-        
+
+        href_entity_lambda = (
+            lambda x: f"""<a href="{x.uri}" title="{escape(x.data.subject_t_label)}" target="_blank">{escape(x.data.subject_h_label)}</a>"""
+        )
+
+        href_literal_lambda = lambda x: (
+                f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
+                if x.data.is_possible_url
+                else f"{escape(x.literal.toPython())}"
+            )
         if self.type == "object":
 
             # Define title_stub
@@ -472,17 +483,13 @@ class GraphEntity:
                     )
                 ]
             )
-            html_title_stub = f""" <h1><a href="{self.uri}" title="{escape(self.data.subject_t_label)}">{escape(self.data.subject_h_label)}</a> | {subject_types_string} <h1> """
+            html_title_stub = f""" <h1>{href_entity_lambda(self)} | {subject_types_string} <h1> """
             components['title']=html_title_stub
             # Define Literal Property Table
-            href_lambda = lambda x: (
-                f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
-                if x.data.is_possible_url
-                else f"{escape(x.literal.toPython())}"
-            )
+            
             property_rows_string = "".join(
                 [
-                    f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
+                    f"""<tr><td>{href_entity_lambda(p)}</td><td>{href_literal_lambda(o)}</td></tr>"""
                     for p, o in sorted(
                         self.outgoing_linked_neighbours,
                         key=lambda x: x[0].data.subject_h_label,
@@ -499,12 +506,10 @@ class GraphEntity:
             components['property_table']=html_property_panel_stub
             # Define Incoming and Outgoing Object Links
 
-            href_lambda = (
-                lambda x: f"""<a href="{x.uri}" title="{escape(x.data.subject_t_label)}">{escape(x.data.subject_h_label)}</a>"""
-            )
+ 
             outbound_links_string = "".join(
                 [
-                    f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
+                    f"""<tr><td>{href_entity_lambda(p)}</td><td>{href_entity_lambda(o)}</td></tr>"""
                     for p, o in sorted(
                         self.outgoing_linked_neighbours,
                         key=lambda x: x[0].data.subject_h_label,
@@ -521,7 +526,7 @@ class GraphEntity:
             components['outbound_links']=html_outbound_links_panel_stub
             inbound_links_string = "".join(
                 [
-                    f"""<tr><td><a href="{p.uri}">{escape(p.data.subject_h_label)}</a></td><td>{href_lambda(o)}</td></tr>"""
+                    f"""<tr><td>{href_entity_lambda(p)}</td><td>{href_entity_lambda(o)}</td></tr>"""
                     for p, o in sorted(
                         self.incoming_linked_neighbours,
                         key=lambda x: x[0].data.subject_h_label,
