@@ -1,53 +1,57 @@
-from datetime import datetime
-from rdflib.plugins.stores import sparqlstore, memory
-from rdflib import URIRef, Literal, BNode, Dataset, Namespace
-from rdflib import Graph as RDFGraph
-from rdflib.namespace import RDF, RDFS
+"""Utility code for working with a knowledge graph store"""
 
+from rdflib import Dataset, URIRef, BNode, Literal, Graph
+from rdflib.plugins.stores import sparqlstore, memory
+import uuid
+from urllib.parse import urljoin
 
 class KGStore:
-    """Class for wrapping utility graph-store functions like
-    query, load-data, delete data etc
-    `store_type` parameter can be set to `memory` or `jena`
-    """
+    def __init__(self, 
+             query_url, 
+             update_url, 
+             base_graph_uri):
+        self.store = sparqlstore.SPARQLUpdateStore(query_url=query_url, 
+                                              context_aware=True)
+        self.store.open((query_url, update_url))
+        self.base_graph_uri = base_graph_uri
+        self.dataset = Dataset(store=self.store, 
+                               default_union=True, 
+                               default_graph_base = self.base_graph_uri)
+    
+    def list_graphs(self):
+        """Return a list of all named graphs in the store"""
+        sparql_q = """SELECT distinct ?g 
+        WHERE { GRAPH ?g { ?s ?p ?o } }"""
 
-    def __init__(self, **kwargs):
-        """Initialising the Store defines default parameters and exposes
-        a Dataset object as self.DS against-which various functions will
-        operate."""
-
-        kwarg_lower_d = {k.lower(): v for k, v in kwargs.items()}
-
-        if "service" in kwarg_lower_d.keys():
-            self.SERVICENAME = kwarg_lower_d.get("service")
-
-        if "queryurl" in kwarg_lower_d.keys():
-            self.QUERYURL = str(kwarg_lower_d.get("queryurl"))
+        return [r.get('g') for r in self.dataset.query(sparql_q)]
+    
+    def drop_graph(self, 
+                   named_graph : URIRef) -> None:
+        drop_graph_sparql = f"DROP GRAPH {named_graph.n3()}"
+        if named_graph in self.list_graphs():
+            self.dataset.update(drop_graph_sparql)
+            self.store.commit()
+            print(f"Graph `{named_graph}` dropped from store.")
         else:
-            self.QUERYURL = f"http://localhost:3030/{self.SERVICENAME}/query"
+            print(f"Graph `{named_graph}` not found in store.")
 
-        if "updateurl" in kwarg_lower_d.keys():
-            self.UPDATEURL = str(kwarg_lower_d.get("updateurl"))
-        else:
-            self.UPDATEURL = f"http://localhost:3030/{self.SERVICENAME}/update"
+    def get_graph(self, 
+                  graph_id : URIRef | None = None) -> Graph:
+        if graph_id is None:
+            unique_id = uuid.uuid4().hex
+            graph_id = URIRef(urljoin(self.base_graph_uri, unique_id))
+        store_graph = self.dataset.graph(graph_id)
+        return store_graph
 
-        if "store_type" in kwarg_lower_d.keys():
-            if kwarg_lower_d.get("store_type") == "memory":
-                self.store = memory.Memory()
-            elif kwarg_lower_d.get("store_type") == "jena":
-                self.store = sparqlstore.SPARQLUpdateStore(
-                    self.QUERYURL, context_aware=True
-                )
-                self.store.open((self.QUERYURL, self.UPDATEURL))
-        self.DS = Dataset(
-            store=self.store, default_union=True, default_graph_base="http://base.raw"
-        )  # pyright: ignore[reportGeneralTypeIssues]
+    def save_graph(self, 
+                      data_graph : Graph,
+                      graph_id : URIRef | None = None, 
+                      ) -> None:
+        graph = self.get_graph(graph_id)
+        triples = [(*t[0:3], graph.identifier) for t in data_graph.triples((None, None, None))]
+        self.dataset.addN(triples)
+        self.store.commit()
+        print(f"Loaded {len(triples)} to Graph `{graph.identifier.toPython()}`")
 
-    def sparql(self, query):
-        return self.DS.query(query)
+    
 
-    @staticmethod
-    def triple_list_to_named_quad_iterator(triples: list[tuple], named_graph_uri: str):
-        NGRAPH = URIRef(named_graph_uri)
-        for s, p, o, *_ in triples:
-            yield (s, p, o, NGRAPH)

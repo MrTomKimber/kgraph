@@ -103,6 +103,13 @@ def get_attribute(id : Hashable,
     else:
         return "Unknown"
 
+def apply(id: Hashable, 
+            data: dict[str, Any], 
+            func : Callable
+            ) -> Hashable:
+
+    return func(id, data)
+
 test_class_mappings = {
     "Unknown": {
         "color" : "#0022ee", 

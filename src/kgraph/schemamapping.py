@@ -94,6 +94,10 @@ class SchemaMapping:
 
         self.stats_dict = {}
 
+        # Validate that no InstanceNames appear more than once!
+        # Duplicate InstanceNames in the mapping cause problems!
+        
+
         for named_object_definition in self.config["NamedObjects"]:
             for instance in named_object_definition["Instances"]:
                 iname = instance.get("InstanceName")
@@ -245,6 +249,7 @@ class SchemaMapping:
             for n in triple_generating_objects
             for q in collate_fqn_parents(n.fully_qualified_name)
         }
+        print(":", raw_fqn_parents)
         nameless_parents = [
             p for p in raw_fqn_parents if p not in self.entity_fqn_index.keys()
         ]
@@ -552,7 +557,10 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
             self._is_definition = False
         self._classbase_uri = classbase
         if self._parent__column is None or str(self._parent__column).strip() == "":
+            print(f"setting <root> for {self._instance_name}")
             self._parent__column = "<root>"
+        else:
+            print(f"_parent_column for {self._instance_name} is {self._parent__column}")
         self._multivalues = instance_d.get("EnableMultiValues", False)
 
         super()._populate_column_list()

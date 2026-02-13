@@ -470,7 +470,7 @@ class GraphEntity:
         href_literal_lambda = lambda x: (
                 f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
                 if x.data.is_possible_url
-                else f"{escape(x.literal.toPython())}"
+                else f"{escape(str(x.literal.toPython()))}"
             )
         if self.type == "object":
 

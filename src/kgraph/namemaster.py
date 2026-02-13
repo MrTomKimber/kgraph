@@ -6,7 +6,12 @@ from kgraph.declarations import KGMETA
 
 class NameMaster:
     """Simple class for providing a data-mastering service using SqliteDict."""
-
+    # Use of SqliteDict means the code can only seriously be run locally, referencing
+    # a single memory file to persist contents between sessions. 
+    # A later evolution might involve switching to a more centralised persistence/caching
+    # solution that offers clients to perform distributed mastering against a 
+    # central store - see REDIS as a potential alternative. 
+    
     def __init__(self, db_path=":memory:", table="master", autocommit=False):
         # Start the database and return the number of items in it
         self.db = SqliteDict(db_path, tablename=table, autocommit=autocommit)
