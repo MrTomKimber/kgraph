@@ -10,29 +10,29 @@ def validate_unbound_function_sig(v_func, ubound_parms):
     # Perform check for node_decorator_f signature
     f_sig = inspect.signature(v_func)
     if not all([n in ubound_parms
-                for n,p in 
+                for n,p in
                 f_sig.parameters.items()
                 if p.default == inspect.Parameter.empty
             ]):
         raise TypeError(f"{v_func.__name__} doesn't have a valid unbound call signature {str([n
-                for n,p in 
+                for n,p in
                 f_sig.parameters.items()
                 if p.default == inspect.Parameter.empty
-            ])} != {str(ubound_parms)}") 
+            ])} != {str(ubound_parms)}")
 
     return True
 
-def decorator_function_template(id : Hashable, 
+def decorator_function_template(id : Hashable,
                        data : dict[str, Any],
-                       classification_function: Callable, 
+                       classification_function: Callable,
                        classification_mapping: dict[str, dict[str, Any]]) -> dict[str, Any]:
     key = classification_function(id, data)
     mapping = classification_mapping.get(key, {})
     return mapping
 
 
-def decorate_networkx_nodes_with_function(nx_g :  NXGraph, 
-                                          classification_function : Callable, 
+def decorate_networkx_nodes_with_function(nx_g :  NXGraph,
+                                          classification_function : Callable,
                                           classification_mapping: dict[str, dict[str, Any]]
                                           ) -> NXGraph:
     """Given a function whose parameters accept a node name, and a dictionary of attributes, 
@@ -41,8 +41,8 @@ def decorate_networkx_nodes_with_function(nx_g :  NXGraph,
 
     assert validate_unbound_function_sig(classification_function, ('id','data'))
 
-    dfunc = partial(decorator_function_template, 
-                    classification_function=classification_function, 
+    dfunc = partial(decorator_function_template,
+                    classification_function=classification_function,
                     classification_mapping=classification_mapping
                     )
 
@@ -56,8 +56,8 @@ def decorate_networkx_nodes_with_function(nx_g :  NXGraph,
     return nx_g
 
 
-def decorate_networkx_edges_with_function(nx_g : NXGraph, 
-                                          classification_function : Callable, 
+def decorate_networkx_edges_with_function(nx_g : NXGraph,
+                                          classification_function : Callable,
                                           classification_mapping: dict[str, dict[str, Any]]
                                           ) -> NXGraph:
     """Given a function whose parameters accept an edge name, and a dictionary of attributes, 
@@ -71,8 +71,8 @@ def decorate_networkx_edges_with_function(nx_g : NXGraph,
     # that's used to uniquely identify edges where start, finish (s,f) isn't a strong
     # enough unique key
 
-    dfunc = partial(decorator_function_template, 
-                    classification_function=classification_function, 
+    dfunc = partial(decorator_function_template,
+                    classification_function=classification_function,
                     classification_mapping=classification_mapping
                     )
 
@@ -89,8 +89,8 @@ def decorate_networkx_edges_with_function(nx_g : NXGraph,
     return nx_g
 
 
-def get_attribute(id : Hashable, 
-                  data : dict[str, Any], 
+def get_attribute(id : Hashable,
+                  data : dict[str, Any],
                   attribute : str
                   ) -> Any:
     """This is a template function for use with the feature decorator
@@ -103,8 +103,8 @@ def get_attribute(id : Hashable,
     else:
         return "Unknown"
 
-def apply(id: Hashable, 
-            data: dict[str, Any], 
+def apply(id: Hashable,
+            data: dict[str, Any],
             func : Callable
             ) -> Hashable:
 
@@ -118,6 +118,5 @@ test_class_mappings = {
         "size" : 5, 
         "shape" : "circle",
         "hover" : "Unknown"
-    }, 
+    },
 }
-
