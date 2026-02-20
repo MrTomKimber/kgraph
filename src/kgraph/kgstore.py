@@ -11,6 +11,12 @@ class StoreType(str, Enum):
     memory = "memory"
     jena = "jena"
 
+class MergePolicy(str, Enum):
+    FULL_REPLACE = "full_replace"
+    ENTITY_REPLACE = "entity_replace"
+    PROPERTY_REPLACE = "property_replace"
+    UNION = "union"
+
 DEFAULT_GRAPH_URI = "http://foo.bar/"
 
 class KGStore:
@@ -56,6 +62,16 @@ class KGStore:
         else:
             print(f"Graph `{named_graph}` not found in store.")
 
+    def clear_graph(self, 
+                   named_graph : URIRef) -> None:
+        clear_graph_sparql = f"CLEAR GRAPH {named_graph.n3()}"
+        if named_graph in self.list_graphs():
+            self.dataset.update(clear_graph_sparql)
+            self.store.commit()
+            print(f"Graph `{named_graph}` cleared from store.")
+        else:
+            print(f"Graph `{named_graph}` not found in store.")
+
     def get_graph(self, 
                   graph_id : URIRef | None = None) -> Graph:
         if graph_id is None:
@@ -67,13 +83,53 @@ class KGStore:
     def save_graph(self, 
                       data_graph : Graph,
                       graph_id : URIRef | None = None, 
+                      drop_existing : bool = False
                       ) -> URIRef:
         graph = self.get_graph(graph_id)
-        triples = [(*t[0:3], graph.identifier) for t in data_graph.triples((None, None, None))]
-        self.dataset.addN(triples)
+        if drop_existing:
+            self.clear_graph(URIRef(graph.identifier))
+        quads = [(*t[0:3], graph.identifier) for t in data_graph.triples((None, None, None))]
+        self.dataset.addN(quads)
         self.store.commit()
-        print(f"Loaded {len(triples)} to Graph `{graph.identifier.toPython()}`")
+        print(f"Loaded {len(quads)} to Graph `{graph.identifier.toPython()}`")
         return graph
+    
+    def update_graph(self, 
+                     graph_data : Graph, 
+                     graph_id : URIRef | None = None,
+                     target_graph_id : URIRef | None = None,
+                     scenario : MergePolicy = MergePolicy.UNION):
+        
+        if target_graph_id is None:
+            target_graph = self.get_graph(graph_id)
+        else:
+            target_graph = self.get_graph(target_graph_id)
+        base_graph = self.get_graph(graph_id)
+        d,k,a = KGStore._gen_deltas(update_graph=graph_data, 
+                                      base_graph=base_graph, 
+                                      scenario=scenario)
+        print(f"d:{d}")
+        print(f"k:{k}")
+        print(f"a:{a}")
+        print(target_graph.identifier)
+
+        try:
+            for triple in d:
+                target_graph.remove(triple)
+            # We don't need to load these under normal circumstances
+            # Commenting out for visibility
+            #keep_quads = [(*t[0:3], target_graph.identifier) for t in k]
+            #self.dataset.addN(keep_quads)
+            add_quads = [(*t[0:3], target_graph.identifier) for t in a]
+            self.dataset.addN(add_quads)
+            self.store.commit()
+        except Exception as e:
+            self.store.rollback()
+            raise e
+        finally:
+            target_graph.close()
+        return target_graph
+    
     
     def get_graph_metrics(self, 
                           data_graph : Graph, 
@@ -97,3 +153,92 @@ class KGStore:
                          "type_count" : type_counts, 
                          "untyped_count" : len(untyped_subjects)}
         return metrics_dict
+    
+    @staticmethod
+    def _tuple_groups(tuples, bitset):
+        """Apply a bitset filter to a list of equally-sized
+        tuples and return the filtered contents."""
+        gtuples=[]
+        # All tuples must be the same length:
+        if len(tuples)>0:
+            bits = len(tuples[0])
+            template = "{bitset:"+"0"+str(bits)+"b"+"}"
+            
+            for tups in tuples:
+                gtuples.append(tuple([tups[e] for e,b in enumerate(template.format(bitset=bitset)) if b!="0"]))
+        return gtuples
+
+    @staticmethod
+    def _collect_group_tuples(tuples, bitset):
+        t_groups = KGStore._tuple_groups(tuples, bitset)
+        t_group_dict = dict()
+        for e,g in enumerate(t_groups):
+            if g not in t_group_dict.keys():
+                t_group_dict[g]=[]
+            t_group_dict[g].append(tuples[e])
+        return t_group_dict
+    
+    @staticmethod
+    def _sets_to_lir(set_a, set_b):
+        l, i, r = set_a - set_b, set_a.intersection(set_b), set_b - set_a
+        return l, i, r
+    
+    @staticmethod
+    def _gen_deltas(update_graph : Graph, 
+                     base_graph : Graph, 
+                     scenario : MergePolicy = MergePolicy.UNION) -> tuple[list, list, list]:
+
+        existing_triples = []        
+        delete_triples = []
+        add_triples = []
+
+        scenario_to_bitset = {
+            MergePolicy.FULL_REPLACE : 0, 
+            MergePolicy.ENTITY_REPLACE : 4, 
+            MergePolicy.PROPERTY_REPLACE : 6, 
+            MergePolicy.UNION : 7
+        }
+        
+        if scenario in scenario_to_bitset.keys():
+            g_tuples_A = KGStore._collect_group_tuples(list(base_graph.triples((None, None, None))), scenario_to_bitset.get(scenario, 7))
+            g_tuples_B = KGStore._collect_group_tuples(list(update_graph.triples((None, None, None))), scenario_to_bitset.get(scenario, 7))
+            g_set_A = set(g_tuples_A.keys())
+            g_set_B = set(g_tuples_B.keys())
+            L,I,R = KGStore._sets_to_lir(g_set_A, g_set_B)
+            print(len(L), len(I), len(R))
+
+            # Keep all triples from L - no action if using old_graph
+            for key in L:
+                for t in g_tuples_B.get(key,[]):
+                    existing_triples.append(t)
+            # Add all triples in R
+            for key in R:
+                for t in g_tuples_B.get(key,[]):
+                    add_triples.append(t)
+            # From I, delete any triples from B and insert any triples from A
+            # If a full s,p,o triple exists in both sets, then add it to the
+            # existing list
+            for key in I:
+                for t in g_tuples_A.get(key,[]):
+                    if t not in g_tuples_B.get(key,[]):
+                        delete_triples.append(t)
+                    else:
+                        existing_triples.append(t)
+                for t in g_tuples_B.get(key,[]):
+                    if t not in g_tuples_A.get(key,[]):
+                        add_triples.append(t)
+                    else:
+                        existing_triples.append(t)
+            # Options at this point are:
+            #   1) Create a brand-new graph that's the result of the merge 
+            #       Create new graph and 
+            #       + add_triples and 
+            #       + existing_triples
+            #   2) Mutate the existing graph  
+            #       - delete_triples and 
+            #       + add_triples (some of may already exist if I contained duplicates, but it's fine)
+
+            
+        else:
+            raise ValueError(f"Scenario value {scenario} not in range {{1,2,3,4}}")
+        return (delete_triples, existing_triples, add_triples)
