@@ -20,6 +20,13 @@ class MergePolicy(str, Enum):
 DEFAULT_GRAPH_URI = "http://foo.bar/"
 
 class KGStore:
+
+    @staticmethod
+    def _bnode_to_sparql(node):
+        if isinstance(node, BNode):
+            return f"<bnode:{node}>"
+        return node.n3()
+
     def __init__(self, 
              store_type : StoreType = StoreType.memory, 
              base_graph_uri : str = DEFAULT_GRAPH_URI,
@@ -30,7 +37,8 @@ class KGStore:
             self.store = memory.Memory()
         elif store_type == StoreType.jena:
             self.store = sparqlstore.SPARQLUpdateStore(query_url=query_url, 
-                                                context_aware=True)
+                                                context_aware=True, 
+                                                node_to_sparql=KGStore._bnode_to_sparql)
             if not any([v is None for v in [query_url, update_url]]):
                 self.store.open((query_url, update_url))
             else:
@@ -142,7 +150,7 @@ class KGStore:
         types = set([t for _,_,t in data_graph.triples((None, RDF.type, None ))])
         type_counts={}
         for t in types:
-            type_counts[t] = len(list(data_graph.triples((None, RDF.type, None))))
+            type_counts[t] = len(list(data_graph.triples((None, RDF.type, t))))
         typed_subjects = set(data_graph.subjects(RDF.type, None))
         all_subjects = set(data_graph.subjects())
         untyped_subjects = all_subjects - typed_subjects
