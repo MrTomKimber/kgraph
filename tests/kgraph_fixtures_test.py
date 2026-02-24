@@ -14,6 +14,8 @@ from kgraph import declarations
 from kgraph import schemamapping
 from kgraph import kgpipeline
 from kgraph import rdfexplorer
+from kgraph import kgstore
+from kgraph import metadata
 
 
 
@@ -61,3 +63,18 @@ def kgp_graph(kgp_pipeline, raw_data_df) -> Graph:
 def explorer_obj(kgp_graph):
     Explorer = rdfexplorer.RDFExplorer(kgp_graph)
     return Explorer
+
+@pytest.fixture(scope='session')
+def in_memory_store() -> kgstore.KGStore:
+    store_type=kgstore.StoreType.memory
+    kgs = kgstore.KGStore(store_type, base_graph_uri="http://kgraph.foo.bar")
+    return kgs
+
+@pytest.fixture(scope='session')
+def toy_graph(scope='session'):
+    toy_graph = Graph()
+    toy_graph.add((URIRef('http://kgraph.foo.bar#example1'), 
+                URIRef('http://kgraph.foo.bar#predicate'), 
+                URIRef('http://kgraph.foo.bar#example2')))
+    return toy_graph
+

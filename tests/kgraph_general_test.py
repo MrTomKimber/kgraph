@@ -19,13 +19,17 @@ from kgraph import schemamapping
 from kgraph import kgpipeline
 from kgraph import rdfexplorer
 from kgraph import gvis
+from kgraph import kgstore
+from kgraph import metadata
 
 from kgraph_fixtures_test import (raw_data_df, 
                                   schema_mapping_object, 
                                   serialised_graph, 
                                   kgp_pipeline, 
                                   kgp_graph, 
-                                  explorer_obj)
+                                  explorer_obj, 
+                                  in_memory_store, 
+                                  toy_graph)
 
 def test_instantiate_schema_mapping_isdataframe(schema_mapping_object):
     """Instantiate a schema_mapping object"""
@@ -152,4 +156,25 @@ def test_rdfexplorer_gen_visualisation(explorer_obj):
             for s,f,d in visualisation_g.edges(data=True)
             ])
 
+
+def test_create_in_memory_store_and_populate_with_metadata(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph)
+
+    gmeta_packet_graph = metadata.NamedGraphMetaData(
+            uri = toy_graph_stored.identifier, 
+            title = "Toy Graph", 
+            label = "Toy Graph", 
+            language = "en", 
+            description = """A minimal graph containing a single triple for testing purposes""", 
+            metadata_type = metadata.MetaDataType.dataset
+        ).to_graph()
+    in_memory_store.update_graph(gmeta_packet_graph, 
+                                 "http://kgraph.foo.bar/metadata", 
+                                 scenario=kgstore.MergePolicy.ENTITY_REPLACE)
+    stored_graphs = in_memory_store.list_graphs()
+    print(stored_graphs)
+    assert toy_graph_stored.identifier in stored_graphs
+    assert URIRef("http://kgraph.foo.bar/metadata") in stored_graphs
     
+    
+
