@@ -641,33 +641,6 @@ wheels = [
 ]
 
 [[package]]
-name = "gravis"
-version = "0.1.1"
-source = { path = "../../../../../home/tomk/Documents/Coding/gravis/dist/gravis-0.1.1-py3-none-any.whl" }
-dependencies = [
-    { name = "setuptools" },
-]
-wheels = [
-    { filename = "gravis-0.1.1-py3-none-any.whl", hash = "sha256:7e75faa776eddae0a59036b28fe83d5ebd8bbab77351bad01f378222cd37ad67" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "flake8", marker = "extra == 'dev'" },
-    { name = "ipython", marker = "extra == 'dev'" },
-    { name = "isort", marker = "extra == 'dev'" },
-    { name = "networkx", marker = "extra == 'dev'" },
-    { name = "pylint", marker = "extra == 'dev'" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=6.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'" },
-    { name = "pytest-timeout", marker = "extra == 'dev'" },
-    { name = "setuptools", specifier = ">=40.0" },
-    { name = "tox", marker = "extra == 'dev'", specifier = ">=3.12.0" },
-    { name = "tox-conda", marker = "extra == 'dev'" },
-]
-provides-extras = ["dev"]
-
-[[package]]
 name = "h11"
 version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1128,11 +1101,6 @@ dependencies = [
     { name = "sqlitedict" },
 ]
 
-[package.optional-dependencies]
-gravis = [
-    { name = "gravis" },
-]
-
 [package.dev-dependencies]
 dev = [
     { name = "black" },
@@ -1146,7 +1114,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "gravis", marker = "extra == 'gravis'", path = "../../../../../home/tomk/Documents/Coding/gravis/dist/gravis-0.1.1-py3-none-any.whl" },
     { name = "networkx", specifier = ">=3.6.1" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=3.0.1" },
