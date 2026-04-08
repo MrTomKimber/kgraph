@@ -21,7 +21,7 @@ jobs:
         uv sync --frozen
     - name: Analyse code with pylint
       run: |
-        uv run pylint $(git ls-files 'src/kgraph/*.py') --fail-under=7.5 --recursive=y
+        uv run --no-extra gravis pylint $(git ls-files 'src/kgraph/*.py') --fail-under=7.5 --recursive=y
     - name: Perform unit testing with pytest - fail if coverage < 75%
       run: |
         uv run --no-extra gravis pytest --cov=kgraph --cov-fail-under=75
