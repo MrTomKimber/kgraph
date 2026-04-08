@@ -44,12 +44,9 @@ def shacl_graph() -> Graph:
 @pytest.fixture(scope='session')
 def kgp_pipeline() -> kgpipeline.KGraphPipeline:
     mapping_config_at = os.path.join(current_dir, "data/skos_vocabulary_mapping.json")
-    ontology_list = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta.owl"), 
-                    os.path.join(current_dir, "../src/kgraph/ontologies/skos.rdf")]
     validation_shacl = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta_shacl.ttl")]
 
     kgp = kgpipeline.KGraphPipeline(mapping_config_at,
-                                ontology_list,
                                 validation_shacl)
     
     return kgp

@@ -1128,10 +1128,14 @@ dependencies = [
     { name = "sqlitedict" },
 ]
 
+[package.optional-dependencies]
+gravis = [
+    { name = "gravis" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "black" },
-    { name = "gravis" },
     { name = "jupyter" },
     { name = "matplotlib" },
     { name = "notebook" },
@@ -1142,6 +1146,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "gravis", marker = "extra == 'gravis'", path = "../../../../../home/tomk/Documents/Coding/gravis/dist/gravis-0.1.1-py3-none-any.whl" },
     { name = "networkx", specifier = ">=3.6.1" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=3.0.1" },
@@ -1150,11 +1155,11 @@ requires-dist = [
     { name = "rdflib", specifier = ">=7.6.0" },
     { name = "sqlitedict", specifier = ">=2.1.0" },
 ]
+provides-extras = ["gravis"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "black" },
-    { name = "gravis", path = "../../../../../home/tomk/Documents/Coding/gravis/dist/gravis-0.1.1-py3-none-any.whl" },
     { name = "jupyter" },
     { name = "matplotlib" },
     { name = "notebook" },

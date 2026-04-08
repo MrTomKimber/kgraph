@@ -34,7 +34,7 @@ package = false
 name = "pypi"
 url = "https://pypi.org/simple"
 
-[project.optional.dependencies]
+[project.optional-dependencies]
 gravis = ["gravis"]
 
 [tool.uv.sources]
