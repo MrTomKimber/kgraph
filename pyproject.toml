@@ -17,7 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "gravis",
+    
     "jupyter",
     "notebook",
     "matplotlib",
@@ -33,6 +33,9 @@ package = false
 [[tool.uv.index]]
 name = "pypi"
 url = "https://pypi.org/simple"
+
+[project.optional.dependencies]
+gravis = ["gravis"]
 
 [tool.uv.sources]
 gravis = { path = "../../../../../home/tomk/Documents/Coding/gravis/dist/gravis-0.1.1-py3-none-any.whl" }
