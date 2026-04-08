@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'
+  xmlns:rdrel='http://RDVocab.info/RDARelationshipsWEMI/'
+  xmlns:dcterms='http://purl.org/dc/terms/'
+  xmlns:dcam='http://purl.org/dc/dcam/'
+  xmlns:ov='http://open.vocab.org/terms/'
+  xmlns:frbr='http://purl.org/vocab/frbr/core#'
+  xmlns:foaf='http://xmlns.com/foaf/0.1/'
+>
+
+
+    <frbr:Work rdf:about="http://openlibrary.org/works/OL716850W">
+            <dcterms:title>Gödel, Escher, Bach: An Eternal Golden Braid</dcterms:title>
+    
+
+
+      <dcterms:creator>
+          <rdf:Description rdf:about="http://openlibrary.org/authors/OL57437A">
+              <foaf:name>Douglas R. Hofstadter</foaf:name>
+          </rdf:Description>
+      </dcterms:creator>
+      
+          <dcterms:subject>Logics</dcterms:subject>
+    <dcterms:subject>Teoria Do Conhecimento</dcterms:subject>
+    <dcterms:subject>Artificial intelligence</dcterms:subject>
+    <dcterms:subject>Metamathematics</dcterms:subject>
+    <dcterms:subject>Symmetry</dcterms:subject>
+    <dcterms:subject>Mathematics</dcterms:subject>
+    <dcterms:subject>Open Library Staff Picks</dcterms:subject>
+    <dcterms:subject>Symbolic and mathematical Logic</dcterms:subject>
+    <dcterms:subject>Long Now Manual for Civilization</dcterms:subject>
+    <dcterms:subject>Kognitiver Prozess</dcterms:subject>
+    <dcterms:subject>Metamathematik</dcterms:subject>
+    <dcterms:subject>Computer</dcterms:subject>
+    <dcterms:subject>Künstliche Intelligenz</dcterms:subject>
+    <dcterms:subject>Weltbild</dcterms:subject>
+    <dcterms:subject>Simetrâi</dcterms:subject>
+    <dcterms:subject>Reading Level-Grade 7</dcterms:subject>
+    <dcterms:subject>Reading Level-Grade 9</dcterms:subject>
+    <dcterms:subject>Reading Level-Grade 8</dcterms:subject>
+    <dcterms:subject>Reading Level-Grade 11</dcterms:subject>
+    <dcterms:subject>Reading Level-Grade 10</dcterms:subject>
+    <dcterms:subject>Reading Level-Grade 12</dcterms:subject>
+    <dcterms:subject>maths</dcterms:subject>
+    <dcterms:subject>music</dcterms:subject>
+    <dcterms:subject>complexity</dcterms:subject>
+    <dcterms:subject>Goedel, kurt, 1906-1978</dcterms:subject>
+    <dcterms:subject>Escher, m. c. (maurits cornelis), 1898-1970</dcterms:subject>
+    <dcterms:subject>Bach, johann sebastian, 1685-1750</dcterms:subject>
+    <dcterms:subject>Escher, M. C. (Maurits Cornelis), 1898-1972</dcterms:subject>
+    <dcterms:subject>Gödel, Kurt</dcterms:subject>
+    <dcterms:subject>Matematica</dcterms:subject>
+    <dcterms:subject>Logica</dcterms:subject>
+    <dcterms:subject>Inteligencia Artificial (Computacao)</dcterms:subject>
+    <dcterms:subject>Simetría</dcterms:subject>
+    <dcterms:subject>Inteligencia artificial</dcterms:subject>
+    <dcterms:subject>Metamathematica</dcterms:subject>
+    <dcterms:subject>Mathématiques</dcterms:subject>
+    <dcterms:subject>Symétrie</dcterms:subject>
+    <dcterms:subject>Intelligence artificielle</dcterms:subject>
+    <dcterms:subject>Philosophy</dcterms:subject>
+    <dcterms:subject>Bach, johann sebastian , 1685-1750</dcterms:subject>
+    <dcterms:subject>Escher, m. c. (maurits cornelis) , 1898-1972</dcterms:subject>
+    <dcterms:subject>Qa9.8 .h63 1999</dcterms:subject>
+
+      
+      
+          <dcterms:description>Winner of the Pulitzer Prize
+
+A metaphorical fugue on minds and machines in the spirit of Lewis Carroll
+
+Douglas Hofstadter&#39;s book is concerned directly with the nature of &quot;maps&quot; or links between formal systems. However, according to Hofstadter, the formal system that underlies all mental activity transcends the system that supports it. If life can grow out of the formal chemical substrate of the cell, if consciousness can emerge out of a formal system of firing neurons, then so too will computers attain human intelligence. Gödel, Escher, Bach is a wonderful exploration of fascinating ideas at the heart of cognitive science: meaning, reduction, recursion, and much more.</dcterms:description>
+    
+
+      
+      <foaf:page>
+          <foaf:Document rdf:about="https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach">
+              <rdfs:label>Wikipedia</rdfs:label>
+          </foaf:Document>
+      </foaf:page>
+      <foaf:page>
+          <foaf:Document rdf:about="https://www.wikidata.org/wiki/Q831517">
+              <rdfs:label>Wikidata</rdfs:label>
+          </foaf:Document>
+      </foaf:page>
+    </frbr:Work>
+
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL50543264M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach: ein Endloses Geflochtenes Band</dcterms:title>
+        <dcterms:date>2019</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL50528618M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach: les Brins d&#39;une Guirlande Eternelle</dcterms:title>
+        <dcterms:date>1987</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL47324647M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach - ein Endloses Geflochtenes Band</dcterms:title>
+        <dcterms:date>Mar 19, 2016</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL45298552M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach: Een eeuwige gouden band</dcterms:title>
+        <dcterms:date>Aug 01, 2018</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL35645429M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach: bir Ebedi Gökçe Belik. Lewis Carroll&#39;ın İzinde Zihinlere ve Makinelere Dair Metaforik Bir Füg</dcterms:title>
+        <dcterms:date>Nov 07, 2017</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL35404010M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Godel, Escher, Bach - Bir Ebedi Gokce Belik</dcterms:title>
+        <dcterms:date>Oct 30, 2011</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL18118400M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Esher, Bach: an eternal golden braid</dcterms:title>
+        <dcterms:date>1979</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL28265738M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Godel, Escher, Bach: An Eternal Golden Braid</dcterms:title>
+        <dcterms:date>Aug 01, 1979</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL31855035M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach: Un&#39;eterna ghirlanda brillante</dcterms:title>
+        <dcterms:date>1990</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL30699865M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach. Ein Endloses Geflochtenes Band</dcterms:title>
+        <dcterms:date>Oct 27, 1985</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL26435358M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach : an eternal golden braid</dcterms:title>
+        <dcterms:date>1999</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL25898144M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach: een eeuwige gouden band</dcterms:title>
+        <dcterms:date>1985</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL8862405M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach. Les Brins d&#39;une Guirlande Eternelle</dcterms:title>
+        <dcterms:date>November 1, 2000</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL17146135M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Godel, Escher, Bach: an eternal golden braid.</dcterms:title>
+        <dcterms:date>1990</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL13322941M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Godel, Escher, Bach</dcterms:title>
+        <dcterms:date>October 2007</dcterms:date>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL7462901M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Godel, Escher, Bach: An Eternal Golden Braid</dcterms:title>
+        <dcterms:date>May 14, 1989</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL7352418M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Godel, Escher, Bach</dcterms:title>
+        <dcterms:date>March 30, 2000</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL9076645M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach. Ein Endloses Geflochtenes Band.</dcterms:title>
+        <dcterms:date>August 1, 2001</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL25898142M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach</dcterms:title>
+        <dcterms:date>1985</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL25898141M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W" />
+        <dcterms:title>Gödel, Escher, Bach</dcterms:title>
+        <dcterms:date>1985</dcterms:date>
+    </rdf:Description>
+    
+    <!-- administrative -->
+    <rdf:Description rdf:about="">
+        <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2024-01-04T15:24:18.930847</dcterms:modified>
+        <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2009-12-09T02:13:09.535169</dcterms:created>
+        <ov:versionnumber>54</ov:versionnumber>
+    </rdf:Description>
+
+</rdf:RDF>

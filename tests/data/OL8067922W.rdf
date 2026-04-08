@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'
+  xmlns:rdrel='http://RDVocab.info/RDARelationshipsWEMI/'
+  xmlns:dcterms='http://purl.org/dc/terms/'
+  xmlns:dcam='http://purl.org/dc/dcam/'
+  xmlns:ov='http://open.vocab.org/terms/'
+  xmlns:frbr='http://purl.org/vocab/frbr/core#'
+  xmlns:foaf='http://xmlns.com/foaf/0.1/'
+>
+
+
+    
+    <frbr:Work rdf:about="http://openlibrary.org/works/OL8067922W">
+            <dcterms:title>I Am a Strange Loop</dcterms:title>
+    
+
+
+      <dcterms:creator>
+          <rdf:Description rdf:about="http://openlibrary.org/authors/OL57437A">
+              <foaf:name>Douglas R. Hofstadter</foaf:name>
+          </rdf:Description>
+      </dcterms:creator>
+      
+          <dcterms:subject>Self (Philosophy)</dcterms:subject>
+    <dcterms:subject>Intellect</dcterms:subject>
+    <dcterms:subject>Consciousness</dcterms:subject>
+    <dcterms:subject>Soul</dcterms:subject>
+    <dcterms:subject>Kognitiver Prozess</dcterms:subject>
+    <dcterms:subject>Metamathematik</dcterms:subject>
+    <dcterms:subject>Symbolen</dcterms:subject>
+    <dcterms:subject>Bewustzijn</dcterms:subject>
+    <dcterms:subject>Selbsterkenntnis</dcterms:subject>
+    <dcterms:subject>Künstliche Intelligenz</dcterms:subject>
+    <dcterms:subject>Selbstbezüglichkeit</dcterms:subject>
+    <dcterms:subject>Patronen (modellen)</dcterms:subject>
+    <dcterms:subject>Identity (psychology)</dcterms:subject>
+    <dcterms:subject>Medvetandet</dcterms:subject>
+    <dcterms:subject>Kèunstliche Intelligenz</dcterms:subject>
+    <dcterms:subject>Selbstbezèuglichkeit</dcterms:subject>
+
+      
+      
+          <dcterms:description>Hofstadter&#39;s long-awaited return to the themes of Gödel, Escher, Bach--an original and controversial view of the nature of consciousness and identity. What do we mean when we say &quot;I&quot;? Can a self, a soul, a consciousness, an &quot;I&quot; arise out of mere matter? If it cannot, then how can you or I be here? This book argues that the key to understanding selves and consciousness is a special kind of abstract feedback loop inhabiting our brains. Deep down, a human brain is a chaotic soup of particles, on a higher level it is a jungle of neurons, and on a yet higher level it is a network of abstractions that we call &quot;symbols.&quot; The most central and complex symbol in your brain or mine is the one we both call &quot;I.&quot; But how can such a mysterious abstraction be real--or is our &quot;I&quot; merely a convenient fiction?--From publisher description.</dcterms:description>
+    
+
+      
+    </frbr:Work>
+
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL37363849M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>Yo Soy un Extrano Bucle</dcterms:title>
+        <dcterms:date>2008</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL35365492M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>Ben Bir Garip Döngüyüm</dcterms:title>
+        <dcterms:date>Oct 28, 2015</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL33975974M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>I Am a Strange Loop</dcterms:title>
+        <dcterms:date>2007</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL33039884M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>I Am a Strange Loop</dcterms:title>
+        <dcterms:date>Sep 25, 2018</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL28679821M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>I Am a Strange Loop</dcterms:title>
+        <dcterms:date>Sep 25, 2018</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL27950421M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>I Am a Strange Loop</dcterms:title>
+        <dcterms:date>Jul 08, 2008</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL24948194M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>I Am a Strange Loop</dcterms:title>
+        <dcterms:date>2007</dcterms:date>
+    </rdf:Description>
+    
+    
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL7593516M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL8067922W" />
+        <dcterms:title>I Am a Strange Loop</dcterms:title>
+        <dcterms:date>March 26, 2007</dcterms:date>
+    </rdf:Description>
+    
+    <!-- administrative -->
+    <rdf:Description rdf:about="">
+        <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2022-11-26T19:30:10.148400</dcterms:modified>
+        <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2009-12-10T22:21:39.603390</dcterms:created>
+        <ov:versionnumber>8</ov:versionnumber>
+    </rdf:Description>
+
+</rdf:RDF>

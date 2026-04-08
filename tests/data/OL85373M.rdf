@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'
+  xmlns:ol="http://openlibrary.org/type/edition#"
+  xmlns:owl='http://www.w3.org/2002/07/owl#'
+  xmlns:bibo='http://purl.org/ontology/bibo/'
+  xmlns:rdvocab='http://RDVocab.info/elements/'
+  xmlns:rdrel='http://RDVocab.info/RDARelationshipsWEMI/'
+  xmlns:dcterms='http://purl.org/dc/terms/'
+  xmlns:dc='http://purl.org/dc/elements/1.1/'
+  xmlns:dcam='http://purl.org/dc/dcam/'
+  xmlns:foaf='http://xmlns.com/foaf/0.1/'
+  xmlns:ov='http://open.vocab.org/terms/'
+>
+
+    <rdf:Description rdf:about="http://openlibrary.org/books/OL85373M">
+        <rdrel:workManifested rdf:resource="http://openlibrary.org/works/OL716850W"/>
+        
+        <!-- authors -->
+        <bibo:authorList rdf:parseType="Collection">
+        <rdf:Description rdf:about="http://openlibrary.org/authors/OL57437A">
+            <foaf:name>Douglas R. Hofstadter</foaf:name>
+        </rdf:Description>
+        </bibo:authorList>
+        
+        <!-- bibliographic description -->
+            <dcterms:title>Gödel, Escher, Bach: an eternal golden braid</dcterms:title>
+    
+
+            <dcterms:publisher>Basic Books</dcterms:publisher>
+
+            <rdvocab:placeOfPublication>New York</rdvocab:placeOfPublication>
+
+            <dcterms:issued>1999</dcterms:issued>
+    
+
+            <dcterms:extent>23, vi-xxi, 777 p. :</dcterms:extent>
+    
+
+        
+            <bibo:edition>20th anniversary ed.</bibo:edition>
+    
+
+        <!-- subjects -->
+            <dc:subject>Bach, Johann Sebastian, 1685-1750</dc:subject>
+    <dc:subject>Escher, M. C. 1898-1972</dc:subject>
+    <dc:subject>Gödel, Kurt</dc:subject>
+    <dc:subject>Metamathematics</dc:subject>
+    <dc:subject>Symmetry</dc:subject>
+    <dc:subject>Artificial intelligence</dc:subject>
+
+      <dcterms:subject>
+          <rdf:Description>
+              <dcam:memberOf rdf:resource="http://purl.org/dc/terms/DDC"/>
+              <rdf:value>510/.1</rdf:value>
+          </rdf:Description>
+      </dcterms:subject>
+      <dcterms:subject>
+          <rdf:Description>
+              <dcam:memberOf rdf:resource="http://purl.org/dc/terms/LCC"/>
+              <rdf:value>QA9.8 .H63 1999</rdf:value>
+          </rdf:Description>
+      </dcterms:subject>
+      <!-- description -->
+      
+          <rdvocab:note>Includes bibliographical references (p. 746-756) and index.</rdvocab:note>
+    
+
+      <dcterms:language>eng</dcterms:language>
+      <!-- identifiers -->
+          <dcterms:identifier>/books/OL85373M</dcterms:identifier>
+    
+
+      
+          <bibo:lccn>99192374</bibo:lccn>
+
+          <bibo:isbn10>0394756827</bibo:isbn10>
+    <bibo:isbn10>0465026567</bibo:isbn10>
+
+      
+    </rdf:Description>
+    <!-- administrative -->
+    <rdf:Description rdf:about="">
+        <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-03-28T16:42:34.114971</dcterms:modified>
+        <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2008-04-01T03:28:50.625462</dcterms:created>
+        <ov:versionnumber>25</ov:versionnumber>
+    </rdf:Description>
+</rdf:RDF>

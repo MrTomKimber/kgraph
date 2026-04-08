@@ -18,7 +18,6 @@ class KGraphPipeline:
     def __init__(
         self,
         mapping_config_location: str,
-        ontology_list: Optional[list[str]] = None,
         validation_shacl_list: Optional[list[str]] = None,
         name_master_location: Optional[str] = None,
     ):
@@ -33,24 +32,23 @@ class KGraphPipeline:
         args = {k: v for k, v in vars().items() if k != "self"}
 
         for k, v in args.items():
-            if isinstance(v, list):
+            if isinstance(v, list) :
                 for a in v:
-                    if not self._validate_file_exists(a):
-                        raise FileExistsError(
-                            f"Problem with parameter `{k}` "
-                            + f"there is no file at :`{a}`"
+                    print(
+                            f"N.B. parameter `{k}` "
+                            + f"found file at :`{a}`"
                         )
             else:
                 if v is not None and not self._validate_file_exists(v):
-                    raise FileExistsError(
-                        f"Problem with parameter `{k}` there is no file at :`{v}`"
+                    print(
+                        f"N.B. parameter `{k}` there is no file at :`{v}`"
                     )
 
         self.mapping_object = SchemaMapping(mapping_config_location)
         self.expected_columns = set(self.mapping_object.referenced_columns) - set(
             self.mapping_object.glob_vars.keys()
         )
-        self.o_list = ontology_list # TODO: expand the ontology awareness of the pipeline
+        
         self.shacl_validations = validation_shacl_list
         self.shacl_validation_results = []
 

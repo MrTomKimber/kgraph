@@ -109,14 +109,3 @@ def apply(id: Hashable,
             ) -> Hashable:
 
     return func(id, data)
-
-test_class_mappings = {
-    "Unknown": {
-        "color" : "#0022ee", 
-        "border_color" : "#26000e",
-        "border_size" : 2,
-        "size" : 5, 
-        "shape" : "circle",
-        "hover" : "Unknown"
-    },
-}

@@ -12,9 +12,31 @@ class NameMaster:
     # solution that offers clients to perform distributed mastering against a 
     # central store - see REDIS as a potential alternative. 
     
-    def __init__(self, db_path=":memory:", table="master", autocommit=False):
+    def __init__(self, db_path=":memory:", 
+                        table="master", 
+                        autocommit=False, 
+                        clear_db=False, 
+                        load_dict=None):
         # Start the database and return the number of items in it
-        self.db = SqliteDict(db_path, tablename=table, autocommit=autocommit)
+        self.db = SqliteDict(db_path, tablename=table, autocommit=autocommit,journal_mode='WAL')
+        if clear_db:
+            self.clear()
+        if load_dict is not None:
+            self.load(load_dict)
+
+    def dump(self) -> dict:
+        return dict(self.db)
+    
+    def load(self, 
+             data : dict):
+        """Clear and reload the database with some data from scratch"""
+        self.clear()
+        self.db.update(data)
+        self.db.commit()
+
+    def __del__(self):
+        """Cleanup and close the db"""
+        self.close()
 
     def close(self):
         self.db.close()
@@ -71,13 +93,53 @@ class NameMaster:
                         )
                         report[2] += 1  # Skipped
                 else:
-                    pass  # Value is the same, no action needed
-                    report[2] += 1  # Skipped
+                    report[2] += 1  # Value is the same, no action needed - Skipped
             else:
                 self.db[key] = value
                 report[0] += 1  # Added
         self.commit()
         return report
+
+    def master(self, key, value, update=True):
+        """Perform a single master operation, returning value
+        where no mastered value is stored.
+        If update, then the mastered value is written back
+        to the namemaster dict.
+        
+        When run as part of a batch, a commit will be necessary
+        to confirm/write the changes - 
+        DANGER: this means that repeated keys presented as part 
+        of the batch risk being mastered with different values 
+        - needs mitigating with a batch-master call"""
+        mastered_value = self.get_value(key)
+        if mastered_value is None:
+            if update:
+                self.set_value(key, value)
+                self.commit()
+            mastered_value = value
+        return mastered_value
+
+    def batch_master(self, kv_tuple_list, update=True):
+        """Perform master operation, if update==True,
+        changes will be persisted.
+        Any values in the database that are deliberately
+        set to None are updatable (i.e. you can't 'master' 
+        a value of None and expect that to remain fixed
+        if an update is provided)"""
+        remastered = []
+        batch_cache = {}
+        for key, value in kv_tuple_list:
+            if key in batch_cache:
+                mastered_value=batch_cache[key]
+            else:
+                mastered_value = self.master(key, value, update)
+                batch_cache[key] = mastered_value
+            remastered.append((key,mastered_value))
+        if update:
+            self.commit()
+        print(f"return_altered_values_from_dict:end {datetime.now()}")
+        return batch_cache
+        
 
     def test_keyvalue_against_master(self, key, value):
         """Given a key, value pair, test if the key is already in the database.
