@@ -56,6 +56,90 @@ def venn_partitions(sets : dict[str,set],
                 partition_d[notation]=contents
     return partition_d
 
+
+
+class OntologyCache():
+    registry : dict[str,str]
+
+    def __init__(self, 
+                 cache_directory : str
+                 ):
+        self.cache_directory = cache_directory
+        self.registry = dict()
+        ocache_json_filename = os.path.join(cache_directory, "ocache.json")
+        self.cache_json = ocache_json_filename
+        if os.path.isfile(self.cache_json):
+            self.read_init()    
+        else:
+            self.commit()
+
+    def read_init(self):
+        with open(self.cache_json, "r") as ocache_json_file:
+            self.registry = json.load(ocache_json_file)
+
+    def commit(self):
+        with open(self.cache_json, "w") as ocache_json_file:
+            json.dump(self.registry, ocache_json_file)
+
+    def cleanup(self):
+        """Enforce integrity of registry and files"""
+        cache_files = set()
+        cache_registry_entries = set(self.registry.values())
+        files = [f for f in os.listdir(self.cache_directory) if os.path.isfile(os.path.join(self.cache_directory, f))]
+        for f in files:
+            if f != "ocache.json":
+                cache_files.add(f)
+        valid_values = cache_registry_entries.intersection(cache_files)
+        unresolved_registry_entries = cache_registry_entries - cache_files
+        orphan_cache_files = cache_files - cache_registry_entries
+        return valid_values, unresolved_registry_entries, orphan_cache_files
+
+    def register_ontologies(self, 
+                            ontology_urls : dict[str,str], 
+                            overwrite : bool = False):
+        for k,v in ontology_urls.items():
+            self.register(ontology_url=k,
+                          overwrite=overwrite,
+                          alias=v)
+    
+    def register(self, 
+                 ontology_url : str, 
+                 overwrite : bool = False, 
+                 alias : Optional[str]=None, 
+                 ):
+        o_graph = Graph()
+        if alias is not None:
+            ontology_location = alias
+        else:
+            ontology_location = ontology_url
+        if overwrite or ontology_url not in self.registry:
+            try:
+                o_graph.parse(ontology_location)
+
+                if overwrite and ontology_url in self.registry:
+                    serial_filename = self.registry[ontology_url]
+                else:
+                    serial_filename = f"{uuid.uuid4().hex.upper()[:8]}.owl"
+                serial_path = os.path.join(self.cache_directory, serial_filename)
+                o_graph.serialize(serial_path, format="xml")
+                self.registry[ontology_url]=serial_filename
+                self.commit()
+            except HTTPError as e:
+                print(f"HTTPError found when processing {ontology_url}: {e}")
+            except URLError as e:
+                print(f"URLError found when processing {ontology_url}: {e}")
+            except ParserError as e:
+                print(f"Parser error encountered while processing {ontology_url} - consider manually registering an alias")
+            except PluginException as e:
+                print(f"{e} encountered while processing {ontology_url} - consider manually registering an alias")
+            except Exception as e:
+                raise e
+                print(f"Unable to register {ontology_url} (@{ontology_location}) due to {e}")
+        else:
+            print(f"{ontology_url} already present in registry")        
+        
+
+
 @dataclass(kw_only=True)
 class Thing:
     identifier : Node
@@ -131,89 +215,6 @@ class ObservedEntity(Thing):
                                 """)
 
         return f"""<table>{"".join(rows)}</table>"""
-
-class OntologyCache():
-    registry : dict[str,str]
-
-    def __init__(self, 
-                 cache_directory : str
-                 ):
-        self.cache_directory = cache_directory
-        self.registry = dict()
-        ocache_json_filename = os.path.join(cache_directory, "ocache.json")
-        self.cache_json = ocache_json_filename
-        if os.path.isfile(self.cache_json):
-            self.read_init()    
-        else:
-            self.commit()
-
-    def read_init(self):
-        with open(self.cache_json, "r") as ocache_json_file:
-            self.registry = json.load(ocache_json_file)
-
-    def commit(self):
-        with open(self.cache_json, "w") as ocache_json_file:
-            json.dump(self.registry, ocache_json_file)
-
-    def cleanup(self):
-        """Enforce integrity of registry and files"""
-        cache_files = set()
-        cache_registry_entries = set(self.registry.values())
-        files = [f for f in os.listdir(self.cache_directory) if os.path.isfile(os.path.join(self.cache_directory, f))]
-        for f in files:
-            if f != "ocache.json":
-                cache_files.add(f)
-        valid_values = cache_registry_entries.intersection(cache_files)
-        unresolved_registry_entries = cache_registry_entries - cache_files
-        orphan_cache_files = cache_files - cache_registry_entries
-        return valid_values, unresolved_registry_entries, orphan_cache_files
-
-    def register_ontologies(self, 
-                            ontology_urls : dict[str,str], 
-                            overwrite : bool = False):
-        for k,v in ontology_urls.items():
-            self.register(ontology_url=k,
-                          overwrite=overwrite,
-                          alias=v)
-    
-    def register(self, 
-                 ontology_url : str, 
-                 overwrite : bool = False, 
-                 alias : Optional[str]=None, 
-                 ):
-        o_graph = Graph()
-        if alias is not None:
-            ontology_location = alias
-        else:
-            ontology_location = ontology_url
-        if overwrite or ontology_url not in self.registry:
-            try:
-
-
-                o_graph.parse(ontology_location)
-
-                if overwrite and ontology_url in self.registry:
-                    serial_filename = self.registry[ontology_url]
-                else:
-                    serial_filename = f"{uuid.uuid4().hex.upper()[:8]}.owl"
-                serial_path = os.path.join(self.cache_directory, serial_filename)
-                o_graph.serialize(serial_path, format="xml")
-                self.registry[ontology_url]=serial_filename
-                self.commit()
-            except HTTPError as e:
-                print(f"HTTPError found when processing {ontology_url}: {e}")
-            except URLError as e:
-                print(f"URLError found when processing {ontology_url}: {e}")
-            except ParserError as e:
-                print(f"Parser error encountered while processing {ontology_url} - consider manually registering an alias")
-            except PluginException as e:
-                print(f"{e} encountered while processing {ontology_url} - consider manually registering an alias")
-            except Exception as e:
-                raise e
-                print(f"Unable to register {ontology_url} (@{ontology_location}) due to {e}")
-        else:
-            print(f"{ontology_url} already present in registry")        
-        
 
 
 class RDF2dict():
