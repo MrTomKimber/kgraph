@@ -69,6 +69,8 @@ class OntologyCache:
 
     def __init__(self, cache_directory: str):
         self.cache_directory = cache_directory
+        if not os.path.isdir(cache_directory):
+            os.makedirs(cache_directory)
         self.registry = dict()
         ocache_json_filename = os.path.join(cache_directory, "ocache.json")
         self.cache_json = ocache_json_filename
