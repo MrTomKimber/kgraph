@@ -24,9 +24,9 @@ An OWL/XML parser for RDFLib
 # import sys
 import xml.parsers.expat
 import urllib.parse
-from rdflib.parser import Parser
 from warnings import warn
 
+from rdflib.parser import Parser
 
 __all__ = ["OWLXMLParser"]
 

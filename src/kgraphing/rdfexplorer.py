@@ -2,14 +2,16 @@
 
 from dataclasses import dataclass, asdict
 from enum import Enum, StrEnum
+import re
+from html import escape
+
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
 from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
-import re
-import networkx as nx
-from html import escape
 
-from kgraph.declarations import (
+import networkx as nx
+
+from kgraphing.declarations import (
     RDFTriple,
     RDFQuad,
     RDFSubjectAtom,
@@ -17,8 +19,7 @@ from kgraph.declarations import (
     RDFObjectAtom,
 )
 
-from kgraph.declarations import KGMETA, KGMETA_G
-
+from kgraphing.declarations import KGMETA, KGMETA_G
 
 PYTHON2XSDDATATYPEMAPPING = {
     "bool": XSD.boolean,
@@ -41,16 +42,19 @@ def uri_split(uriref):
     prefrag = str(uriref)[0 : -len(frag)]
     return prefrag, frag
 
+
 @dataclass
 class EdgeData:
     """Dataclass for expressing edges between entities in the graph"""
+
     subject: Identifier  # used to store the uri-ref of the subject
-    predicate: Identifier # used to store the uri-ref of the predicate
-    object: Identifier # used to store the uri-ref of the object
-    predicate_label: str # contains the predicate-label for display
+    predicate: Identifier  # used to store the uri-ref of the predicate
+    object: Identifier  # used to store the uri-ref of the object
+    predicate_label: str  # contains the predicate-label for display
 
     def to_dict(self):
         return asdict(self)
+
 
 @dataclass(frozen=True)
 class NodeData:
@@ -79,14 +83,13 @@ class GraphLiteralData(NodeData):
     subject: Literal
     value: object
     subject_types: list
-    
 
 
 @dataclass(frozen=True)
 class GraphEntityData(NodeData):
     """Dataclass for handling graph-links from an object to other objects"""
 
-    subject: URIRef 
+    subject: URIRef
     value: URIRef
     subject_types: list[URIRef]
 
@@ -319,8 +322,6 @@ class GraphEntity:
             for t in incoming_predicates
         ]
 
-        
-
         self.data = GraphEntityData(
             subject=self.uri,
             subject_namespace_str=uri_split(self.uri)[0],
@@ -333,7 +334,7 @@ class GraphEntity:
             outgoing_predicate_labels=outgoing_predicate_labels,
             incoming_predicates=incoming_predicates,
             incoming_predicate_labels=incoming_predicate_labels,
-            is_possible_url=True
+            is_possible_url=True,
         )
 
     def get_neighbours(self):
@@ -357,14 +358,14 @@ class GraphEntity:
                     )
                 )
 
-                if fetched_object_entity.type=='literal':
+                if fetched_object_entity.type == "literal":
                     property_list.append(
                         (
                             fetched_predicate_entity.data.subject_h_label,
-                            fetched_object_entity.data.value
+                            fetched_object_entity.data.value,
                         )
                     )
-                
+
         self.outgoing_linked_neighbours = outgoing_linked_neighbours
         self.property_list = property_list
 
@@ -461,17 +462,17 @@ class GraphEntity:
 
     def html_components(self, configuration):
 
-        components={}
+        components = {}
 
         href_entity_lambda = (
             lambda x: f"""<a href="{x.uri}" title="{escape(x.data.subject_t_label)}" target="_blank">{escape(x.data.subject_h_label)}</a>"""
         )
 
         href_literal_lambda = lambda x: (
-                f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
-                if x.data.is_possible_url
-                else f"{escape(str(x.literal.toPython()))}"
-            )
+            f'<a href="{escape(x.literal.toPython())}">{escape(x.literal.toPython())}</a>'
+            if x.data.is_possible_url
+            else f"{escape(str(x.literal.toPython()))}"
+        )
         if self.type == "object":
 
             # Define title_stub
@@ -483,10 +484,12 @@ class GraphEntity:
                     )
                 ]
             )
-            html_title_stub = f""" <h1>{href_entity_lambda(self)} | {subject_types_string} <h1> """
-            components['title']=html_title_stub
+            html_title_stub = (
+                f""" <h1>{href_entity_lambda(self)} | {subject_types_string} <h1> """
+            )
+            components["title"] = html_title_stub
             # Define Literal Property Table
-            
+
             property_rows_string = "".join(
                 [
                     f"""<tr><td>{href_entity_lambda(p)}</td><td>{href_literal_lambda(o)}</td></tr>"""
@@ -503,10 +506,9 @@ class GraphEntity:
                 </table>"""
             else:
                 html_property_panel_stub = ""
-            components['property_table']=html_property_panel_stub
+            components["property_table"] = html_property_panel_stub
             # Define Incoming and Outgoing Object Links
 
- 
             outbound_links_string = "".join(
                 [
                     f"""<tr><td>{href_entity_lambda(p)}</td><td>{href_entity_lambda(o)}</td></tr>"""
@@ -523,7 +525,7 @@ class GraphEntity:
                 </table>"""
             else:
                 html_outbound_links_panel_stub = ""
-            components['outbound_links']=html_outbound_links_panel_stub
+            components["outbound_links"] = html_outbound_links_panel_stub
             inbound_links_string = "".join(
                 [
                     f"""<tr><td>{href_entity_lambda(p)}</td><td>{href_entity_lambda(o)}</td></tr>"""
@@ -540,16 +542,14 @@ class GraphEntity:
                 </table>"""
             else:
                 html_inbound_links_panel_stub = ""
-            components['inbound_links']=html_inbound_links_panel_stub
+            components["inbound_links"] = html_inbound_links_panel_stub
         return components
 
 
 # Collection of base methods for generating triples given various
 # input combinations
 def create_triples_from_slist_p_o(
-    subjects: list[URIRef], 
-    predicate: URIRef, 
-    obj: RDFObjectAtom
+    subjects: list[URIRef], predicate: URIRef, obj: RDFObjectAtom
 ) -> set[RDFTriple]:
     """With a list of subjects, and a fixed predicate/object combination,
     generate a set of RDFTriples"""
@@ -583,18 +583,21 @@ class RDFExplorer:
     def populate_link_store(self):
         """extract all the triples linking entities and
         prepare data packets for each unique s,p,o combination"""
-        self.link_store={}
-        for e,t in enumerate(self.graph.triples((None, None, None))):
-            s,p,o = t
-            if isinstance(s,URIRef) and isinstance(p,URIRef) and isinstance(o,URIRef):
+        self.link_store = {}
+        for e, t in enumerate(self.graph.triples((None, None, None))):
+            s, p, o = t
+            if (
+                isinstance(s, URIRef)
+                and isinstance(p, URIRef)
+                and isinstance(o, URIRef)
+            ):
                 edge_data = EdgeData(
-                    subject = s, 
-                    predicate = p, 
-                    object = o,
-                    predicate_label=p.n3(self.graph.namespace_manager)
+                    subject=s,
+                    predicate=p,
+                    object=o,
+                    predicate_label=p.n3(self.graph.namespace_manager),
                 )
-                self.link_store[e]=edge_data
-
+                self.link_store[e] = edge_data
 
     def gen_entity_report_dict_for_types(
         self, types: list[URIRef]
@@ -675,37 +678,38 @@ class RDFExplorer:
         nx_g = nx.MultiDiGraph()
 
         for node, entity in self.entity_store.items():
-            
+
             # Filter out nodes that are objects (exclude literals)
-            if entity.type=='object':
+            if entity.type == "object":
                 print(entity.property_list)
                 html_components = entity.html_components(configuration={})
                 html_stuff = ""
                 for k, content in html_components.items():
                     html_stuff = html_stuff + content
                 try:
-                    nx_g.add_node(node, 
-                                label=entity.data.subject_h_label, 
-                                click=html_stuff, 
-                                hover=html_components['title'],
-                                rdfclass=entity.data.subject_type_labels[0],
-                                property_list=entity.property_list
-                                )
+                    nx_g.add_node(
+                        node,
+                        label=entity.data.subject_h_label,
+                        click=html_stuff,
+                        hover=html_components["title"],
+                        rdfclass=entity.data.subject_type_labels[0],
+                        property_list=entity.property_list,
+                    )
                 except Exception as e:
                     print(entity, e)
-                    
+
         for edge_id, edge in self.link_store.items():
             if edge.predicate != RDF.type:
                 try:
-                    nx_g.add_edge(edge.subject,
-                                edge.object,
-                                label=edge.predicate_label, 
-                                uri=edge.predicate,
-                                rdfclass=edge.predicate.n3(self.graph.namespace_manager)
-                                )
+                    nx_g.add_edge(
+                        edge.subject,
+                        edge.object,
+                        label=edge.predicate_label,
+                        uri=edge.predicate,
+                        rdfclass=edge.predicate.n3(self.graph.namespace_manager),
+                    )
 
                 except Exception as e:
                     print(edge, e)
 
         return nx_g
-        

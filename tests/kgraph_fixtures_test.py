@@ -1,22 +1,22 @@
-import sys, os
+import os
 from pathlib import Path
 current_dir = Path(__file__).parent
-repo_path = os.path.abspath(os.path.join(current_dir, "../src"))
-if repo_path not in sys.path:
-    sys.path.append(repo_path)
 
 import pytest
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import SKOS, RDF, RDFS
 from pandas import read_excel, DataFrame
+from importlib import resources
 
-from kgraph import declarations
-from kgraph import schemamapping
-from kgraph import kgpipeline
-from kgraph import rdfexplorer
-from kgraph import kgstore
-from kgraph import metadata
+from kgraphing import declarations
+from kgraphing.ingest import schemamapping
+from kgraphing.ingest import kgpipeline
+from kgraphing import rdfexplorer
+from kgraphing.store import kgstore
+from kgraphing.store import metadata
+from kgraphing import ontologies, shapes
 
+from kgraphing import rdf2dict
 
 
 @pytest.fixture(scope='session')
@@ -44,7 +44,7 @@ def shacl_graph() -> Graph:
 @pytest.fixture(scope='session')
 def kgp_pipeline() -> kgpipeline.KGraphPipeline:
     mapping_config_at = os.path.join(current_dir, "data/skos_vocabulary_mapping.json")
-    validation_shacl = [os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta_shacl.ttl")]
+    validation_shacl = [str(resources.files(shapes) / os.path.normpath("kgmeta_shacl.ttl"))]
 
     kgp = kgpipeline.KGraphPipeline(mapping_config_at,
                                 validation_shacl)
@@ -75,3 +75,14 @@ def toy_graph(scope='session'):
                 URIRef('http://kgraph.foo.bar#example2')))
     return toy_graph
 
+@pytest.fixture(scope='session')
+def ontology_cache(scope='session'):
+    """Create an empty OntologyCache object"""
+    OC = rdf2dict.OntologyCache(os.path.join(current_dir, "data/ocache"))
+    OC.purge() # Delete any remaining content that might exist from an earlier run
+    return OC
+
+@pytest.fixture(scope='session')
+def rdf2dict_of_serialised_graph(ontology_cache, serialised_graph, scope='session'):
+    rdf2d = rdf2dict.RDF2dict(serialised_graph, ontology_cache)
+    return rdf2d

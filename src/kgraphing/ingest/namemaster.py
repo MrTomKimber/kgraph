@@ -1,24 +1,30 @@
 from datetime import datetime
 from sqlitedict import SqliteDict
 from rdflib import Namespace, URIRef, Literal, Graph
-from kgraph.declarations import KGMETA
+from kgraphing.declarations import KGMETA
 
 
 class NameMaster:
     """Simple class for providing a data-mastering service using SqliteDict."""
+
     # Use of SqliteDict means the code can only seriously be run locally, referencing
-    # a single memory file to persist contents between sessions. 
+    # a single memory file to persist contents between sessions.
     # A later evolution might involve switching to a more centralised persistence/caching
-    # solution that offers clients to perform distributed mastering against a 
-    # central store - see REDIS as a potential alternative. 
-    
-    def __init__(self, db_path=":memory:", 
-                        table="master", 
-                        autocommit=False, 
-                        clear_db=False, 
-                        load_dict=None):
+    # solution that offers clients to perform distributed mastering against a
+    # central store - see REDIS as a potential alternative.
+
+    def __init__(
+        self,
+        db_path=":memory:",
+        table="master",
+        autocommit=False,
+        clear_db=False,
+        load_dict=None,
+    ):
         # Start the database and return the number of items in it
-        self.db = SqliteDict(db_path, tablename=table, autocommit=autocommit,journal_mode='WAL')
+        self.db = SqliteDict(
+            db_path, tablename=table, autocommit=autocommit, journal_mode="WAL"
+        )
         if clear_db:
             self.clear()
         if load_dict is not None:
@@ -26,9 +32,8 @@ class NameMaster:
 
     def dump(self) -> dict:
         return dict(self.db)
-    
-    def load(self, 
-             data : dict):
+
+    def load(self, data: dict):
         """Clear and reload the database with some data from scratch"""
         self.clear()
         self.db.update(data)
@@ -105,11 +110,11 @@ class NameMaster:
         where no mastered value is stored.
         If update, then the mastered value is written back
         to the namemaster dict.
-        
+
         When run as part of a batch, a commit will be necessary
-        to confirm/write the changes - 
-        DANGER: this means that repeated keys presented as part 
-        of the batch risk being mastered with different values 
+        to confirm/write the changes -
+        DANGER: this means that repeated keys presented as part
+        of the batch risk being mastered with different values
         - needs mitigating with a batch-master call"""
         mastered_value = self.get_value(key)
         if mastered_value is None:
@@ -123,23 +128,22 @@ class NameMaster:
         """Perform master operation, if update==True,
         changes will be persisted.
         Any values in the database that are deliberately
-        set to None are updatable (i.e. you can't 'master' 
+        set to None are updatable (i.e. you can't 'master'
         a value of None and expect that to remain fixed
         if an update is provided)"""
         remastered = []
         batch_cache = {}
         for key, value in kv_tuple_list:
             if key in batch_cache:
-                mastered_value=batch_cache[key]
+                mastered_value = batch_cache[key]
             else:
                 mastered_value = self.master(key, value, update)
                 batch_cache[key] = mastered_value
-            remastered.append((key,mastered_value))
+            remastered.append((key, mastered_value))
         if update:
             self.commit()
         print(f"return_altered_values_from_dict:end {datetime.now()}")
         return batch_cache
-        
 
     def test_keyvalue_against_master(self, key, value):
         """Given a key, value pair, test if the key is already in the database.

@@ -9,13 +9,13 @@ from rdflib import URIRef, Literal, BNode
 from rdflib import Graph as rdflibGraph
 from rdflib.namespace import Namespace
 
-import kgraph.ontologies
-import kgraph.jschema
+from kgraphing import shapes, ontologies
+import kgraphing.jschema
 
 # SCHEMAMAPPINGSCHEMA is the json-schema that validates schema mapping
 # configuration files
 with resources.as_file(
-    resources.files(kgraph.jschema) / os.path.normpath("schemamappingschema.json")
+    resources.files(kgraphing.jschema) / os.path.normpath("schemamappingschema.json")
 ) as schema_mapping_schema_file:
     with schema_mapping_schema_file.open(
         "r", encoding="utf-8", errors="strict"
@@ -30,14 +30,14 @@ KGMETA = Namespace("https://kgraph.foo/onto/kgmeta#")
 KGMETA_G = rdflibGraph()
 
 with resources.as_file(
-    resources.files(kgraph.ontologies) / os.path.normpath("kgmeta.owl")
+    resources.files(ontologies) / os.path.normpath("kgmeta.owl")
 ) as kgmeta_owl:
     KGMETA_G.parse(kgmeta_owl, format="xml")
     KGMETA_G.bind("KGMETA", KGMETA.title.toPython())
 
 KGMETA_SHAPES_G = rdflibGraph()
 with resources.as_file(
-    resources.files(kgraph.ontologies) / os.path.normpath("kgmeta_shacl.ttl")
+    resources.files(shapes) / os.path.normpath("kgmeta_shacl.ttl")
 ) as kgmeta_shapes:
     KGMETA_SHAPES_G.parse(kgmeta_shapes, format="ttl")
     KGMETA_SHAPES_G.bind("KGMETA", KGMETA.title.toPython())

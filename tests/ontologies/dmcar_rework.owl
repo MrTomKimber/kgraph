@@ -171,6 +171,15 @@ By convention, the joins are delimited by dots to return the final FullyQualifie
 	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
 	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#EntityType"/>
 	<rdfs:comment>A DataStructure acts as a blueprint and describes the structured collection of attributes used to define an object. In physical contexts, might be used to describe denormalised views containing information source from multiple entities, e.g. in the case of a file format, message or api response definition.</rdfs:comment>
+	<rdfs:comment>A datastructure is separate from EntityType as it carries no implication of being a normalised object.</rdfs:comment>
+</rdf:Description>
+<!--  -->
+<!-- http://kgraph.foo/onto/modelling#DataType -->
+
+<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#DataType">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
+	<rdfs:comment>A DataType is a controlled expression of the domain of values that an attribute or parameter is expected to conform to.</rdfs:comment>
 </rdf:Description>
 <!--  -->
 <!-- http://kgraph.foo/onto/modelling#Definition -->

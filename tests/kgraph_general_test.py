@@ -1,9 +1,6 @@
-import sys, os
+import os
 from pathlib import Path
 current_dir = Path(__file__).parent
-repo_path = os.path.abspath(os.path.join(current_dir, "../src"))
-if repo_path not in sys.path:
-    sys.path.append(repo_path)
 
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import SKOS, RDF, RDFS
@@ -14,13 +11,16 @@ import pandas as pd
 import json
 import networkx as nx
 
-from kgraph import declarations
-from kgraph import schemamapping
-from kgraph import kgpipeline
-from kgraph import rdfexplorer
-from kgraph import gvis
-from kgraph import kgstore
-from kgraph import metadata
+from importlib import resources
+
+from kgraphing import declarations
+from kgraphing.ingest import schemamapping
+from kgraphing.ingest import kgpipeline
+from kgraphing import rdfexplorer
+from kgraphing import gvis
+from kgraphing.store import kgstore
+from kgraphing.store import metadata
+from kgraphing import ontologies
 
 from kgraph_fixtures_test import (raw_data_df, 
                                   schema_mapping_object, 
@@ -29,7 +29,9 @@ from kgraph_fixtures_test import (raw_data_df,
                                   kgp_graph, 
                                   explorer_obj, 
                                   in_memory_store, 
-                                  toy_graph)
+                                  toy_graph, 
+                                  ontology_cache, 
+                                  rdf2dict_of_serialised_graph)
 
 def test_instantiate_schema_mapping_isdataframe(schema_mapping_object):
     """Instantiate a schema_mapping object"""
@@ -73,7 +75,8 @@ def test_serialised_concept_count(serialised_graph):
     
 def test_post_schema_mapping_shacl_validation(serialised_graph):
     ont = Graph()
-    ont.parse(os.path.join(current_dir, "../src/kgraph/ontologies/kgmeta.owl"))
+    kgmeta_file = str(resources.files(ontologies) / os.path.normpath("kgmeta.owl"))
+    ont.parse(kgmeta_file)
     conforms, results_g, results_t = validate(
                                             serialised_graph, 
                                             shacl_graph=declarations.KGMETA_SHAPES_G, 
@@ -172,9 +175,30 @@ def test_create_in_memory_store_and_populate_with_metadata(in_memory_store, toy_
                                  "http://kgraph.foo.bar/metadata", 
                                  scenario=kgstore.MergePolicy.ENTITY_REPLACE)
     stored_graphs = in_memory_store.list_graphs()
-    print(stored_graphs)
     assert toy_graph_stored.identifier in stored_graphs
     assert URIRef("http://kgraph.foo.bar/metadata") in stored_graphs
     
+def test_ontology_cache_instantiation_and_file_registration(ontology_cache):
+    kgmeta_path = str(resources.files(ontologies) / os.path.normpath("kgmeta.owl"))
+    OC = ontology_cache
+    OC.register("https://kgraph.foo/onto/kgmeta#", 
+            False, 
+            kgmeta_path)
+    # Test that a file exists in the cache and that its name matches the registry
+    v,m,o = OC.cross_check_registry_cache()
+    assert len(o)==0
+    assert len(m)==0
+    assert len(v)==1
+
+def test_rdf2d_instantiation(rdf2dict_of_serialised_graph):
+    assert len(rdf2dict_of_serialised_graph.entities)==170
+    assert len(rdf2dict_of_serialised_graph.relations)==12
+
+def test_rdf2d_cache_enrichment(rdf2dict_of_serialised_graph):
+    rdf2dict_of_serialised_graph.enrich_metadata()
+    assert len(rdf2dict_of_serialised_graph.ontology_cache.registry)==5
+    assert len(rdf2dict_of_serialised_graph.entities)==305
+    assert len(rdf2dict_of_serialised_graph.relations)==24
     
+
 

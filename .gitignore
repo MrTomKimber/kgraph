@@ -5,3 +5,4 @@ tests/.pytest_cache/
 .coverage
 .~lock.*.xlsx#
 tests/data/ignore_*.rdf
+tests/data/ocache/*

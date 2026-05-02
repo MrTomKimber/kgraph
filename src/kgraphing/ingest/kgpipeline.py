@@ -8,10 +8,9 @@ import pandas as pd
 from rdflib import Graph
 from pyshacl import validate
 
-
 # local imports
-from kgraph.schemamapping import SchemaMapping
-from kgraph.namemaster import NameMaster
+from kgraphing.ingest.schemamapping import SchemaMapping
+from kgraphing.ingest.namemaster import NameMaster
 
 
 class KGraphPipeline:
@@ -32,23 +31,18 @@ class KGraphPipeline:
         args = {k: v for k, v in vars().items() if k != "self"}
 
         for k, v in args.items():
-            if isinstance(v, list) :
+            if isinstance(v, list):
                 for a in v:
-                    print(
-                            f"N.B. parameter `{k}` "
-                            + f"found file at :`{a}`"
-                        )
+                    print(f"N.B. parameter `{k}` " + f"found file at :`{a}`")
             else:
                 if v is not None and not self._validate_file_exists(v):
-                    print(
-                        f"N.B. parameter `{k}` there is no file at :`{v}`"
-                    )
+                    print(f"N.B. parameter `{k}` there is no file at :`{v}`")
 
         self.mapping_object = SchemaMapping(mapping_config_location)
         self.expected_columns = set(self.mapping_object.referenced_columns) - set(
             self.mapping_object.glob_vars.keys()
         )
-        
+
         self.shacl_validations = validation_shacl_list
         self.shacl_validation_results = []
 
@@ -56,9 +50,7 @@ class KGraphPipeline:
             name_master_location = ":memory:"
         self.namemaster = NameMaster(name_master_location)
 
-    def process(self, 
-                data: pd.DataFrame,
-                ignore_validate : bool = False) -> Graph:
+    def process(self, data: pd.DataFrame, ignore_validate: bool = False) -> Graph:
         """Accept some data input as a dataframe and convert it
         into an rdflib graph using the parameterised process"""
 

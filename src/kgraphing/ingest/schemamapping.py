@@ -18,9 +18,8 @@ from rdflib.namespace import RDF, RDFS, OWL
 import numpy as np
 import pandas as pd
 
-
 # Local package imports
-from kgraph.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGMETA
+from kgraphing.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGMETA
 
 
 def split_on_comma_respecting_quotes(some_string):
@@ -96,7 +95,6 @@ class SchemaMapping:
 
         # Validate that no InstanceNames appear more than once!
         # Duplicate InstanceNames in the mapping cause problems!
-        
 
         for named_object_definition in self.config["NamedObjects"]:
             for instance in named_object_definition["Instances"]:
@@ -385,7 +383,11 @@ class SchemaMapping:
                                     raw_data_value
                                 )
                             except Exception as e:
-                                print( f"`{e}`", c, raw_data_value, )
+                                print(
+                                    f"`{e}`",
+                                    c,
+                                    raw_data_value,
+                                )
                                 raise e
 
                         else:
