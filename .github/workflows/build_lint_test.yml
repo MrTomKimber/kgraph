@@ -19,6 +19,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install uv
         uv sync --frozen
+        uv pip install -e .
+
     - name: Analyse code with pylint
       run: |
         uv run --no-extra gravis pylint $(git ls-files 'src/kgraphing/*.py') --fail-under=7.5 --recursive=y
