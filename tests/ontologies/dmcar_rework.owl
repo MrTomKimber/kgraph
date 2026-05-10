@@ -1,294 +1,467 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF
-	xmlns="http://kgraph.foo/onto/dmcar#"
-	xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:xml="http://www.w3.org/XML/1998/namespace"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://kgraph.foo/onto/datamodelling#"
+     xml:base="https://kgraph.foo/onto/datamodelling"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:kgmod="https://kgraph.foo/onto/datamodelling#">
+    <owl:Ontology rdf:about="https://kgraph.foo/onto/datamodelling#">
+        <rdfs:comment>A data-modelling metamodel describing entity composition and relationships as well as inter and cross-model mappings.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Ontology>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
-</rdf:Description>
-<!--  -->
-<!--  -->
-<!-- ################################################################# -->
-<!-- # -->
-<!-- #    Object Properties -->
-<!-- # -->
-<!-- ################################################################# -->
-<!--  -->
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#IsEnclosedBy -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#IsEnclosedBy">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:comment>Describes the relationship between entities where the first entity's name is defined locally (and guaranteed uniqueness) within the scope of  some other entity that acts as a namespace.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#appliesFunction -->
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#appliesFunction">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:domain rdf:resource="http://kgraph.foo/onto/modelling#Mapping"/>
-	<rdfs:range rdf:resource="http://kgraph.foo/onto/modelling#Function"/>
-	<rdfs:comment>A relationship from a mapping to the function definition used to template the application of that mapping.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#hasBinding -->
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#hasBinding">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:domain rdf:resource="http://kgraph.foo/onto/modelling#Parameter"/>
-	<rdfs:range rdf:resource="http://kgraph.foo/onto/modelling#Element"/>
-	<rdfs:comment>A relationship between a mapping unit and any of the bindings that are used to specify its application against a schema.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#hasParameter -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#hasParameter">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:domain rdf:resource="http://kgraph.foo/onto/modelling#Function"/>
-	<rdfs:range rdf:resource="http://kgraph.foo/onto/modelling#Parameter"/>
-	<rdfs:comment>A relation from a function definition to one of the parameters that function exposes for binding.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#hasSource -->
+    <!-- https://kgraph.foo/onto/datamodelling#appliesFunction -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#hasSource">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:domain rdf:resource="http://kgraph.foo/onto/modelling#Association"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#hasTarget -->
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#appliesFunction">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Mapping"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Function"/>
+        <rdfs:comment>A relationship from a mapping to the function definition used to template the application of that mapping.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#hasTarget">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:domain rdf:resource="http://kgraph.foo/onto/modelling#Association"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#isKnownBy -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#isKnownBy">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:domain rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-	<rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-	<rdfs:comment>Connects a Definition entity to a Vocabulary term by which the entity is known and understood within the context of the vocabulary.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#isSubclassOf -->
+    <!-- https://kgraph.foo/onto/datamodelling#attributeIsPartOfEntity -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#isSubclassOf">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:comment>A subsumptive relation from a a hyponym (a more specific type) to a hypernym (more general type).</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling##isMemberOf -->
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#attributeIsPartOfEntity">
+        <rdfs:subPropertyOf rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Attribute"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+    </owl:ObjectProperty>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling##isMemberOf">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:comment>A membership relation from the member entity to another entity that acts as collection or group.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling##isPartOf -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling##isPartOf">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-	<rdfs:comment>Describes a compositional relationship between two entities</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- ################################################################# -->
-<!-- # -->
-<!-- #    Data properties -->
-<!-- # -->
-<!-- ################################################################# -->
-<!--  -->
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#FullyQualifiedName -->
+    <!-- https://kgraph.foo/onto/datamodelling#attributeIsPartOfKey -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#FullyQualifiedName">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-	<rdfs:comment>A string constructed by appending local names and traversing the root-to-leaf-path defined by the isEnclosedBy object property hierarchy. If each Enclosing node guarantees the distinctness of the names defined within it, then each FullyQualifiedName should perform as unique identifiers. 
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#attributeIsPartOfKey">
+        <rdfs:subPropertyOf rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Attribute"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#entityActsAsRole -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#entityActsAsRole">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#hasBinding -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#hasBinding">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Parameter"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
+        <rdfs:comment>A relationship between a mapping unit and any of the bindings that are used to specify its application against a schema.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#hasParameter -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#hasParameter">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Function"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Parameter"/>
+        <rdfs:comment>A relation from a function definition to one of the parameters that function exposes for binding.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#isKnownBy -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isKnownBy">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+        <rdfs:comment>Connects a Definition entity to a Vocabulary term by which the entity is known and understood within the context of the vocabulary.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#isMemberOf -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isMemberOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:comment>A membership relation from the member entity to another entity that acts as collection or group. Considered a separate concept to isPartOf which defines dependent, compositional relationships.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#isPartOf -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isPartOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:comment>Describes a compositional relationship between two entities</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#isSubclassOf -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isSubclassOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:comment>A subsumptive relation from a a hyponym (a more specific type) to a hypernym (more general type).</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#keyIsDefinedForEntity -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#keyIsDefinedForEntity">
+        <rdfs:subPropertyOf rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#relationshipHasRole -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#relationshipHasRole">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Relationship"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#roleIsImplementedByKey -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#roleIsImplementedByKey">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#FullyQualifiedName -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#FullyQualifiedName">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A string constructed by appending local names and traversing the root-to-leaf-path defined by the isEnclosedBy object property hierarchy. If each Enclosing node guarantees the distinctness of the names defined within it, then each FullyQualifiedName should perform as unique identifiers. 
 
 By convention, the joins are delimited by dots to return the final FullyQualifiedName, and this has an impact on the legal characters available to construct each local name.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- ################################################################# -->
-<!-- # -->
-<!-- #    Classes -->
-<!-- # -->
-<!-- ################################################################# -->
-<!--  -->
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Association -->
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:DatatypeProperty>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Association">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Attribute -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Attribute">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Element"/>
-	<rdfs:comment>An attribute is a property or feature that can be ascribed to an EntityType</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#AttributeMapping -->
+    <!-- https://kgraph.foo/onto/datamodelling#RoleVerb -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#AttributeMapping">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Mapping"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Binding -->
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleVerb">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">A Verb that describes the role that an entity plays in its participation via an associated relationship.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Binding">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Association"/>
-	<rdfs:comment>A binding describes the specific application of a function's parameter to a defined Element (an attribute or parameter).</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#DataStructure -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#DataStructure">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#EntityType"/>
-	<rdfs:comment>A DataStructure acts as a blueprint and describes the structured collection of attributes used to define an object. In physical contexts, might be used to describe denormalised views containing information source from multiple entities, e.g. in the case of a file format, message or api response definition.</rdfs:comment>
-	<rdfs:comment>A datastructure is separate from EntityType as it carries no implication of being a normalised object.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#DataType -->
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#DataType">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-	<rdfs:comment>A DataType is a controlled expression of the domain of values that an attribute or parameter is expected to conform to.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Definition -->
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Definition">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:comment>In the realm of modelling, a definition is the core unit. Every definition should be named, described and reference other definitions through a constrained set of interactions.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Element -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Element">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#EntityMapping -->
+    <!-- http://www.w3.org/1999/02/22-rdf-syntax-ns#List -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#EntityMapping">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Mapping"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#EntityType -->
+    <owl:Class rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#EntityType">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-	<rdfs:comment>An EntityType describes a concept, class, or table. Entities of the same EntityType are defined with common characteristics for which the EntityType acts as a container.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Function -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Function">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-	<rdfs:comment>A function defines the rules and logic required to map from a collection of zero or more input parameters to a collection of zero or more output parameter(s). It is a behavioral definition.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#InputParameter -->
+    <!-- http://www.w3.org/2004/02/skos/core#Concept -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#InputParameter">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Parameter"/>
-	<rdfs:comment>An InputParameter is a function-scoped name to which values can be bound at execution-time for input into a function.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Mapping -->
+    <owl:Class rdf:about="http://www.w3.org/2004/02/skos/core#Concept"/>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Mapping">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Association"/>
-	<rdfs:comment>A mapping is a directed link between entities across differenct models or taxonomies. Its meaning is dependent on the Mapping's type. For more physical mappings, a mapping may apply a transformation through the application of a bound FunctionDefninition's parameters.</rdfs:comment>
-	<rdfs:comment>Mappings might be used to link between definitions at different levels (e.g. Logical to Physical for example) or across models at the same level (e.g. when identifying isomorphisms across models)</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Model -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Model">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-	<rdfs:comment>A model describes a collection of classes and their interacting relationships, along with any annotative information that further describes their context.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Namespace -->
+    <!-- https://kgraph.foo/onto/datamodelling#Association -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Namespace">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#OutputParameter -->
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Association">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#OutputParameter">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Parameter"/>
-	<rdfs:comment>An OutputParemeter is a function-scoped name to which an output can be assigned as the result of performing a function.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Parameter -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Parameter">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Element"/>
-	<rdfs:comment>A parameter is a function-scoped variable that can be bound with data from outside of the function. Parameters are defined as being input or output parameters to define flow.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#Relationship -->
+    <!-- https://kgraph.foo/onto/datamodelling#Attribute -->
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#Relationship">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Association"/>
-	<rdfs:comment>A relationship describes a relation between two classes. Often a relationship will be expressed using entity identifiers in a primary/foreign-key type pattern.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://kgraph.foo/onto/modelling#SubjectArea -->
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Attribute">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
+        <rdfs:comment>An attribute is a property or feature that can be ascribed to an EntityType</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
 
-<rdf:Description rdf:about="http://kgraph.foo/onto/modelling#SubjectArea">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-	<rdfs:subClassOf rdf:resource="http://kgraph.foo/onto/modelling#Definition"/>
-	<rdfs:comment>A SubjectArea describes a thematic category or topic of area of interest. Individual Classes might be tagged with one or more SubjectAreas depending on their meaning within the context.</rdfs:comment>
-</rdf:Description>
-<!--  -->
-<!-- http://www.w3.org/2004/02/skos/core#Concept -->
 
-<rdf:Description rdf:about="http://www.w3.org/2004/02/skos/core#Concept">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-</rdf:Description>
-<!--  -->
+    <!-- https://kgraph.foo/onto/datamodelling#AttributeMapping -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#AttributeMapping">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Mapping"/>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Binding -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Binding">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Association"/>
+        <rdfs:comment>A binding describes the specific application of a function&apos;s parameter to a defined Element (an attribute or parameter).</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#DataStructure -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#DataStructure">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+        <rdfs:comment>A DataStructure acts as a blueprint and describes the structured collection of attributes used to define an object. In physical contexts, might be used to describe denormalised views containing information source from multiple entities, e.g. in the case of a file format, message or api response definition.</rdfs:comment>
+        <rdfs:comment>A datastructure is separate from EntityType as it carries no implication of being a normalised object.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Definition -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Definition">
+        <rdfs:comment>In the realm of modelling, a definition is the core unit. Every definition should be named, described and reference other definitions through a constrained set of interactions.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Domain -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Domain">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A Domain is a controlled expression of the domain of values that an attribute or parameter is expected to conform to.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Element -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Element">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#EntityMapping -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#EntityMapping">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Mapping"/>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#EntityType -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#EntityType">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>An EntityType describes a concept, class, or table. Entities of the same EntityType are defined with common characteristics for which the EntityType acts as a container.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#ForeignKey -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#ForeignKey">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Function -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Function">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A function defines the rules and logic required to map from a collection of zero or more input parameters to a collection of zero or more output parameter(s). It is a behavioral definition.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#InputParameter -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#InputParameter">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Parameter"/>
+        <rdfs:comment>An InputParameter is a function-scoped name to which values can be bound at execution-time for input into a function.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Key -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Key">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A Key is a formal way of referencing instances of an entity.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Mapping -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Mapping">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Association"/>
+        <rdfs:comment>A mapping is a directed link between entities across differenct models or taxonomies. Its meaning is dependent on the Mapping&apos;s type. For more physical mappings, a mapping may apply a transformation through the application of a bound FunctionDefninition&apos;s parameters.</rdfs:comment>
+        <rdfs:comment>Mappings might be used to link between definitions at different levels (e.g. Logical to Physical for example) or across models at the same level (e.g. when identifying isomorphisms across models)</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Model -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Model">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A model describes a collection of classes and their interacting relationships, along with any annotative information that further describes their context.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Namespace -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Namespace">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A namespace is a named set of names that are guaranteed to each be unambiguously assigned to an individual object. i.e. Each name defined in a namespace has a singular, definitive meaning or mapping to an object.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#OutputParameter -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#OutputParameter">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Parameter"/>
+        <rdfs:comment>An OutputParemeter is a function-scoped name to which an output can be assigned as the result of performing a function.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Parameter -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Parameter">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
+        <rdfs:comment>A parameter is a function-scoped variable that can be bound with data from outside of the function. Parameters are defined as being input or output parameters to define flow.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#PrimaryKey -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#PrimaryKey">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Relationship -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Relationship">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Association"/>
+        <rdfs:comment>A relationship describes a relation between two classes. A relationship will be directed from the source (or child) referencing entity to a target (or parent) referenced entity via their respective keys. These keys are used to establish how that relationship can be encoded in practice, or for relationships with less defined specificity, they will exist as nominal placeholders.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Role -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Role">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A Role is the abstract representation of how an Entity participates in a Relationship. Each relationship definition should be associated with a SourceRole and a TargetRole.
+The relationship&apos;s multiplicity (cardinality + optionality) properties are recorded against the role, as are any key-definitions used to implement the role.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#SubjectArea -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#SubjectArea">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:comment>A SubjectArea describes a thematic category or topic of area of interest. Individual Classes might be tagged with one or more SubjectAreas depending on their association to different contexts.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#sourceRole -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#sourceRole">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+        <owl:disjointWith rdf:resource="https://kgraph.foo/onto/datamodelling#targetRole"/>
+        <rdfs:comment>The sourceRole is the role a participant plays at the source of a relationship.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#targetRole -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#targetRole">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+        <rdfs:comment>The targetRole is the role a participant plays at the target end of a relationship.</rdfs:comment>
+    </owl:Class>
+</rdf:RDF>
+
+
+
 <!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
 
-</rdf:RDF>

@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 
 # Local package imports
-from kgraphing.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGMETA
+from kgraphing.declarations import RDFTriple, SCHEMAMAPPINGSCHEMA, KGNAM
 
 
 def split_on_comma_respecting_quotes(some_string):
@@ -260,7 +260,7 @@ class SchemaMapping:
             # For each object, create a link to the isScopedWithin object that acts as its parent
             o_parent = self.entity_fqn_index.get(o.parent_fqn, None)
             if o_parent is not None:
-                scope_r = RelationObject(o, o_parent, KGMETA.isScopedWithin)
+                scope_r = RelationObject(o, o_parent, KGNAM.isScopedWithin)
                 triple_generating_objects.extend([scope_r])
             else:
                 print(
@@ -520,7 +520,7 @@ class NamedObject:
                 triples.append(
                     (
                         URIRef(self.uri),
-                        URIRef(KGMETA.Name),
+                        URIRef(KGNAM.Name),
                         Literal(n),
                     )
                 )
@@ -528,7 +528,7 @@ class NamedObject:
         triples.append(
             (
                 URIRef(self.uri),
-                URIRef(KGMETA.FullyQualifiedName),
+                URIRef(KGNAM.FullyQualifiedName),
                 Literal(self.fully_qualified_name),
             )
         )
@@ -590,13 +590,13 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
         of NamedObjects per the NamedObjectListFromDataGraphRow specification
         A NamedObject must have one or more principle:
               types
-              names (KGMETA)
-              labels (KGMETA)
+              names (KGNAM)
+              labels (KGNAM) (not necessarily true)
               namespace
-              FullyQualifiedNames (KGMETA)
+              FullyQualifiedNames (KGNAM)
         In addition, it might have any additional, overlapping properties that describe the
         object, but for basic construction, we start with this list to populate the minimal,
-        KGMETA based content (...or do we??)"""
+        KGNAM based content (...or do we??)"""
 
         type_uris = [URIRef(self.target_class)]
 

@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="https://kgraph.foo/onto/kgnam#"
+     xml:base="https://kgraph.foo/onto/kgnam"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+     xmlns:kgnam="https://kgraph.foo/onto/kgnam#"
+     xmlns:terms="http://purl.org/dc/terms/">
+    <owl:Ontology rdf:about="https://kgraph.foo/onto/kgnam">
+        <owl:versionIRI rdf:resource="https://kgraph.foo/onto/kgnam/v1.0.0"/>
+        <rdfs:comment xml:lang="en">An ontology designed to define core knowledge graph naming concepts, properties and definitions. 
+
+Many of the definitions within this ontology are used to help drive automated utility functions e.g. for serialisation and object mastery as part of the kgraph suite.</rdfs:comment>
+        <rdfs:label xml:lang="en">Knowledge Graph Meta Data</rdfs:label>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2004/02/skos/core#example -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#example"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#isScopedWithin -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgnam#isScopedWithin">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+        <rdfs:comment>Defines a link from the child NamedObject to parent NamedObject that performs as a unique naming context, i.e. a Namespace. The NamedObject&apos;s names must be defined to conform to the uniqueness characteristics within the referred NamedObject.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgnam"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">isScopedWithin</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#FullyQualifiedName -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgnam#FullyQualifiedName">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The FullyQualifiedName is a Functional data property of the object. It should uniquely define any individual of that object.</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The full globally identifying name of the object, consisting of the Namespace and all steps down the parental hierarchy using dot-separated notation.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgnam"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FullyQualifiedName</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#Name -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgnam#Name">
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The portion of the UniqueIdentifier that excludes the Namespace. All Names that are &quot;ScopedWithin&quot; a given Namespace must be unique.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgnam"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Name</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#NamedObject -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgnam#NamedObject">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A NamedObject is any object that conforms to the scope and namespacing restrictions described in this ontology.
+
+The Hierarchy of Namespace Uniqueness is as Follows:
+
+UniqueIdentifier: A global identifier entirely unique to the thing or concept, identifying only it. Commonly it will consist of the concatenation of the Name of the Surrounding Namespace plus the Name of the object, separated by a dot.
+
+Name: An identifier unique within a namespace. Names have constrictions on thier form that exclude certain characters and enforce agreed patterns. Objects that &quot;belong&quot; or are defined as children of other objects through the `isScopedWithin` property might reference their Parent Objects using their names separated by a dot to enforce uniqueness within the namespace.
+
+ShortName: An identifier unique within the confines of a parental object (see Parent) this is enforced excuding certain characters and conforming to a common pattern. 
+
+Label: An unrestricted form of the object&apos;s ShortName, not confined as rigidly in terms of formation. 
+
+Description: A context-sensitive description of the object in terms of its enclosing parental, and namespace scopes.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/kgnam"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NamedObject</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#Namespace -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgnam#Namespace">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://kgraph.foo/onto/kgnam#NamedObject"/>
+                    <owl:Restriction>
+                        <owl:onProperty>
+                            <rdf:Description>
+                                <owl:inverseOf rdf:resource="https://kgraph.foo/onto/kgnam#isScopedWithin"/>
+                            </rdf:Description>
+                        </owl:onProperty>
+                        <owl:someValuesFrom rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

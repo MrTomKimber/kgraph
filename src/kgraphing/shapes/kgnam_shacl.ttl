@@ -3,62 +3,51 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix sh:   <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix kgmeta: <https://kgraph.foo/onto/kgmeta#> .
+@prefix kgnam: <https://kgraph.foo/onto/kgnam#> .
 
 
 # Define expected property-shapes to be associated with any subject for which there is assigned a type
 # This limits the scope of the validation to (typed) individuals - which *should* be a minimum requirement
 # for any ingestion that includes naming (consider mappings though, which might arrive through a different
 # channel )
-kgmeta:NamedObjectShape a sh:NodeShape;
+kgnam:NamedObjectShape a sh:NodeShape;
     #sh:targetSubjectsOf rdf:type ;
-    sh:targetClass kgmeta:NamedObject ;
+    sh:targetClass kgnam:NamedObject ;
     sh:nodeKind sh:IRI ;
-    sh:property kgmeta:FullyQualifiedNamePropertyShape ;
-    sh:property kgmeta:NamePropertyShape ;
-    sh:property kgmeta:LabelPropertyShape ;
-    sh:property kgmeta:DescriptionPropertyShape ;
-    sh:property kgmeta:isScopedWithinPropertyShape ;
-    sh:property kgmeta:isIntegralPartOfPropertyShape .
+    sh:property kgnam:FullyQualifiedNamePropertyShape ;
+    sh:property kgnam:NamePropertyShape ;
+    sh:property kgnam:LabelPropertyShape ;
+    sh:property kgnam:DescriptionPropertyShape ;
+    sh:property kgnam:isScopedWithinPropertyShape .
     
 # The FullyQualifiedName property can and must only appear once, and when it does, it has a 
 # prescriptive pattern to which it must conform
-kgmeta:FullyQualifiedNamePropertyShape a sh:PropertyShape ;
-    sh:path kgmeta:FullyQualifiedName ;
+kgnam:FullyQualifiedNamePropertyShape a sh:PropertyShape ;
+    sh:path kgnam:FullyQualifiedName ;
     sh:maxCount 1 ;
     sh:minCount 1 ;
     sh:datatype xsd:string ;
     sh:pattern "(((^|[A-Za-z0-9_()↔\\s\\-&]+[.])([A-Za-z0-9_()↔\\s\\-&]+))+)$" .
 
-kgmeta:NamePropertyShape a sh:PropertyShape ;
-    sh:path kgmeta:Name ;
+kgnam:NamePropertyShape a sh:PropertyShape ;
+    sh:path kgnam:Name ;
     sh:maxCount 1 ;
     sh:minCount 1 ;
     sh:datatype xsd:string ;
     sh:pattern "(((^|[A-Za-z0-9_()↔\\s\\-&]+[.])([A-Za-z0-9_()↔\\s\\-&]+))+)$" .
 
-kgmeta:LabelPropertyShape a sh:PropertyShape ;
+kgnam:LabelPropertyShape a sh:PropertyShape ;
     sh:path rdfs:label ;
     sh:minCount 1 ;
     sh:datatype xsd:string .
 
-kgmeta:DescriptionPropertyShape a sh:PropertyShape ;
-    sh:path kgmeta:Description ;
+kgnam:DescriptionPropertyShape a sh:PropertyShape ;
+    sh:path kgnam:Description ;
     sh:maxCount 1 ;
     sh:datatype xsd:string .
 
 # IsScopedWithin should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
-kgmeta:isScopedWithinPropertyShape a sh:PropertyShape ;
-    sh:path kgmeta:isScopedWithin ;
+kgnam:isScopedWithinPropertyShape a sh:PropertyShape ;
+    sh:path kgnam:isScopedWithin ;
     sh:maxCount 1 ;
-    sh:class kgmeta:NamedObject .
-
-# isIntegralPartOf should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
-kgmeta:isIntegralPartOfPropertyShape a sh:PropertyShape ;
-    sh:path kgmeta:isIntegralPartOf ;
-    sh:maxCount 1 ;
-    sh:class kgmeta:NamedObject .
-
-
-
-
+    sh:class kgnam:NamedObject .

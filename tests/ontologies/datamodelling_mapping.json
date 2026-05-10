@@ -1,0 +1,213 @@
+{
+    "$schema": "../../src/kgraphing/jschema/schemamappingschema.json",
+    "Namespaces": {
+        "dmod": "https://kgraph.foo/onto/datamodelling#",
+        "vocg" : "https://kgraph.foo/skos/individuals#",
+        "nsdef" : "https://kgraph.foo/namespace#",
+        "KGMETA": "https://kgraph.foo/onto/kgmeta#",
+        "skos": "http://www.w3.org/2004/02/skos/core#"
+    },
+    "GlobalVariables": {
+        "RootNamespace" : "DataModelling",
+        "RootNamespaceLabel" : "Data Modelling Namespace"
+    },
+        "NamedObjects": [
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Namespace",
+            "URIBase": "https://kgraph.foo/namespace#",
+            "Instances": [
+                {
+                    "InstanceName": "Rootnamespace",
+                    "SubjectTag": "RootNamespace",
+                    "ParentTag": null,
+                    "Definition": true
+                },
+
+                {
+                    "InstanceName": "Namespace",
+                    "SubjectTag": "Namespace",
+                    "ParentTag": "NamespaceParent",
+                    "Definition": true
+                },
+
+                {
+                    "InstanceName": "NamespaceParent",
+                    "SubjectTag": "NamespaceParent",
+                    "ParentTag": null,
+                    "Definition": false
+                },
+
+                {
+                    "InstanceName": "SubjectAreaNamespace",
+                    "SubjectTag": "SubjectAreaNamespace",
+                    "ParentTag": null,
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "ModelNamespace",
+                    "SubjectTag": "ModelNamespace",
+                    "ParentTag": null,
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "EntityNamespace",
+                    "SubjectTag": "EntityNamespace",
+                    "ParentTag": null,
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "RelationshipNamespace",
+                    "SubjectTag": "RelationshipNamespace",
+                    "ParentTag": null,
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "TargetEntityNamespace",
+                    "SubjectTag": "TargetEntityNamespace",
+                    "ParentTag": null,
+                    "Definition": false
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#SubjectArea",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "SubjectArea",
+                    "SubjectTag": "SubjectArea",
+                    "ParentTag": "SubjectAreaNamespace",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Model",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "Model",
+                    "SubjectTag": "Model",
+                    "ParentTag": "ModelNamespace",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Entity",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "Entity",
+                    "SubjectTag": "Entity",
+                    "ParentTag": "EntityNamespace",
+                    "Definition": true
+                },
+                {
+                    "InstanceName": "SourceRoleEntity",
+                    "SubjectTag": "SourceRoleEntity",
+                    "ParentTag": "EntityNamespace",
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "TargetRoleEntity",
+                    "SubjectTag": "TargetRoleEntity",
+                    "ParentTag": "TargetEntityNamespace",
+                    "Definition": false
+                },
+
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Attribute",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "Attribute",
+                    "SubjectTag": "Attribute",
+                    "ParentTag": "Entity",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Domain",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "Domain",
+                    "SubjectTag": "Domain",
+                    "ParentTag": "DomainNamespace",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Key",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "Key",
+                    "SubjectTag": "EntityKey",
+                    "ParentTag": "Entity",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Relationship",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "Relationship",
+                    "SubjectTag": "Relationship",
+                    "ParentTag": "RelationshipNamespace",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Role",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "SourceRole",
+                    "SubjectTag": "SourceRole",
+                    "ParentTag": "Relationship",
+                    "Definition": true
+                },
+                {
+                    "InstanceName": "TargetRole",
+                    "SubjectTag": "TargetRole",
+                    "ParentTag": "Relationship",
+                    "Definition": true
+                }
+            ]
+            
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Key",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+                {
+                    "InstanceName": "EntityKey",
+                    "SubjectTag": "EntityKey",
+                    "ParentTag": "Entity",
+                    "Definition": true
+                }
+            ]
+            
+        }],
+        "Relationships": [
+            {   "Predicate": "", 
+                "Instances": []
+            }
+        ],
+        "Properties": [
+            {   "Predicate": "", 
+                "Instances": []
+            }
+        ]
+    }
+
+        

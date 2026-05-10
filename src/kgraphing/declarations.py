@@ -22,25 +22,25 @@ with resources.as_file(
     ) as schema_mapping_schema:
         SCHEMAMAPPINGSCHEMA = json.load(schema_mapping_schema)
 
-# KGMETA is the fixed namespace used by the kgraph suite of utilities
+# KGNAM is the fixed namespace used by the kgraph suite of utilities
 # Here the namespace is defined, and the underlying ontology resource
 # is openend as an rdflib-Graph object, to which are bound core ontology
 # namespaces to the graph's namespace manager.
-KGMETA = Namespace("https://kgraph.foo/onto/kgmeta#")
-KGMETA_G = rdflibGraph()
+KGNAM = Namespace("https://kgraph.foo/onto/kgnam#")
+KGNAM_G = rdflibGraph()
 
 with resources.as_file(
-    resources.files(ontologies) / os.path.normpath("kgmeta.owl")
-) as kgmeta_owl:
-    KGMETA_G.parse(kgmeta_owl, format="xml")
-    KGMETA_G.bind("KGMETA", KGMETA.title.toPython())
+    resources.files(ontologies) / os.path.normpath("kgnam.owl")
+) as kgnam_owl:
+    KGNAM_G.parse(kgnam_owl, format="xml")
+    KGNAM_G.bind("KGNAM", KGNAM.title.toPython())
 
-KGMETA_SHAPES_G = rdflibGraph()
+KGNAM_SHAPES_G = rdflibGraph()
 with resources.as_file(
-    resources.files(shapes) / os.path.normpath("kgmeta_shacl.ttl")
-) as kgmeta_shapes:
-    KGMETA_SHAPES_G.parse(kgmeta_shapes, format="ttl")
-    KGMETA_SHAPES_G.bind("KGMETA", KGMETA.title.toPython())
+    resources.files(shapes) / os.path.normpath("kgnam_shacl.ttl")
+) as kgnam_shapes:
+    KGNAM_SHAPES_G.parse(kgnam_shapes, format="ttl")
+    KGNAM_SHAPES_G.bind("KGNAM", KGNAM.title.toPython())
 
 # Define the type-aliases used to handle triple contents
 RDFSubjectAtom: TypeAlias = Union[URIRef, BNode]

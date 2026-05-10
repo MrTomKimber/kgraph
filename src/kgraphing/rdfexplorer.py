@@ -6,7 +6,7 @@ import re
 from html import escape
 
 from rdflib.namespace import RDF, RDFS, SKOS, XSD
-from rdflib import Container, URIRef, Literal, Graph as rdflibGraph, Namespace
+from rdflib import URIRef, Literal, Graph as rdflibGraph, Namespace
 from rdflib.term import Node, Identifier
 
 import networkx as nx
@@ -19,7 +19,7 @@ from kgraphing.declarations import (
     RDFObjectAtom,
 )
 
-from kgraphing.declarations import KGMETA, KGMETA_G
+from kgraphing.declarations import KGNAM, KGNAM_G
 
 PYTHON2XSDDATATYPEMAPPING = {
     "bool": XSD.boolean,
@@ -101,16 +101,16 @@ class GraphEntity:
     )
 
     __default_technical_label_prefs = [
-        KGMETA.FullyQualifiedName,
-        KGMETA.Name,
+        KGNAM.FullyQualifiedName,
+        KGNAM.Name,
         RDFS.label,
         SKOS.prefLabel,
     ]
     __default_human_label_prefs = [
         RDFS.label,
         SKOS.prefLabel,
-        KGMETA.Name,
-        KGMETA.FullyQualifiedName,
+        KGNAM.Name,
+        KGNAM.FullyQualifiedName,
     ]
     __entity_types = StrEnum("EntityType", ["object", "literal", "other"])
 

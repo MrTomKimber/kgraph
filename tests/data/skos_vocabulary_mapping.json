@@ -4,7 +4,7 @@
         "DMCAR": "https://kgraph.foo/onto/kgdmcar#",
         "vocg" : "https://kgraph.foo/skos/individuals#",
         "nsdef" : "https://kgraph.foo/namespace#",
-        "KGMETA": "https://kgraph.foo/onto/kgmeta#",
+        "KGNAM": "https://kgraph.foo/onto/kgnam#",
         "skos": "http://www.w3.org/2004/02/skos/core#"
     },
     "GlobalVariables": {
@@ -13,7 +13,7 @@
     },
     "NamedObjects": [
         {
-            "TargetClass": "https://kgraph.foo/onto/kgmeta#Namespace",
+            "TargetClass": "https://kgraph.foo/onto/kgnam#Namespace",
             "URIBase": "https://kgraph.foo/namespace#",
             "Instances": [
                 {

@@ -48,7 +48,7 @@ def test_serialised_concept_count(serialised_graph):
     extracted_concept_names = [
         n
         for s in extracted_concepts
-        for _,_,n in serialised_graph.triples((s, declarations.KGMETA.FullyQualifiedName, None))
+        for _,_,n in serialised_graph.triples((s, declarations.KGNAM.FullyQualifiedName, None))
     ]
 
     assert len(extracted_concept_names) == 32
@@ -75,11 +75,11 @@ def test_serialised_concept_count(serialised_graph):
     
 def test_post_schema_mapping_shacl_validation(serialised_graph):
     ont = Graph()
-    kgmeta_file = str(resources.files(ontologies) / os.path.normpath("kgmeta.owl"))
-    ont.parse(kgmeta_file)
+    kgnam_file = str(resources.files(ontologies) / os.path.normpath("kgnam.owl"))
+    ont.parse(kgnam_file)
     conforms, results_g, results_t = validate(
                                             serialised_graph, 
-                                            shacl_graph=declarations.KGMETA_SHAPES_G, 
+                                            shacl_graph=declarations.KGNAM_SHAPES_G, 
                                             ont_graph=ont, 
                                             inference='rdfs', 
                                             abort_on_first=False, 
@@ -113,7 +113,7 @@ def test_rdfexplorer_get_types(explorer_obj):
     assert s_types == {URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
                         URIRef('http://www.w3.org/2004/02/skos/core#Concept'),
                         URIRef('http://www.w3.org/2004/02/skos/core#ConceptScheme'),
-                        URIRef('https://kgraph.foo/onto/kgmeta#Namespace')}
+                        URIRef('https://kgraph.foo/onto/kgnam#Namespace')}
 
 
 def test_rdfexplorer_gen_entity_report(explorer_obj):
@@ -179,11 +179,11 @@ def test_create_in_memory_store_and_populate_with_metadata(in_memory_store, toy_
     assert URIRef("http://kgraph.foo.bar/metadata") in stored_graphs
     
 def test_ontology_cache_instantiation_and_file_registration(ontology_cache):
-    kgmeta_path = str(resources.files(ontologies) / os.path.normpath("kgmeta.owl"))
+    kgnam_path = str(resources.files(ontologies) / os.path.normpath("kgnam.owl"))
     OC = ontology_cache
-    OC.register("https://kgraph.foo/onto/kgmeta#", 
+    OC.register("https://kgraph.foo/onto/kgnam#", 
             False, 
-            kgmeta_path)
+            kgnam_path)
     # Test that a file exists in the cache and that its name matches the registry
     v,m,o = OC.cross_check_registry_cache()
     assert len(o)==0
@@ -197,8 +197,8 @@ def test_rdf2d_instantiation(rdf2dict_of_serialised_graph):
 def test_rdf2d_cache_enrichment(rdf2dict_of_serialised_graph):
     rdf2dict_of_serialised_graph.enrich_metadata()
     assert len(rdf2dict_of_serialised_graph.ontology_cache.registry)==5
-    assert len(rdf2dict_of_serialised_graph.entities)==305
-    assert len(rdf2dict_of_serialised_graph.relations)==24
+    assert len(rdf2dict_of_serialised_graph.entities)==299
+    assert len(rdf2dict_of_serialised_graph.relations)==23
     
 
 

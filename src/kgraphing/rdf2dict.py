@@ -1,14 +1,14 @@
 """Utility for converting rdflib graphs into dictionary
 representations, and (at some point in the future) back again."""
 
-from typing import Optional
+from typing import Optional, Self
 from dataclasses import dataclass, asdict, field
 import json
 import uuid
 import os
 from itertools import combinations
 
-
+from xml.etree import ElementTree as ET
 from urllib.parse import urldefrag
 from rdflib import Graph, Literal, URIRef, BNode
 from rdflib.term import Identifier, Node
@@ -264,6 +264,59 @@ class ObservedEntity(Thing):
 
 class RDF2dict:
 
+
+    def __init__(self, g: Graph, cache: OntologyCache):
+        self.source_graph=RDF2dict.copy_graph(g) # Store a copy of the original graph used to instantiate the object
+        self.relations = (
+            {}
+        )  # A dictionary keyed on predicates - provides graph-level meta-data over the observed usage of the predicate
+        self.entities = (
+            {}
+        )  # A dictionary keyed on subject - this differs from the raw_graph_dict in that it collects observations across the graph
+        # It might be worth stripping this out later, I'm not 100% convinced this is doing anything meaningful that the raw_graph_dict isn't
+        self.ontology_cache = cache
+        self.update(g, order=0)
+
+    @classmethod
+    def from_file(cls, file_path : str, cache : OntologyCache)->Self:
+        declared_namespaces = RDF2dict.get_xml_namespaces(file_path)
+        print(f"Declared Namespaces={declared_namespaces}")
+        g = Graph()
+        g.parse(file_path)
+        # Find the URI of the default namespace
+        try:
+            default_uri = next(uri for prefix, uri in g.namespaces() if prefix == "")
+            print(f"Default uri={default_uri}")
+            # Find the named prefix (e.g., 'kgmod') that maps to the same URI as the default
+            preferred_prefix = next((prefix for prefix, uri in declared_namespaces.items() if str(uri) == str(default_uri) and prefix != ""), None)
+            print(f"Preferred Prefix={preferred_prefix}")
+            # Rebind the namespace to use the named prefix
+            if preferred_prefix:
+                g.bind(preferred_prefix, default_uri, replace=True)
+
+        except StopIteration:
+            # There is no default uri
+            pass
+        return cls(g, cache)
+    
+    @staticmethod
+    def copy_graph(original_graph):
+        copy_graph = Graph(
+            store=original_graph.store,
+            identifier=original_graph.identifier,
+            namespace_manager=original_graph.namespace_manager
+            )
+        for triple in original_graph:
+            copy_graph.add(triple)
+        return copy_graph
+
+    @staticmethod
+    def get_xml_namespaces(file_path):
+        with open(file_path, 'r') as file:
+            context = ET.iterparse(file, events=['start-ns'])
+            # Convert list of (prefix, uri) tuples to a dictionary
+            return dict([item for action, item in context])
+
     @staticmethod
     def get_base_uri(uri_str: str):
         # urldefrag separates the URI into (root, fragment)
@@ -374,17 +427,6 @@ class RDF2dict:
                         )
                     )
 
-    def __init__(self, g: Graph, cache: OntologyCache):
-
-        self.relations = (
-            {}
-        )  # A dictionary keyed on predicates - provides graph-level meta-data over the observed usage of the predicate
-        self.entities = (
-            {}
-        )  # A dictionary keyed on subject - this differs from the raw_graph_dict in that it collects observations across the graph
-        # It might be worth stripping this out later, I'm not 100% convinced this is doing anything meaningful that the raw_graph_dict isn't
-        self.ontology_cache = cache
-        self.update(g, order=0)
 
     def update_cache(self):
         cache_ontologies = set(self.ontology_cache.registry)

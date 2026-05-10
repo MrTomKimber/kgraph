@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlitedict import SqliteDict
 from rdflib import Namespace, URIRef, Literal, Graph
-from kgraphing.declarations import KGMETA
+from kgraphing.declarations import KGNAM
 
 
 class NameMaster:
@@ -181,7 +181,7 @@ class NameMaster:
         keyvalue_pairs = {}
 
         # Cycle over all the named entities in the graph
-        for s, _, o in graph.triples((None, KGMETA.FullyQualifiedName, None)):
+        for s, _, o in graph.triples((None, KGNAM.FullyQualifiedName, None)):
             object_value = None
             subject = s  # By convention, store entity references as raw URIRefs
             if isinstance(o, URIRef):
