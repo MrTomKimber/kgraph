@@ -56,6 +56,12 @@
                     "Definition": false
                 },
                 {
+                    "InstanceName": "AttributeDomainNamespace",
+                    "SubjectTag": "AttributeDomainNamespace",
+                    "ParentTag": null,
+                    "Definition": false
+                },
+                {
                     "InstanceName": "RelationshipNamespace",
                     "SubjectTag": "RelationshipNamespace",
                     "ParentTag": null,
@@ -114,7 +120,7 @@
                     "SubjectTag": "TargetRoleEntity",
                     "ParentTag": "TargetEntityNamespace",
                     "Definition": false
-                },
+                }
 
             ]
         },
@@ -127,6 +133,13 @@
                     "SubjectTag": "Attribute",
                     "ParentTag": "Entity",
                     "Definition": true
+                },
+                {
+                    "InstanceName": "EntityKeyAttribute",
+                    "SubjectTag": "EntityKeyAttributes",
+                    "ParentTag": "Entity",
+                    "Definition": true,
+                    "EnableMultiValues": true
                 }
             ]
         },
@@ -135,10 +148,10 @@
             "URIBase": "https://kgraph.foo/entities#",
             "Instances": [
                 {
-                    "InstanceName": "Domain",
-                    "SubjectTag": "Domain",
-                    "ParentTag": "DomainNamespace",
-                    "Definition": true
+                    "InstanceName": "AttributeDomain",
+                    "SubjectTag": "AttributeDomain",
+                    "ParentTag": "AttributeDomainNamespace",
+                    "Definition": false
                 }
             ]
         },
@@ -151,7 +164,20 @@
                     "SubjectTag": "EntityKey",
                     "ParentTag": "Entity",
                     "Definition": true
+                },
+                {
+                    "InstanceName": "SourceRoleKey",
+                    "SubjectTag": "SourceRoleKey",
+                    "ParentTag": "Entity",
+                    "Definition": false
+                },
+                {
+                    "InstanceName": "TargetRoleKey",
+                    "SubjectTag": "TargetRoleKey",
+                    "ParentTag": "TargetRoleEntity",
+                    "Definition": false
                 }
+                
             ]
         },
         {
@@ -184,29 +210,151 @@
                 }
             ]
             
-        },
-        {
-            "TargetClass": "https://kgraph.foo/onto/datamodelling#Key",
-            "URIBase": "https://kgraph.foo/entities#",
-            "Instances": [
-                {
-                    "InstanceName": "EntityKey",
-                    "SubjectTag": "EntityKey",
-                    "ParentTag": "Entity",
-                    "Definition": true
-                }
-            ]
-            
         }],
         "Relationships": [
-            {   "Predicate": "", 
-                "Instances": []
+            {   "Predicate": "https://kgraph.foo/onto/kgnam#isPartOf", 
+                "Instances": [
+                    {
+                        "InstanceName": "AttributeIsPartOfEntity",
+                        "SubjectTag": "Attribute",
+                        "ObjectTag": "Entity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "KeyIsPartOfEntity",
+                        "SubjectTag": "EntityKey",
+                        "ObjectTag": "Entity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "SourceRoleIsPartOfRelationship",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "Relationship",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleIsPartOfRelationship",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "Relationship",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "SourceRoleIsPartOfEntity",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "SourceRoleEntity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleIsPartOfEntity",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "TargetRoleEntity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "SourceRoleIsPartOfKey",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "SourceRoleKey",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleIsPartOfKey",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "TargetRoleKey",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "AttributeDomainIsPartOfAttributeDomainNamespace",
+                        "SubjectTag": "AttributeDomain",
+                        "ObjectTag": "AttributeDomainNamespace",
+                        "EnableMultiValues": false
+                    }
+                ]
+            },
+            {
+                "Predicate": "https://kgraph.foo/onto/datamodelling#isMemberOf", 
+                "Instances": [
+                    {
+                        "InstanceName": "ModelIsMemberOfParentModel",
+                        "SubjectTag": "Model",
+                        "ObjectTag": "ModelParent",
+                        "EnableMultiValues": true
+                    },
+                    {
+                        "InstanceName": "EntityIsMemberOfSubjectArea",
+                        "SubjectTag": "Entity",
+                        "ObjectTag": "SubjectArea",
+                        "EnableMultiValues": true
+                    },                    
+                    {
+                        "InstanceName": "AttributeIsMemberOfKey",
+                        "SubjectTag": "EntityKeyAttributes",
+                        "ObjectTag": "EntityKey",
+                        "EnableMultiValues": true
+                    },                    
+                    {
+                        "InstanceName": "AttributeIsMemberOfKey",
+                        "SubjectTag": "EntityKeyAttributes",
+                        "ObjectTag": "EntityKey",
+                        "EnableMultiValues": true
+                    }
+                ]
             }
+            
         ],
         "Properties": [
-            {   "Predicate": "", 
-                "Instances": []
+            {
+
+            "Predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+            "Instances": [
+                {
+                    "InstanceName": "NamespaceLabel",
+                    "SubjectTag": "Namespace",
+                    "LiteralTag": "NamespaceLabel"
+            },
+                {
+                    "InstanceName": "SubjectAreaLabel",
+                    "SubjectTag": "SubjectArea",
+                    "LiteralTag": "SubjectAreaLabel"
+            },
+            
+                {
+                    "InstanceName": "ModelLabel",
+                    "SubjectTag": "Model",
+                    "LiteralTag": "ModelLabel"
+            },
+
+                {
+                    "InstanceName": "EntityLabel",
+                    "SubjectTag": "Entity",
+                    "LiteralTag": "EntityLabel"
+            },
+                {
+                    "InstanceName": "AttributeLabel",
+                    "SubjectTag": "Attribute",
+                    "LiteralTag": "AttributeLabel"
+            },
+                {
+                    "InstanceName": "EntityKeyLabel",
+                    "SubjectTag": "EntityKey",
+                    "LiteralTag": "EntityKeyLabel"
+            },
+            {
+                    "InstanceName": "RelationshipLabel",
+                    "SubjectTag": "Relationship",
+                    "LiteralTag": "RelationshipLabel"
+            },
+            {
+                    "InstanceName": "SourceRoleLabel",
+                    "SubjectTag": "SourceRole",
+                    "LiteralTag": "SourceRoleLabel"
+            },
+            {
+                    "InstanceName": "TargetRoleLabel",
+                    "SubjectTag": "TargetRole",
+                    "LiteralTag": "TargetRoleLabel"
             }
+            ]
+        }
         ]
     }
 

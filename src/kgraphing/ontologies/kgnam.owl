@@ -50,6 +50,7 @@ Many of the definitions within this ontology are used to help drive automated ut
     <!-- https://kgraph.foo/onto/kgnam#isScopedWithin -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgnam#isScopedWithin">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>

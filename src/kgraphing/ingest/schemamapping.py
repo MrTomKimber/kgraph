@@ -260,6 +260,7 @@ class SchemaMapping:
             # For each object, create a link to the isScopedWithin object that acts as its parent
             o_parent = self.entity_fqn_index.get(o.parent_fqn, None)
             if o_parent is not None:
+                print(f"possible parent for {fqn}: {o_parent}")
                 scope_r = RelationObject(o, o_parent, KGNAM.isScopedWithin)
                 triple_generating_objects.extend([scope_r])
             else:

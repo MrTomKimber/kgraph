@@ -6,8 +6,9 @@
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
      xmlns:kgmod="https://kgraph.foo/onto/datamodelling#">
-    <owl:Ontology rdf:about="https://kgraph.foo/onto/datamodelling#">
+    <owl:Ontology rdf:about="https://kgraph.foo/onto/kgnam/v1.0.0">
         <rdfs:comment>A data-modelling metamodel describing entity composition and relationships as well as inter and cross-model mappings.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
     </owl:Ontology>
@@ -37,22 +38,22 @@
     
 
 
+    <!-- https://kgraph.foo/onto/datamodelling#attributeIsMemberOfKey -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#attributeIsMemberOfKey">
+        <rdfs:subPropertyOf rdf:resource="https://kgraph.foo/onto/datamodelling#isMemberOf"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Attribute"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://kgraph.foo/onto/datamodelling#attributeIsPartOfEntity -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#attributeIsPartOfEntity">
         <rdfs:subPropertyOf rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Attribute"/>
         <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
-    </owl:ObjectProperty>
-    
-
-
-    <!-- https://kgraph.foo/onto/datamodelling#attributeIsPartOfKey -->
-
-    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#attributeIsPartOfKey">
-        <rdfs:subPropertyOf rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
-        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Attribute"/>
-        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
     </owl:ObjectProperty>
     
 
@@ -107,7 +108,8 @@
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isMemberOf">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-        <rdfs:comment>A membership relation from the member entity to another entity that acts as collection or group. Considered a separate concept to isPartOf which defines dependent, compositional relationships.</rdfs:comment>
+        <rdfs:comment>A membership relation from the member entity to another entity that acts as collection or group. Membership of a group is non-exclusive. 
+Contrast with isPartOf which defines dependent, compositional relationships that are exclusively defined. i.e. functional</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
     </owl:ObjectProperty>
     
@@ -117,7 +119,8 @@
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isPartOf">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
-        <rdfs:comment>Describes a compositional relationship between two entities</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:comment>Describes a compositional relationship between two entities. If an entity isPartOf another, this relationship is exclusive. An entity cannot be part of multiple parent entities.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
     </owl:ObjectProperty>
     
@@ -163,6 +166,12 @@
     
 
 
+    <!-- https://kgraph.foo/onto/kgnam#isScopedWithin -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/kgnam#isScopedWithin"/>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -174,26 +183,30 @@
     
 
 
-    <!-- https://kgraph.foo/onto/datamodelling#FullyQualifiedName -->
-
-    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#FullyQualifiedName">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
-        <rdfs:comment>A string constructed by appending local names and traversing the root-to-leaf-path defined by the isEnclosedBy object property hierarchy. If each Enclosing node guarantees the distinctness of the names defined within it, then each FullyQualifiedName should perform as unique identifiers. 
-
-By convention, the joins are delimited by dots to return the final FullyQualifiedName, and this has an impact on the legal characters available to construct each local name.</rdfs:comment>
-        <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- https://kgraph.foo/onto/datamodelling#RoleVerb -->
 
     <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleVerb">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">A Verb that describes the role that an entity plays in its participation via an associated relationship.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#FullyQualifiedName -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgnam#FullyQualifiedName">
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#Name -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/kgnam#Name">
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:DatatypeProperty>
     
 
@@ -458,6 +471,35 @@ The relationship&apos;s multiplicity (cardinality + optionality) properties are 
     <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#targetRole">
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
         <rdfs:comment>The targetRole is the role a participant plays at the target end of a relationship.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#NamedObject -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgnam#NamedObject"/>
+    
+
+
+    <!-- https://kgraph.foo/onto/kgnam#Namespace -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/kgnam#Namespace">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://kgraph.foo/onto/kgnam#NamedObject"/>
+                    <owl:Restriction>
+                        <owl:onProperty>
+                            <rdf:Description>
+                                <owl:inverseOf rdf:resource="https://kgraph.foo/onto/kgnam#isScopedWithin"/>
+                            </rdf:Description>
+                        </owl:onProperty>
+                        <owl:someValuesFrom rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/kgnam#NamedObject"/>
     </owl:Class>
 </rdf:RDF>
 
