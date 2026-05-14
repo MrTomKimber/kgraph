@@ -16,7 +16,7 @@ from kgraphing.store import kgstore
 from kgraphing.store import metadata
 from kgraphing import ontologies, shapes
 
-from kgraphing import rdf2dict
+from kgraphing import gerf
 
 
 @pytest.fixture(scope='session')
@@ -78,11 +78,11 @@ def toy_graph(scope='session'):
 @pytest.fixture(scope='session')
 def ontology_cache(scope='session'):
     """Create an empty OntologyCache object"""
-    OC = rdf2dict.OntologyCache(os.path.join(current_dir, "data/ocache"))
+    OC = gerf.OntologyCache(os.path.join(current_dir, "data/ocache"))
     OC.purge() # Delete any remaining content that might exist from an earlier run
     return OC
 
 @pytest.fixture(scope='session')
 def rdf2dict_of_serialised_graph(ontology_cache, serialised_graph, scope='session'):
-    rdf2d = rdf2dict.RDF2dict(serialised_graph, ontology_cache)
+    rdf2d = gerf.Gerf(serialised_graph, ontology_cache)
     return rdf2d

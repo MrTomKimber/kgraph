@@ -262,11 +262,29 @@ class ObservedEntity(Thing):
         return f"""<table>{"".join(rows)}</table>"""
 
 
-class RDF2dict:
+class Gerf:
+    """The Gerf class translates an rdflib Graph object
+    into a structured object containing Entities and Relations dictionaries.
+    These dictionaries are keyed on their URIs
+    
+    A Graph G consists of { E, R, F }
+    where
+    E is a set of Entities contained within the graph
+    R is the set of Relations that define connection types
+    F is the set of Facts, expressed as (h, r, t)
+    where
+    (h ∈ E, r ∈ R, t ∈ E)
 
+    For convenience, the Entities object contains a property
+    called `interactions` that contains a relation-keyed 
+    dictionary listing all facts expressed in the graph.
+
+    This provides a common method for extracting content
+    from the graph in an Entity-centric way.
+    """
 
     def __init__(self, g: Graph, cache: OntologyCache):
-        self.source_graph=RDF2dict.copy_graph(g) # Store a copy of the original graph used to instantiate the object
+        self.source_graph=Gerf.copy_graph(g) # Store a copy of the original graph used to instantiate the object
         self.relations = (
             {}
         )  # A dictionary keyed on predicates - provides graph-level meta-data over the observed usage of the predicate
@@ -279,7 +297,7 @@ class RDF2dict:
 
     @classmethod
     def from_file(cls, file_path : str, cache : OntologyCache)->Self:
-        declared_namespaces = RDF2dict.get_xml_namespaces(file_path)
+        declared_namespaces = Gerf.get_xml_namespaces(file_path)
         print(f"Declared Namespaces={declared_namespaces}")
         g = Graph()
         g.parse(file_path)
@@ -340,7 +358,7 @@ class RDF2dict:
         relations = self._get_relationship_definitions()
         types = self._get_class_definitions()
         candidate_ontology_set = set(
-            [RDF2dict.get_base_uri(c) for c in relations.union(types)]
+            [Gerf.get_base_uri(c) for c in relations.union(types)]
         )
         return candidate_ontology_set
 
