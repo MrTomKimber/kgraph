@@ -397,6 +397,7 @@ class Gerf:
                     self.entities[identifier]._observed_rdf_classes = (
                         entity._observed_rdf_classes.union(entity_relations_d[RDF.type])
                     )
+                    
             for relation, obj_set in entity_relations_d.items():
                 self.relations[relation]._observed_rdf_subject_classes = self.relations[
                     relation
@@ -482,3 +483,40 @@ class Gerf:
         self._enrich_entities_relations_from_global()
 
 
+
+    def inference_super_class(self):
+        entities=set(self.entities.keys())
+        o_graph = self.create_ontology_graph()
+        order=max([e.order for e in self.entities.values()])+1
+        self._enrich_metadata_for_entities(entities,o_graph,order=order)
+        for entity in entities:
+            self._apply_super_class_assignment_for_entity(entity, order=order)
+
+    def _get_super_classes_of_class(self, 
+                                    class_entity, 
+                                    super_class_set)->set:
+        """Traverse the graph over RDFS.subClassOf, collecting the 
+        tree of parent super-classes for this class definition"""
+        if super_class_set is None:
+            super_class_set=set()
+        class_enitiy_object = self.entities.get(class_entity, ObservedEntity(identifier=None, order=None))
+        immediate_super_classes = class_enitiy_object.interactions.get(RDFS.subClassOf, set())
+        for sup in immediate_super_classes:
+            super_class_set.add(sup)
+            super_class_set=super_class_set.union(self._get_super_classes_of_class(sup, super_class_set))
+        return super_class_set
+    
+    def _apply_super_class_assignment_for_entity(self, 
+                                                 entity,
+                                                 order:int):
+        
+        entity_classes = self.entities.get(entity, ObservedEntity(identifier=None, order=None)).interactions.get(RDF.type, set())
+        super_class_set=set()
+        for e_class in entity_classes:
+            super_class_set = super_class_set.union(self._get_super_classes_of_class(e_class, None))
+        
+        super_class_triples=set()
+        for s_class in super_class_set:
+            super_class_triples.add((entity, RDF.type, s_class))
+        for triple in super_class_triples:
+            self._update_entities_relations_from_triple(triple=triple, order=order)

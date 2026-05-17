@@ -193,7 +193,7 @@
             ]
         },
         {
-            "TargetClass": "https://kgraph.foo/onto/datamodelling#Role",
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#sourceRole",
             "URIBase": "https://kgraph.foo/entities#",
             "Instances": [
                 {
@@ -201,7 +201,15 @@
                     "SubjectTag": "SourceRole",
                     "ParentTag": "Relationship",
                     "Definition": true
-                },
+                }
+            ]
+            
+        },
+            {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#targetRole",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+
                 {
                     "InstanceName": "TargetRole",
                     "SubjectTag": "TargetRole",
@@ -210,9 +218,10 @@
                 }
             ]
             
-        }],
+        }
+    ],
         "Relationships": [
-            {   "Predicate": "https://kgraph.foo/onto/kgnam#isPartOf", 
+            {   "Predicate": "https://kgraph.foo/onto/datamodelling#isPartOf", 
                 "Instances": [
                     {
                         "InstanceName": "AttributeIsPartOfEntity",
