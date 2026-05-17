@@ -11,7 +11,7 @@ from pyshacl import validate
 # local imports
 from kgraphing.ingest.schemamapping import SchemaMapping
 from kgraphing.ingest.namemaster import NameMaster
-
+from kgraphing import setfunctions
 
 class KGraphPipeline:
     def __init__(
@@ -55,7 +55,7 @@ class KGraphPipeline:
         into an rdflib graph using the parameterised process"""
 
         # Validate Columns from input data match expected mapping columns
-        _, _, f_score = KGraphPipeline._lir_stats(
+        _, _, f_score = setfunctions.lir_stats(
             set(data.columns), self.expected_columns
         )
         if not ignore_validate:
@@ -104,24 +104,3 @@ class KGraphPipeline:
 
         # Generate logging/output signal and return fail
         return False
-
-    @staticmethod
-    def _sets_to_lir(set_a, set_b):
-        l, i, r = set_a - set_b, set_a.intersection(set_b), set_b - set_a
-        return l, i, r
-
-    @staticmethod
-    def _lir_stats(set_a, set_b):
-        l, i, r = KGraphPipeline._sets_to_lir(set_a, set_b)
-        total_size, len_a, len_b = (
-            sum((1 for v in [l, i, r] for e in v)),
-            len(set_a),
-            len(set_b),
-        )
-        precision = (len(i)) / (len(i) + len(l))
-        recall = (len(i)) / (len(i) + len(r))
-        if (precision + recall) != 0:
-            f1_score = 2 * (precision * recall) / (precision + recall)
-        else:
-            f1_score = 0
-        return precision, recall, f1_score

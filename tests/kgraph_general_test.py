@@ -17,7 +17,7 @@ from kgraphing import declarations
 from kgraphing.ingest import schemamapping
 from kgraphing.ingest import kgpipeline
 from kgraphing import rdfexplorer
-from kgraphing import gvis
+from kgraphing import nxproperties
 from kgraphing.store import kgstore
 from kgraphing.store import metadata
 from kgraphing import ontologies
@@ -135,18 +135,18 @@ def test_rdfexplorer_gen_visualisation(explorer_obj):
     nxg = explorer_obj.to_gravis_nx()
     node_style_mappings = json.load(open(os.path.join(current_dir, "data/vocab_node_styles.json"), "r"))
     edge_style_mappings = json.load(open(os.path.join(current_dir, "data/vocab_edge_styles.json"), "r"))
-    map_node_styles_on_rdfclass_f = gvis.partial(gvis.get_attribute, attribute="rdfclass")
-    map_edge_styles_on_rdfclass_f = gvis.partial(gvis.get_attribute, attribute="rdfclass")
+    map_node_styles_on_rdfclass_f = nxproperties.partial(nxproperties.get_attribute, attribute="rdfclass")
+    map_edge_styles_on_rdfclass_f = nxproperties.partial(nxproperties.get_attribute, attribute="rdfclass")
     
 
     visualisation_g = nx.MultiDiGraph()
     #print({node: value for node, value in nx.get_node_attributes(nxg, 'POS').items() if value in ('AUX', 'VERB')})
     # Retrieve content from sentence_list *if* the number of nsubj's is > 0
 
-    visualisation_g = gvis.decorate_networkx_nodes_with_function(nxg,
+    visualisation_g = nxproperties.decorate_networkx_nodes_with_function(nxg,
                                         map_node_styles_on_rdfclass_f,
                                         node_style_mappings)
-    visualisation_g = gvis.decorate_networkx_edges_with_function(visualisation_g,
+    visualisation_g = nxproperties.decorate_networkx_edges_with_function(visualisation_g,
                                         map_edge_styles_on_rdfclass_f,
                                         edge_style_mappings)
     

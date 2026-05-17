@@ -1,4 +1,4 @@
-"""Utility functions used for graph visualisation"""
+"""Utility functions used for decorating networkx graphs"""
 
 from functools import partial, wraps
 from typing import Any, Hashable, TypeAlias, Union
@@ -21,7 +21,7 @@ def validate_unbound_function_sig(v_func, ubound_parms):
         ]
     ):
         raise TypeError(
-            f"{v_func.__name__} doesn't have a valid unbound call signature {str([n
+            f"{v_func.func.__name__} doesn't have a valid unbound call signature {str([n
                 for n,p in
                 f_sig.parameters.items()
                 if p.default == inspect.Parameter.empty

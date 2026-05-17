@@ -100,7 +100,7 @@
             ]
         },
         {
-            "TargetClass": "https://kgraph.foo/onto/datamodelling#Entity",
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#EntityType",
             "URIBase": "https://kgraph.foo/entities#",
             "Instances": [
                 {
