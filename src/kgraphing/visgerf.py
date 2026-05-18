@@ -80,9 +80,25 @@ class VisGerf:
         tests = [
                 identifier in gerf_object.entities.keys(), 
                 element in gerf_object.entities.keys(), 
-                predicate in gerf_object.relations.keys()
+                predicate in gerf_object.relations.keys(),
+                VisGerf._predicate_is_subclass_leaf(gerf_object, identifier, predicate, element)                # include only predicates that are subClass leaves
                 ]
         return all(tests)
+
+    @staticmethod
+    def _predicate_is_subclass_leaf(gerf_object, identifier, predicate, element):
+        sub_properties = set([s 
+                                for s,p,o in gerf_object.total_graph.triples((None, RDFS.subPropertyOf, predicate)) 
+                                if s!=o])
+        # Select most specific active sub-property that exists between this pair of nodes
+        if any({p in sub_properties for s,p,o in gerf_object.total_graph.triples((identifier, None, element))}):
+            return False
+        else:
+            return True
+
+
+
+
 
     @staticmethod
     def _default_node_properties_function(gerf_object, identifier):
@@ -94,6 +110,7 @@ class VisGerf:
     
     @staticmethod
     def _default_edge_properties_function(gerf_object, identifier, predicate, element):
+        # Need to trim relations that are duplicated due to subclassed relation-definitions
         property_dict = {}
         EmptyObject = ObservedEntity(identifier=None, order=None)
         relation_def = gerf_object.entities.get(predicate, EmptyObject)

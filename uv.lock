@@ -1094,6 +1094,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "networkx" },
     { name = "openpyxl" },
+    { name = "owlrl" },
     { name = "pandas" },
     { name = "pydeps" },
     { name = "pyshacl" },
@@ -1116,6 +1117,7 @@ dev = [
 requires-dist = [
     { name = "networkx", specifier = ">=3.6.1" },
     { name = "openpyxl", specifier = ">=3.1.5" },
+    { name = "owlrl", specifier = ">=7.1.4" },
     { name = "pandas", specifier = ">=3.0.1" },
     { name = "pydeps", specifier = ">=3.0.2" },
     { name = "pyshacl", specifier = ">=0.31.0" },

@@ -137,6 +137,8 @@ class OntologyCache:
                 print(
                     f"{e} encountered while processing {ontology_url} - consider manually registering an alias"
                 )
+            except FileNotFoundError as e:
+                print(e)
             except Exception as e:
                 raise e
                 print(
@@ -433,6 +435,8 @@ class Gerf:
             o_file = self.ontology_cache.registry.get(o)
             if o_file is not None:
                 o_graph.parse(os.path.join(self.ontology_cache.cache_directory, o_file))
+        self.ontology_graph = o_graph
+        self.total_graph = self.source_graph + self.ontology_graph
         return o_graph
 
     def get_entities_pending_metadata(self):
@@ -483,6 +487,8 @@ class Gerf:
         self._enrich_entities_relations_from_global()
 
 
+    ## Simple inference on targeted relationships - consider using RDFSClosure or OWL-RL
+    # for more expressivity.
 
     def inference_super_class(self):
         entities=set(self.entities.keys())

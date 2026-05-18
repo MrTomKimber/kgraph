@@ -5,9 +5,9 @@ description = "Add your description here"
 requires-python = ">=3.12"
 readme = "README.md"
 dependencies = [
-
     "networkx>=3.6.1",
     "openpyxl>=3.1.5",
+    "owlrl>=7.1.4",
     "pandas>=3.0.1",
     "pydeps>=3.0.2",
     "pyshacl>=0.31.0",

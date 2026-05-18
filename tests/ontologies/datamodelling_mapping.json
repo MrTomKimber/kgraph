@@ -248,30 +248,6 @@
                         "EnableMultiValues": false
                     },
                     {
-                        "InstanceName": "SourceRoleIsPartOfEntity",
-                        "SubjectTag": "SourceRole",
-                        "ObjectTag": "SourceRoleEntity",
-                        "EnableMultiValues": false
-                    },
-                    {
-                        "InstanceName": "TargetRoleIsPartOfEntity",
-                        "SubjectTag": "TargetRole",
-                        "ObjectTag": "TargetRoleEntity",
-                        "EnableMultiValues": false
-                    },
-                    {
-                        "InstanceName": "SourceRoleIsPartOfKey",
-                        "SubjectTag": "SourceRole",
-                        "ObjectTag": "SourceRoleKey",
-                        "EnableMultiValues": false
-                    },
-                    {
-                        "InstanceName": "TargetRoleIsPartOfKey",
-                        "SubjectTag": "TargetRole",
-                        "ObjectTag": "TargetRoleKey",
-                        "EnableMultiValues": false
-                    },
-                    {
                         "InstanceName": "AttributeDomainIsPartOfAttributeDomainNamespace",
                         "SubjectTag": "AttributeDomain",
                         "ObjectTag": "AttributeDomainNamespace",
@@ -305,6 +281,30 @@
                         "SubjectTag": "EntityKeyAttributes",
                         "ObjectTag": "EntityKey",
                         "EnableMultiValues": true
+                    },
+                    {
+                        "InstanceName": "SourceRoleIsMemberOfEntity",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "SourceRoleEntity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleIsMemberOfEntity",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "TargetRoleEntity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "SourceRoleIsMemberOfKey",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "SourceRoleKey",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleIsMemberOfKey",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "TargetRoleKey",
+                        "EnableMultiValues": false
                     }
                 ]
             }
