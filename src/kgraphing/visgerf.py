@@ -70,7 +70,7 @@ class VisGerf:
         test_node = gerf_object.entities.get(identifier, empty_node)
         tests = [
                 test_node.identifier in gerf_object.entities.keys(), 
-                test_node.order>=0, 
+                test_node.order==0, 
                 test_node.term in (URIRef, BNode, Literal)
                  ]
         return all(tests)
@@ -117,4 +117,5 @@ class VisGerf:
         property_dict['label']=predicate.n3(namespace_manager=gerf_object.source_graph.namespace_manager)
         property_dict['click']=relation_def.to_html()
         return property_dict
+    
     

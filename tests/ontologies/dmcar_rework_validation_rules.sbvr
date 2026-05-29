@@ -1,0 +1,17 @@
+It is necessaray that an EntityType has one and only one Name
+It is necessary that an Attribute has one and only one Name
+It is necessary that a Name is a string value
+It is necessary that a Label is a string value
+It is obligatory that a Name must conform to a chosen NamingConvention
+It is possible that an EntityType contains one or more Attributes
+It is necessary that an Attribute is part of one and only one EntityType
+It is encouraged that an EntityType has at least one Label
+It is encouraged that an Attribute has at least one Label
+It is encouraged that a Relationship has a Name
+It is necessary that a Relationship has zero or one Names.
+It is necessary that a Relationship contains one and only one targetRole
+It is necessary that a Relationship contains one and only one sourceRole
+It is necessary that a targetRole is a Role
+It is necessary that a sourceRole is a Role
+It is necessary that a Role is part of a Relationship
+It is necessary that a Role is a member of an EntityType

@@ -8,7 +8,8 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:skos="http://www.w3.org/2004/02/skos/core#"
      xmlns:kgmod="https://kgraph.foo/onto/datamodelling#">
-    <owl:Ontology rdf:about="https://kgraph.foo/onto/kgnam/v1.0.0">
+    <owl:Ontology rdf:about="https://kgraph.foo/onto/datamodelling">
+        <owl:versionIRI rdf:resource="https://kgraph.foo/onto/datamodelling/v1.0.0"/>
         <rdfs:comment>A data-modelling metamodel describing entity composition and relationships as well as inter and cross-model mappings.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
     </owl:Ontology>
@@ -58,6 +59,16 @@
     
 
 
+    <!-- https://kgraph.foo/onto/datamodelling#elementHasDomain -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#elementHasDomain">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Domain"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://kgraph.foo/onto/datamodelling#entityActsAsRole -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#entityActsAsRole">
@@ -88,6 +99,14 @@
         <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Parameter"/>
         <rdfs:comment>A relation from a function definition to one of the parameters that function exposes for binding.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#isAssociatedWith -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isAssociatedWith">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
     </owl:ObjectProperty>
     
 
@@ -180,6 +199,30 @@ Contrast with isPartOf which defines dependent, compositional relationships that
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Description -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#Description">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#RoleCardinality -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleCardinality">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#RoleOptionality -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleOptionality">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>
     
 
 
@@ -442,6 +485,15 @@ Contrast with isPartOf which defines dependent, compositional relationships that
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
         <rdfs:comment>A Role is the abstract representation of how an Entity participates in a Relationship. Each relationship definition should be associated with a SourceRole and a TargetRole.
 The relationship&apos;s multiplicity (cardinality + optionality) properties are recorded against the role, as are any key-definitions used to implement the role.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#SubType -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#SubType">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Association"/>
+        <rdfs:comment>An association between two classes that are taxonomically related. The child class being a more specific subset of the more generalised parent.</rdfs:comment>
     </owl:Class>
     
 

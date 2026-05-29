@@ -1,0 +1,52 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dmod: <https://kgraph.foo/onto/datamodelling#> .
+
+
+# Define expected property-shapes to be associated with any subject for which there is assigned a type
+# This limits the scope of the validation to (typed) individuals - which *should* be a minimum requirement
+# for any ingestion that includes naming (consider mappings though, which might arrive through a different
+# channel )
+dmod:EntityTypeShape a sh:NodeShape;
+    sh:targetClass dmod:EntityType ;
+    sh:nodeKind sh:IRI ;
+    sh:property kgnam:FullyQualifiedNamePropertyShape ;
+    sh:property kgnam:NamePropertyShape ;
+    sh:property kgnam:LabelPropertyShape ;
+    sh:property kgnam:DescriptionPropertyShape ;
+    sh:property kgnam:isScopedWithinPropertyShape .
+    
+# The FullyQualifiedName property can and must only appear once, and when it does, it has a 
+# prescriptive pattern to which it must conform
+kgnam:FullyQualifiedNamePropertyShape a sh:PropertyShape ;
+    sh:path kgnam:FullyQualifiedName ;
+    sh:maxCount 1 ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:pattern "(((^|[A-Za-z0-9_()↔\\s\\-&]+[.])([A-Za-z0-9_()↔\\s\\-&]+))+)$" .
+
+kgnam:NamePropertyShape a sh:PropertyShape ;
+    sh:path kgnam:Name ;
+    sh:maxCount 1 ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:pattern "(((^|[A-Za-z0-9_()↔\\s\\-&]+[.])([A-Za-z0-9_()↔\\s\\-&]+))+)$" .
+
+kgnam:LabelPropertyShape a sh:PropertyShape ;
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string .
+
+kgnam:DescriptionPropertyShape a sh:PropertyShape ;
+    sh:path kgnam:Description ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string .
+
+# IsScopedWithin should appear at most once, and the target of any scoping object should itself have a FullyQualifiedName
+kgnam:isScopedWithinPropertyShape a sh:PropertyShape ;
+    sh:path kgnam:isScopedWithin ;
+    sh:maxCount 1 ;
+    sh:class kgnam:NamedObject .

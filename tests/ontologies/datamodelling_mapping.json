@@ -275,35 +275,45 @@
                         "SubjectTag": "EntityKeyAttributes",
                         "ObjectTag": "EntityKey",
                         "EnableMultiValues": true
-                    },                    
+                    }
+                ]
+            },
+            {
+                "Predicate": "https://kgraph.foo/onto/datamodelling#isAssociatedWith", 
+                "Instances": [
                     {
-                        "InstanceName": "AttributeIsMemberOfKey",
-                        "SubjectTag": "EntityKeyAttributes",
-                        "ObjectTag": "EntityKey",
-                        "EnableMultiValues": true
-                    },
-                    {
-                        "InstanceName": "SourceRoleIsMemberOfEntity",
+                        "InstanceName": "SourceRoleisAssociatedWithEntity",
                         "SubjectTag": "SourceRole",
                         "ObjectTag": "SourceRoleEntity",
                         "EnableMultiValues": false
                     },
                     {
-                        "InstanceName": "TargetRoleIsMemberOfEntity",
+                        "InstanceName": "TargetRoleisAssociatedWithEntity",
                         "SubjectTag": "TargetRole",
                         "ObjectTag": "TargetRoleEntity",
                         "EnableMultiValues": false
                     },
                     {
-                        "InstanceName": "SourceRoleIsMemberOfKey",
+                        "InstanceName": "SourceRoleIsAssociatedWithKey",
                         "SubjectTag": "SourceRole",
                         "ObjectTag": "SourceRoleKey",
                         "EnableMultiValues": false
                     },
                     {
-                        "InstanceName": "TargetRoleIsMemberOfKey",
+                        "InstanceName": "TargetRoleIsAssociatedWithKey",
                         "SubjectTag": "TargetRole",
                         "ObjectTag": "TargetRoleKey",
+                        "EnableMultiValues": false
+                    }
+                ]
+            },
+            {
+                "Predicate": "https://kgraph.foo/onto/datamodelling#elementHasDomain", 
+                "Instances": [
+                    {
+                        "InstanceName": "ElementHasDomain",
+                        "SubjectTag": "Attribute",
+                        "ObjectTag": "AttributeDomain",
                         "EnableMultiValues": false
                     }
                 ]
@@ -319,52 +329,137 @@
                     "InstanceName": "NamespaceLabel",
                     "SubjectTag": "Namespace",
                     "LiteralTag": "NamespaceLabel"
-            },
+                },
                 {
                     "InstanceName": "SubjectAreaLabel",
                     "SubjectTag": "SubjectArea",
                     "LiteralTag": "SubjectAreaLabel"
-            },
+                },
             
                 {
                     "InstanceName": "ModelLabel",
                     "SubjectTag": "Model",
                     "LiteralTag": "ModelLabel"
-            },
+                },
 
                 {
                     "InstanceName": "EntityLabel",
                     "SubjectTag": "Entity",
                     "LiteralTag": "EntityLabel"
-            },
+                },
                 {
                     "InstanceName": "AttributeLabel",
                     "SubjectTag": "Attribute",
                     "LiteralTag": "AttributeLabel"
-            },
+                },
                 {
                     "InstanceName": "EntityKeyLabel",
                     "SubjectTag": "EntityKey",
                     "LiteralTag": "EntityKeyLabel"
-            },
-            {
+                },
+                {
                     "InstanceName": "RelationshipLabel",
                     "SubjectTag": "Relationship",
                     "LiteralTag": "RelationshipLabel"
-            },
-            {
+               },
+               {
                     "InstanceName": "SourceRoleLabel",
                     "SubjectTag": "SourceRole",
                     "LiteralTag": "SourceRoleLabel"
-            },
-            {
+              },
+                {
                     "InstanceName": "TargetRoleLabel",
                     "SubjectTag": "TargetRole",
                     "LiteralTag": "TargetRoleLabel"
-            }
+                }
             ]
-        }
+        },
+        {
+
+            "Predicate": "https://kgraph.foo/onto/datamodelling#Description",
+            "Instances": [
+                {
+                    "InstanceName": "NamespaceDescription",
+                    "SubjectTag": "Namespace",
+                    "LiteralTag": "NamespaceDescription"
+                },
+                {
+                    "InstanceName": "SubjectAreaDescription",
+                    "SubjectTag": "SubjectArea",
+                    "LiteralTag": "SubjectAreaDescription"
+                },
+                {
+                    "InstanceName": "ModelDescription",
+                    "SubjectTag": "Model",
+                    "LiteralTag": "ModelDescription"
+                },
+                {
+                    "InstanceName": "EntityDescription",
+                    "SubjectTag": "Entity",
+                    "LiteralTag": "EntityDescription"
+                },
+                {
+                    "InstanceName": "AttributeDescription",
+                    "SubjectTag": "Attribute",
+                    "LiteralTag": "AttributeDescription"
+                },
+                {
+                    "InstanceName": "EntityKeyDescription",
+                    "SubjectTag": "EntityKey",
+                    "LiteralTag": "EntityKeyDescription"
+                },
+                {
+                    "InstanceName": "RelationshipDescription",
+                    "SubjectTag": "Relationship",
+                    "LiteralTag": "RelationshipDescription"
+                },
+                {
+                    "InstanceName": "SourceRoleDescription",
+                    "SubjectTag": "SourceRole",
+                    "LiteralTag": "SourceRoleDescription"
+                },
+                {
+                    "InstanceName": "TargetRoleDescription",
+                    "SubjectTag": "TargetRole",
+                    "LiteralTag": "TargetRoleDescription"
+                }
+            ]
+        },
+        {
+
+            "Predicate": "https://kgraph.foo/onto/datamodelling#RoleCardinality",
+            "Instances": [
+                {
+                    "InstanceName": "SourceRoleCardinality",
+                    "SubjectTag": "SourceRole",
+                    "LiteralTag": "SourceRoleCardinality"
+                },
+
+                {
+                    "InstanceName": "TargetRoleCardinality",
+                    "SubjectTag": "TargetRole",
+                    "LiteralTag": "TargetRoleCardinality"
+                }
+        ]
+    },
+        {
+
+            "Predicate": "https://kgraph.foo/onto/datamodelling#RoleOptionality",
+            "Instances": [
+                {
+                    "InstanceName": "SourceRoleOptionality",
+                    "SubjectTag": "SourceRole",
+                    "LiteralTag": "SourceRoleOptionality"
+                },
+
+                {
+                    "InstanceName": "TargetRoleOptionality",
+                    "SubjectTag": "TargetRole",
+                    "LiteralTag": "TargetRoleOptionality"
+                }
         ]
     }
+    ]
+}
 
         
