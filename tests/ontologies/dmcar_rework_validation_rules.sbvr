@@ -1,9 +1,15 @@
 It is necessaray that an EntityType has one and only one Name
 It is necessary that an Attribute has one and only one Name
+It is necessaray that an EntityType has one and only one FullyQualifiedName
+It is necessary that an Attribute has one and only one FullyQualifiedName
+It is necessary that each FullyQualifiedName uniquely references a single object
 It is necessary that a Name is a string value
 It is necessary that a Label is a string value
 It is obligatory that a Name must conform to a chosen NamingConvention
-It is possible that an EntityType contains one or more Attributes
+It is necessary that an Attribute's Name is unique within the contextual scope of its parent Entity
+It is necessary that an Entity's Name is unique within the contextual scope of its parent Namespace
+It is obligatory that a FullyQualifiedName must conform to the FQN specific NamingConvention
+It is necessary that an EntityType contains zero or more Attributes
 It is necessary that an Attribute is part of one and only one EntityType
 It is encouraged that an EntityType has at least one Label
 It is encouraged that an Attribute has at least one Label
@@ -13,5 +19,8 @@ It is necessary that a Relationship contains one and only one targetRole
 It is necessary that a Relationship contains one and only one sourceRole
 It is necessary that a targetRole is a Role
 It is necessary that a sourceRole is a Role
-It is necessary that a Role is part of a Relationship
-It is necessary that a Role is a member of an EntityType
+It is necessary that a Role is part of a Relationship and only one Relationship
+It is necessary that a Role is associated with an EntityType and only one EntityType
+It is obligatory that an EntityType has a Definition
+It is obligatory that an Attribute has a Definition
+It is obligatory that a Definition be written using Intensional form

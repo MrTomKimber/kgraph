@@ -252,6 +252,18 @@
                         "SubjectTag": "AttributeDomain",
                         "ObjectTag": "AttributeDomainNamespace",
                         "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "SourceRoleisPartOfEntity",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "SourceRoleEntity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleisPartOfEntity",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "TargetRoleEntity",
+                        "EnableMultiValues": false
                     }
                 ]
             },
@@ -275,24 +287,19 @@
                         "SubjectTag": "EntityKeyAttributes",
                         "ObjectTag": "EntityKey",
                         "EnableMultiValues": true
+                    },
+                    {
+                        "InstanceName": "AttributeIsMemberOfDomain",
+                        "SubjectTag": "Attribute",
+                        "ObjectTag": "Domain",
+                        "EnableMultiValues": true
                     }
                 ]
             },
             {
                 "Predicate": "https://kgraph.foo/onto/datamodelling#isAssociatedWith", 
                 "Instances": [
-                    {
-                        "InstanceName": "SourceRoleisAssociatedWithEntity",
-                        "SubjectTag": "SourceRole",
-                        "ObjectTag": "SourceRoleEntity",
-                        "EnableMultiValues": false
-                    },
-                    {
-                        "InstanceName": "TargetRoleisAssociatedWithEntity",
-                        "SubjectTag": "TargetRole",
-                        "ObjectTag": "TargetRoleEntity",
-                        "EnableMultiValues": false
-                    },
+
                     {
                         "InstanceName": "SourceRoleIsAssociatedWithKey",
                         "SubjectTag": "SourceRole",
@@ -303,17 +310,6 @@
                         "InstanceName": "TargetRoleIsAssociatedWithKey",
                         "SubjectTag": "TargetRole",
                         "ObjectTag": "TargetRoleKey",
-                        "EnableMultiValues": false
-                    }
-                ]
-            },
-            {
-                "Predicate": "https://kgraph.foo/onto/datamodelling#elementHasDomain", 
-                "Instances": [
-                    {
-                        "InstanceName": "ElementHasDomain",
-                        "SubjectTag": "Attribute",
-                        "ObjectTag": "AttributeDomain",
                         "EnableMultiValues": false
                     }
                 ]

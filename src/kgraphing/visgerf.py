@@ -106,6 +106,7 @@ class VisGerf:
         EmptyObject = ObservedEntity(identifier=None, order=None)
         property_dict['label']=str(next(iter(gerf_object.entities.get(identifier, EmptyObject).interactions.get(RDFS.label,{identifier.n3(namespace_manager=gerf_object.source_graph.namespace_manager)}))))
         property_dict['click']=gerf_object.entities.get(identifier, EmptyObject).to_html()
+        
         return property_dict
     
     @staticmethod
@@ -116,6 +117,6 @@ class VisGerf:
         relation_def = gerf_object.entities.get(predicate, EmptyObject)
         property_dict['label']=predicate.n3(namespace_manager=gerf_object.source_graph.namespace_manager)
         property_dict['click']=relation_def.to_html()
+        property_dict['predicate']=gerf_object.entities.get(predicate, EmptyObject).identifier
         return property_dict
-    
     
