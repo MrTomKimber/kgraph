@@ -149,24 +149,39 @@ class KGStore:
             target_graph.close()
         return target_graph
 
+    def _get_predicate_counts_for_graph(self, 
+                                        g: Graph):
+        sparql_q = """
+            SELECT ?predicate (COUNT(?subject) as ?count)
+            WHERE { 
+                ?subject ?predicate ?object
+            }
+            GROUP BY ?predicate"""
+        q_results = g.query(sparql_q)
+        return {k: p.toPython() for k,p in list(q_results)}
+
+    def _get_type_counts_for_graph(self, 
+                                        g: Graph):
+        sparql_q = """
+            SELECT ?type (COUNT(?subject) as ?count)
+            WHERE { 
+                ?subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type
+            }
+            GROUP BY ?type"""
+        q_results = g.query(sparql_q)
+        return {k: p.toPython() for k,p in list(q_results)}
+
     def get_graph_metrics(self, data_graph: Graph, graph_id: URIRef) -> dict:
         total_triples = len(data_graph)
-        predicates = set(data_graph.predicates())
-        predicate_counts = {}
-        for p in predicates:
-            predicate_counts[p] = len(list(data_graph.triples((None, p, None))))
-        types = set([t for _, _, t in data_graph.triples((None, RDF.type, None))])
-        type_counts = {}
-        for t in types:
-            type_counts[t] = len(list(data_graph.triples((None, RDF.type, t))))
+        #predicates = set(data_graph.predicates()) # This call fetches everything back from the server - all s,p,o values - filtering only after collecting everything
+        predicate_counts = self._get_predicate_counts_for_graph(data_graph)      
+        type_counts = self._get_type_counts_for_graph(data_graph)
         typed_subjects = set(data_graph.subjects(RDF.type, None))
         all_subjects = set(data_graph.subjects())
         untyped_subjects = all_subjects - typed_subjects
         metrics_dict = {
             "triple_count": total_triples,
-            "predicates": predicates,
             "predicate_count": predicate_counts,
-            "types": types,
             "type_count": type_counts,
             "untyped_count": len(untyped_subjects),
         }
@@ -239,7 +254,7 @@ class KGStore:
             g_set_A = set(g_tuples_A.keys())
             g_set_B = set(g_tuples_B.keys())
             L, I, R = KGStore._sets_to_lir(g_set_A, g_set_B)
-            print(len(L), len(I), len(R))
+            #print(len(L), len(I), len(R))
 
             # Keep all triples from L - no action if using old_graph
             for key in L:

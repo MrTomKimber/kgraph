@@ -17,6 +17,7 @@ from rdflib.plugin import register, PluginException
 from rdflib.exceptions import ParserError
 from urllib.error import HTTPError, URLError
 from send2trash import send2trash
+from owlrl import DeductiveClosure, RDFS_Semantics
 
 from rdflibowlparser import owlxml
 
@@ -251,6 +252,9 @@ class Gerf:
 
     def __init__(self, g: Graph, cache: OntologyCache):
         self.source_graph=Gerf.copy_graph(g) # Store a copy of the original graph used to instantiate the object
+        self.ontology_graph=Graph()
+        self.inferred_graph=Graph()
+        self.total_graph=Graph()
         self.relations = (
             {}
         )  # A dictionary keyed on predicates - provides graph-level meta-data over the observed usage of the predicate
@@ -429,6 +433,9 @@ class Gerf:
         else:
             print("No new ontologies added.")
 
+    def update_total_graph(self):
+        self.total_graph = self.source_graph + self.ontology_graph + self.inferred_graph
+
     def create_ontology_graph(self):
         o_graph = Graph()
         for o in self._infer_ontology_list():
@@ -436,8 +443,18 @@ class Gerf:
             if o_file is not None:
                 o_graph.parse(os.path.join(self.ontology_cache.cache_directory, o_file))
         self.ontology_graph = o_graph
-        self.total_graph = self.source_graph + self.ontology_graph
+        
         return o_graph
+
+    def perform_inference_closure(self):
+        total_graph_copy = Graph()
+
+        for triple in set(self.total_graph):
+            total_graph_copy.add(triple)
+        DeductiveClosure(RDFS_Semantics).expand(total_graph_copy)
+        self.inferred_graph = self.inferred_graph + (total_graph_copy-self.total_graph)
+        print(f"Inferred {len(self.inferred_graph)} new triples")
+        self.update(self.inferred_graph, order=99)
 
     def get_entities_pending_metadata(self):
         all_classes = self._get_class_definitions()

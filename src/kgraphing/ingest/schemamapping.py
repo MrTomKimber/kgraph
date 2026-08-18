@@ -13,8 +13,9 @@ import re
 import urllib.parse
 import json
 import jsonschema, jsonschema.exceptions
-from rdflib import Graph as rdflibGraph, Namespace, URIRef, Literal
+from rdflib import Graph as rdflibGraph, Namespace, URIRef, Literal, BNode
 from rdflib.namespace import RDF, RDFS, OWL
+from rdflib.collection import Collection
 import numpy as np
 import pandas as pd
 
@@ -237,6 +238,9 @@ class SchemaMapping:
         self.populate_entity_fqn_index(raw_graph)
         triple_generating_objects = list(self.entity_fqn_index.values())
 
+        for k,v in self.entity_fqn_index.items():
+            print(f"{k}:{v.uri}")
+
         # Here there's an opportunity to review the formation of the triple_generating_objects
         # To determine whether all/any namespace hierarchies are fully populated.
         # i.e. That if a namespace is inferred anywhere in any of the FullyQualifiedNames used to
@@ -269,6 +273,10 @@ class SchemaMapping:
                     + f"parent {o.parent_fqn} - doesn't exist in file"
                 )
 
+        for k,v in self.entity_fqn_index.items():
+            print(f"{k}:{v.uri}")
+
+        
         # Once the entities are defined, next it's time to link them all via the various
         # relationship linkages
         for datarow in [
@@ -288,6 +296,21 @@ class SchemaMapping:
                         )
                     )
 
+        for k,v in self.entity_fqn_index.items():
+            print(f"{k}:{v.uri}")
+                  
+        collection_assignments_triples = []
+        for datarow in [
+                    r[0] for r in raw_graph.triples((None, RDF.type, SchemaMapping.DATA["row"]))
+                ]:
+            for s in [s for s in self.specifications.values() if s._is_list and isinstance(s, NamedObjectInstanceSpecification)]:
+                collection_assignments_triples.extend (
+                    s.listAssignmentTriples(
+                    datarow,
+                    raw_graph,
+                    self.entity_fqn_index)
+                )
+
         print("Objects, Unique Objects")
         print(len(triple_generating_objects), len(set(triple_generating_objects)))
 
@@ -300,6 +323,11 @@ class SchemaMapping:
         for e in triple_generating_objects:
             for t in e.to_triples():
                 return_graph.add(t)
+
+        print(f"There are {len(collection_assignments_triples)} in the collection_assignments_triples")
+        for t in collection_assignments_triples:
+            return_graph.add(t)
+
         print(f"rdf_parse:end {datetime.now()}")
 
         # Any validation ought to be performed at this stage:
@@ -399,8 +427,24 @@ class SchemaMapping:
                         unspecified_colums.add(c)
 
                     for v in data_fetched:
+                        # For every value in the data_fetched list, add the data to the graph via the appropriate column
                         o_literal = Literal(v)
                         g.add((row_url, p_url, o_literal))
+
+                    # Where the column is defined as a multivalue_column, there's an option for preserving the 
+                    # # fetched data as a list - we encode this into an rdflist of literal contents accessible
+                    # via the key original_columname__listhead - which we'll make use of later in the process:
+                    if c in self.multivalue_columns:
+                        head_node = BNode() # create a new BNode to act as the head
+                        Collection(g, 
+                                   head_node, 
+                                   [Literal(v) for v in data_fetched])
+                        # Join the subject-row to the created list head as a subtype of the column
+                        l_url = SchemaMapping.DATA[f"column({url_c}__listhead)"]
+                        g.add((row_url, l_url, head_node))
+
+
+
         print(f"The following columns are not listed in the spec {unspecified_colums}")
         return g
 
@@ -416,6 +460,8 @@ class SchemaMappingInstanceSpecification:
         self.parent_SchemaMapping = parent
         self.column_list = []
         self._multivalues = None
+        self._is_list = None
+        self._list_elements_specification = None
 
     @staticmethod
     def extract_valid_fqns(rowurl, data_graph, fetch_key):
@@ -559,6 +605,13 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
         else:
             self._is_definition = False
         self._classbase_uri = classbase
+        if 'ListContent' in instance_d.keys():
+            self._is_list = True
+            self._list_elements_specification = instance_d['ListContent']
+        else:
+            self._is_list = False
+            self._list_elements_specification = None
+
         if self._parent__column is None or str(self._parent__column).strip() == "":
             print(f"setting <root> for {self._instance_name}")
             self._parent__column = "<root>"
@@ -586,6 +639,60 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
                     that reference a parent"
             )
 
+
+
+    def listAssignmentTriples(
+        self, row_uri, data_graph, entity_fqn_index
+    ) -> list[RDFTriple]:
+        """Where a NamedObject specification uses the _is_list and 
+        _list_elements_specification properties - we must extract those
+        values from the source raw graph and return them as a set of triples
+        assigned to the list-head.
+        """
+        assignment_triples = []
+
+        element_spec = self.parent_SchemaMapping.specifications.get(self._list_elements_specification, None)
+        if element_spec is None:
+            return assignment_triples
+
+        raw_list_heads = [o for s,p,o in data_graph.triples((row_uri, SchemaMapping.DATA[f"column({element_spec._subject__column}__listhead)"], None))]
+
+        # Get the list possible objects for which we want to do some list assignment: 
+        assignment_heads = [entity_fqn_index.get(n) 
+                            for n in SchemaMappingInstanceSpecification.extract_valid_fqns(
+                                row_uri, data_graph, self.naming_hierarchy_path
+                                ) 
+                            ]
+        for ass_head in assignment_heads:
+            for raw_head in raw_list_heads:
+                list_items = Collection(data_graph, raw_head)
+                fqn_roots = self.extract_valid_fqns(
+                    row_uri, 
+                    data_graph, 
+                    self.parent_SchemaMapping.traverse_hierarchy_path(element_spec._subject__column)[1:]
+                )
+                cobject_names = list()
+                for root in fqn_roots:
+                    for li in list_items:
+                        cobject_names.append(".".join([root, li]))
+                object_list = [URIRef(entity_fqn_index.get(n).uri)
+                            for n in cobject_names 
+                            if entity_fqn_index.get(n) is not None]
+
+                temp_g = rdflibGraph()
+                list_triples = Collection(temp_g, 
+                                        URIRef(ass_head.uri), 
+                                        object_list).graph.triples((None, None, None))
+                
+                assignment_triples.extend(list_triples)
+        return assignment_triples
+
+
+
+
+
+
+    
     def NamedObjectListFromDataGraphRow(self, row_uri, data_graph) -> list[NamedObject]:
         """For a given row_uri, using the data_graph, extract a list
         of NamedObjects per the NamedObjectListFromDataGraphRow specification

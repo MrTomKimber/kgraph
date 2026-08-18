@@ -10,8 +10,8 @@
 # This limits the scope of the validation to (typed) individuals - which *should* be a minimum requirement
 # for any ingestion that includes naming (consider mappings though, which might arrive through a different
 # channel )
-dmod:EntityTypeShape a sh:NodeShape;
-    sh:targetClass dmod:EntityType ;
+dmod:EntityShape a sh:NodeShape;
+    sh:targetClass dmod:Entity ;
     sh:nodeKind sh:IRI ;
     sh:property kgnam:FullyQualifiedNamePropertyShape ;
     sh:property kgnam:NamePropertyShape ;

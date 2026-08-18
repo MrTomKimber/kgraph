@@ -24,8 +24,8 @@ class VisGerf:
             gerf_object : Gerf,
             include_node_function : Optional[Callable],
             include_edge_function : Optional[Callable],
-            node_properties_function : Optional[Callable], 
-            edge_properties_function : Optional[Callable], 
+            node_properties_function : Optional[Callable]=None, 
+            edge_properties_function : Optional[Callable]=None, 
             ) -> MultiDiGraph:
         """This is the default graph-generation recipe.
         A function defines the 'closure' of the graph, 
@@ -36,6 +36,7 @@ class VisGerf:
         with information via a suitably called properties function."""
         base_g = MultiDiGraph()
         node_includes=[]
+        non_entity_nodes=[]
 
         if include_node_function is None:
             include_node_function=self._default_include_node_function
@@ -54,6 +55,8 @@ class VisGerf:
         for k,e in self.gerf.entities.items():
             if include_node_function(self.gerf, k):
                 node_includes.append(k)
+            else:
+                non_entity_nodes.append(k)
 
         for k in node_includes:
             base_g.add_node(k, **node_properties_function(self.gerf, k))
@@ -62,6 +65,10 @@ class VisGerf:
                     if element in node_includes: # Test the other end is present in node_includes
                         if include_edge_function(self.gerf, k, predicate, element):
                             base_g.add_edge(k, element, **edge_properties_function(self.gerf, k, predicate, element))
+
+        #for k in non_entity_nodes:
+        #    base_g.add_node(k, **{"node_type" : "weird, non-entity-node"})
+
         return base_g
 
     @staticmethod

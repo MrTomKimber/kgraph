@@ -36,10 +36,28 @@
     
 
 
+    <!-- https://kgraph.foo/onto/datamodelling#hasElementList -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#hasElementList">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#ElementList"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://kgraph.foo/onto/datamodelling#isAssociatedWith -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isAssociatedWith">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#isDiscriminatedBy -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isDiscriminatedBy">
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#SubTypeCluster"/>
+        <rdfs:range rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
     </owl:ObjectProperty>
     
 
@@ -109,6 +127,16 @@ Contrast with isPartOf which defines dependent, compositional relationships that
 
     <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#Description">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#ElementSequence -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#ElementSequence">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
     </owl:DatatypeProperty>
     
 
@@ -197,7 +225,7 @@ Contrast with isPartOf which defines dependent, compositional relationships that
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Entity"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment>An attribute is a property or feature that can be ascribed to an EntityType</rdfs:comment>
@@ -242,7 +270,7 @@ Contrast with isPartOf which defines dependent, compositional relationships that
     <!-- https://kgraph.foo/onto/datamodelling#DataStructure -->
 
     <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#DataStructure">
-        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Entity"/>
         <rdfs:comment>A DataStructure acts as a blueprint and describes the structured collection of attributes used to define an object. In physical contexts, might be used to describe denormalised views containing information source from multiple entities, e.g. in the case of a file format, message or api response definition.</rdfs:comment>
         <rdfs:comment>A datastructure is separate from EntityType as it carries no implication of being a normalised object.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
@@ -285,20 +313,48 @@ Contrast with isPartOf which defines dependent, compositional relationships that
     
 
 
-    <!-- https://kgraph.foo/onto/datamodelling#EntityMapping -->
+    <!-- https://kgraph.foo/onto/datamodelling#ElementList -->
 
-    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#EntityMapping">
-        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Mapping"/>
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#ElementList">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+    </owl:Class>
+    
+
+
+    <!-- https://kgraph.foo/onto/datamodelling#Entity -->
+
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#Entity">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasElementList"/>
+                <owl:allValuesFrom rdf:resource="https://kgraph.foo/onto/datamodelling#ElementList"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isSubclassOf"/>
+                <owl:allValuesFrom rdf:resource="https://kgraph.foo/onto/datamodelling#SubTypeCluster"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasElementList"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#ElementList"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>An Entity describes a concept, class, or table. Entities of the same EntityType are defined with common characteristics for which the EntityType acts as a container.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
     </owl:Class>
     
 
 
-    <!-- https://kgraph.foo/onto/datamodelling#EntityType -->
+    <!-- https://kgraph.foo/onto/datamodelling#EntityMapping -->
 
-    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#EntityType">
-        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
-        <rdfs:comment>An EntityType describes a concept, class, or table. Entities of the same EntityType are defined with common characteristics for which the EntityType acts as a container.</rdfs:comment>
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#EntityMapping">
+        <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Mapping"/>
         <rdfs:isDefinedBy rdf:resource="https://kgraph.foo/onto/datamodelling#"/>
     </owl:Class>
     
@@ -340,9 +396,22 @@ Contrast with isPartOf which defines dependent, compositional relationships that
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasElementList"/>
+                <owl:allValuesFrom rdf:resource="https://kgraph.foo/onto/datamodelling#ElementList"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#EntityType"/>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Entity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasElementList"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#ElementList"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment>A Key is a formal way of referencing instances of an entity.</rdfs:comment>
@@ -424,21 +493,14 @@ Contrast with isPartOf which defines dependent, compositional relationships that
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasComponent"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#sourceRole"/>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#objectRole"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasComponent"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#targetRole"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#hasComponent"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#subjectRole"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment>A relationship describes a relation between two classes. A relationship will be directed from the source (or child) referencing entity to a target (or parent) referenced entity via their respective keys. These keys are used to establish how that relationship can be encoded in practice, or for relationships with less defined specificity, they will exist as nominal placeholders.</rdfs:comment>
@@ -453,6 +515,13 @@ Contrast with isPartOf which defines dependent, compositional relationships that
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Definition"/>
         <rdfs:subClassOf>
             <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isAssociatedWith"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Entity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
                 <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isPartOf"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
                 <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Relationship"/>
@@ -460,21 +529,42 @@ Contrast with isPartOf which defines dependent, compositional relationships that
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isAssociatedWith"/>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#RoleCardinality"/>
                 <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
-                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Key"/>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment>A Role is the abstract representation of how an Entity participates in a Relationship. Each relationship definition should be associated with a SourceRole and a TargetRole.
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#RoleOptionality"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>A Role is the abstract representation of how an Entity participates in a Relationship. Each relationship definition should be associated with a subjectRole and an objectRole.
 The relationship&apos;s multiplicity (cardinality + optionality) properties are recorded against the role, as are any key-definitions used to implement the role.</rdfs:comment>
     </owl:Class>
     
 
 
-    <!-- https://kgraph.foo/onto/datamodelling#SubType -->
+    <!-- https://kgraph.foo/onto/datamodelling#SubTypeCluster -->
 
-    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#SubType">
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#SubTypeCluster">
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Association"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isDiscriminatedBy"/>
+                <owl:allValuesFrom rdf:resource="https://kgraph.foo/onto/datamodelling#Element"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isSubclassOf"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#Entity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>A SubTypeCluster is similar to but distinct from a Relationship in that it relates entities through a directed association where one class is identified as the super-class, and multiple subordinate classes play the roles of sub-class. A SubTypeCluster can only reference a single Entity, but many sub-classes can reference it.</rdfs:comment>
         <rdfs:comment>An association between two classes that are taxonomically related. The child class being a more specific subset of the more generalised parent.</rdfs:comment>
     </owl:Class>
     
@@ -490,21 +580,37 @@ The relationship&apos;s multiplicity (cardinality + optionality) properties are 
     
 
 
-    <!-- https://kgraph.foo/onto/datamodelling#sourceRole -->
+    <!-- https://kgraph.foo/onto/datamodelling#objectRole -->
 
-    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#sourceRole">
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#objectRole">
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
-        <owl:disjointWith rdf:resource="https://kgraph.foo/onto/datamodelling#targetRole"/>
-        <rdfs:comment>The sourceRole is the role a participant plays at the source of a relationship.</rdfs:comment>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isAssociatedWith"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#PrimaryKey"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="https://kgraph.foo/onto/datamodelling#subjectRole"/>
+        <rdfs:comment>The objectRole defines the object of a relationship.</rdfs:comment>
+        <rdfs:comment>The objectRole should be associated with a PrimaryKey found on the entity to which the objectRole is also associated.</rdfs:comment>
     </owl:Class>
     
 
 
-    <!-- https://kgraph.foo/onto/datamodelling#targetRole -->
+    <!-- https://kgraph.foo/onto/datamodelling#subjectRole -->
 
-    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#targetRole">
+    <owl:Class rdf:about="https://kgraph.foo/onto/datamodelling#subjectRole">
         <rdfs:subClassOf rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
-        <rdfs:comment>The targetRole is the role a participant plays at the target end of a relationship.</rdfs:comment>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#isAssociatedWith"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#ForeignKey"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>A subjectRole should be associated with a ForeignKey, which should be situated on the entity to which the subjectRole is also associated. The pointer to which the ForeignKey provides a reference should be referenced by the corresponding objectRole&apos;s key and entity associations.</rdfs:comment>
+        <rdfs:comment>The subjectRole defines the subject of a relationship.</rdfs:comment>
     </owl:Class>
     
 
@@ -552,7 +658,7 @@ The relationship&apos;s multiplicity (cardinality + optionality) properties are 
             <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Association"/>
             <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Domain"/>
             <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Element"/>
-            <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#EntityType"/>
+            <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Entity"/>
             <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Function"/>
             <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Key"/>
             <rdf:Description rdf:about="https://kgraph.foo/onto/datamodelling#Model"/>

@@ -9,7 +9,8 @@
     },
     "GlobalVariables": {
         "RootNamespace" : "DataModelling",
-        "RootNamespaceLabel" : "Data Modelling Namespace"
+        "RootNamespaceLabel" : "Data Modelling Namespace", 
+        "ElementList" : "ElementList"
     },
         "NamedObjects": [
         {
@@ -100,7 +101,7 @@
             ]
         },
         {
-            "TargetClass": "https://kgraph.foo/onto/datamodelling#EntityType",
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#Entity",
             "URIBase": "https://kgraph.foo/entities#",
             "Instances": [
                 {
@@ -138,7 +139,7 @@
                     "InstanceName": "EntityKeyAttribute",
                     "SubjectTag": "EntityKeyAttributes",
                     "ParentTag": "Entity",
-                    "Definition": true,
+                    "Definition": false,
                     "EnableMultiValues": true
                 }
             ]
@@ -193,7 +194,7 @@
             ]
         },
         {
-            "TargetClass": "https://kgraph.foo/onto/datamodelling#sourceRole",
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#subjectRole",
             "URIBase": "https://kgraph.foo/entities#",
             "Instances": [
                 {
@@ -206,7 +207,7 @@
             
         },
             {
-            "TargetClass": "https://kgraph.foo/onto/datamodelling#targetRole",
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#objectRole",
             "URIBase": "https://kgraph.foo/entities#",
             "Instances": [
 
@@ -218,7 +219,23 @@
                 }
             ]
             
+        },
+    {
+            "TargetClass": "https://kgraph.foo/onto/datamodelling#ElementList",
+            "URIBase": "https://kgraph.foo/entities#",
+            "Instances": [
+
+                {
+                    "InstanceName": "KeyAttributesElementList",
+                    "SubjectTag": "ElementList",
+                    "ParentTag": "EntityKey",
+                    "ListContent" : "EntityKeyAttribute",
+                    "Definition": true
+                }
+            ]
+            
         }
+
     ],
         "Relationships": [
             {   "Predicate": "https://kgraph.foo/onto/datamodelling#isPartOf", 
@@ -251,18 +268,6 @@
                         "InstanceName": "AttributeDomainIsPartOfAttributeDomainNamespace",
                         "SubjectTag": "AttributeDomain",
                         "ObjectTag": "AttributeDomainNamespace",
-                        "EnableMultiValues": false
-                    },
-                    {
-                        "InstanceName": "SourceRoleisPartOfEntity",
-                        "SubjectTag": "SourceRole",
-                        "ObjectTag": "SourceRoleEntity",
-                        "EnableMultiValues": false
-                    },
-                    {
-                        "InstanceName": "TargetRoleisPartOfEntity",
-                        "SubjectTag": "TargetRole",
-                        "ObjectTag": "TargetRoleEntity",
                         "EnableMultiValues": false
                     }
                 ]
@@ -310,6 +315,18 @@
                         "InstanceName": "TargetRoleIsAssociatedWithKey",
                         "SubjectTag": "TargetRole",
                         "ObjectTag": "TargetRoleKey",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "SourceRoleIsAssociatedWithEntity",
+                        "SubjectTag": "SourceRole",
+                        "ObjectTag": "SourceRoleEntity",
+                        "EnableMultiValues": false
+                    },
+                    {
+                        "InstanceName": "TargetRoleIsAssociatedWithEntity",
+                        "SubjectTag": "TargetRole",
+                        "ObjectTag": "TargetRoleEntity",
                         "EnableMultiValues": false
                     }
                 ]
@@ -435,6 +452,17 @@
                     "InstanceName": "TargetRoleCardinality",
                     "SubjectTag": "TargetRole",
                     "LiteralTag": "TargetRoleCardinality"
+                }
+        ]
+    },
+        {
+
+            "Predicate": "https://kgraph.foo/onto/datamodelling#ElementSequence",
+            "Instances": [
+                {
+                    "InstanceName": "ElementSequence",
+                    "SubjectTag": "Attribute",
+                    "LiteralTag": "AttributeSequence"
                 }
         ]
     },
