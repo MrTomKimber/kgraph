@@ -1,0 +1,155 @@
+{
+    "$schema": "../../src/kgraphing/jschema/schemamappingschema.json",
+    "Namespaces": {
+        "KGNAM": "https://kgraph.foo/onto/kgnam#",
+        "test": "https://kgraph.foo/onto/test#"
+    },
+    "GlobalVariables": {
+        "RootNamespace" : "Vocabularies",
+        "RootNamespaceLabel" : "Vocabularies"
+    },
+    "NamedObjects": [
+        {
+            "TargetClass": "https://kgraph.foo/onto/test#Namespace",
+            "URIBase": "https://kgraph.foo/individuals#",
+            "Instances": [
+                {
+                    "InstanceName": "Namespace",
+                    "SubjectTag": "Namespace",
+                    "ParentTag": null,
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/test#Entity",
+            "URIBase": "https://kgraph.foo/individuals#",
+            "Instances": [
+                {
+                    "InstanceName": "EntityTypeA",
+                    "SubjectTag": "EntityTypeA",
+                    "ParentTag": "Namespace",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/test#Component",
+            "URIBase": "https://kgraph.foo/individuals#",
+            "Instances": [
+                {
+                    "InstanceName": "ComponentB",
+                    "SubjectTag": "ComponentB",
+                    "ParentTag": "Namespace",
+                    "Definition": true
+                }
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/test#PackagedComponent",
+            "URIBase": "https://kgraph.foo/individuals#",
+            "Instances": [
+                {
+                    "InstanceName": "AssemblySequenceComponents",
+                    "SubjectTag": "AssemblySequence",
+                    "ParentTag": "EntityTypeA",
+                    "Definition": false,
+                    "EnableMultiValues":true
+                },
+                {
+                    "InstanceName": "ComponentBPackage",
+                    "SubjectTag": "ComponentBPackage",
+                    "ParentTag": "EntityTypeA",
+                    "Definition": true,
+                    "EnableMultiValues":false
+                }
+                
+            ]
+        },
+        {
+            "TargetClass": "https://kgraph.foo/onto/test#AssemblyDocument",
+            "URIBase": "https://kgraph.foo/individuals#",
+            "Instances": [
+                {
+                    "InstanceName": "AssemblyDocument",
+                    "SubjectTag": "AssemblyDocument",
+                    "ParentTag": "Namespace",
+                    "Definition": true,
+                    "ListContent" : "AssemblySequenceComponents"
+                }
+            ]
+        }
+    ],
+    "Relationships": [
+{
+            "Predicate": "https://kgraph.foo/onto/test#isComponentOf",
+            "Instances": [
+                {
+                    "InstanceName": "isComponentOf",
+                    "SubjectTag": "ComponentBPackage",
+                    "ObjectTag": "EntityTypeA"
+                }
+            ]
+        },
+        {
+            "Predicate": "https://kgraph.foo/onto/test#isInstanceOf",
+            "Instances": [
+                {
+                    "InstanceName": "PackageComponentIsInstanceOf",
+                    "SubjectTag": "ComponentBPackage",
+                    "ObjectTag": "ComponentB"
+                }
+            ]
+        },
+        {
+            "Predicate": "https://kgraph.foo/onto/test#hasAssemblyDocument",
+            "Instances": [
+                {
+                    "InstanceName": "EntityHasAssemblyDocument",
+                    "SubjectTag": "EntityTypeA",
+                    "ObjectTag": "AssemblyDocument", 
+                    "EnableMultiValues": true
+                }
+            ]
+        }
+    ],
+    "Properties": [
+        
+        {
+            "Predicate": "https://kgraph.foo/onto/test#ComponentCount",
+            "Instances": [
+                {
+                    "InstanceName": "PackageComponentCount",
+                    "SubjectTag": "ComponentBPackage",
+                    "LiteralTag": "Count"
+                }
+            ]
+        },
+        {
+            "Predicate": "http://www.w3.org/2000/01/rdf-schema#label",
+            "Instances": [
+                {
+                    "InstanceName": "EntityTypeALabel",
+                    "SubjectTag": "EntityTypeA",
+                    "LiteralTag": "EntityTypeALabel"
+                },
+                {
+                    "InstanceName": "ComponentBLabel",
+                    "SubjectTag": "ComponentB",
+                    "LiteralTag": "ComponentBLabel"
+                },
+                {
+                    "InstanceName": "PackageComponentBLabel",
+                    "SubjectTag": "ComponentBPackage",
+                    "LiteralTag": "ComponentBLabel"
+                },
+                {
+                    "InstanceName": "AssemblyDocumentLabel",
+                    "SubjectTag": "AssemblyDocument",
+                    "LiteralTag": "AssemblyDocument"
+                }
+                
+            ]
+        }
+    ]
+}

@@ -296,7 +296,7 @@
                     {
                         "InstanceName": "AttributeIsMemberOfDomain",
                         "SubjectTag": "Attribute",
-                        "ObjectTag": "Domain",
+                        "ObjectTag": "AttributeDomain",
                         "EnableMultiValues": true
                     }
                 ]
@@ -330,7 +330,20 @@
                         "EnableMultiValues": false
                     }
                 ]
+            },
+                        {
+                "Predicate": "https://kgraph.foo/onto/datamodelling#hasElementList", 
+                "Instances": [
+
+                    {
+                        "InstanceName": "KeyHasElementList",
+                        "SubjectTag": "EntityKey",
+                        "ObjectTag": "ElementList",
+                        "EnableMultiValues": false
+                    }
+                ]
             }
+            
             
         ],
         "Properties": [
@@ -384,6 +397,16 @@
                     "InstanceName": "TargetRoleLabel",
                     "SubjectTag": "TargetRole",
                     "LiteralTag": "TargetRoleLabel"
+                },
+                {
+                    "InstanceName": "EntityKeyLabel",
+                    "SubjectTag": "EntityKey",
+                    "LiteralTag": "EntityKeyLabel"
+                },
+                {
+                    "InstanceName": "ElementListLabel",
+                    "SubjectTag": "ElementList",
+                    "LiteralTag": "ElementList"
                 }
             ]
         },

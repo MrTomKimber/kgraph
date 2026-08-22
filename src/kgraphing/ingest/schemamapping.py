@@ -150,15 +150,6 @@ class SchemaMapping:
                     multivalue_columns.append(c)
         self.multivalue_columns = list(set(multivalue_columns))
 
-    def _filter_specifications_on_subject_column(self, column):
-        c_specs = [
-            s
-            for k, s in self.specifications.items()
-            if isinstance(s, NamedObjectInstanceSpecification)
-            and s._subject__column == column
-        ]
-        return c_specs
-
     def traverse_hierarchy_path(self, start, acc=None):
         """Given a dictionary containing node-to-node parental linkages {child:parent}
         and a start node,
@@ -304,12 +295,11 @@ class SchemaMapping:
                     r[0] for r in raw_graph.triples((None, RDF.type, SchemaMapping.DATA["row"]))
                 ]:
             for s in [s for s in self.specifications.values() if s._is_list and isinstance(s, NamedObjectInstanceSpecification)]:
-                collection_assignments_triples.extend (
-                    s.listAssignmentTriples(
-                    datarow,
-                    raw_graph,
-                    self.entity_fqn_index)
-                )
+                new_collection_triples = s.listAssignmentTriples(
+                                    datarow,
+                                    raw_graph,
+                                    self.entity_fqn_index)
+                collection_assignments_triples.extend (new_collection_triples)
 
         print("Objects, Unique Objects")
         print(len(triple_generating_objects), len(set(triple_generating_objects)))
@@ -484,7 +474,7 @@ class SchemaMappingInstanceSpecification:
             return results
         else:
 
-            return None
+            return []
 
     @staticmethod
     def get_keylist_from_datarow(rowurl, data_graph, spec):
@@ -658,11 +648,23 @@ class NamedObjectInstanceSpecification(SchemaMappingInstanceSpecification):
         raw_list_heads = [o for s,p,o in data_graph.triples((row_uri, SchemaMapping.DATA[f"column({element_spec._subject__column}__listhead)"], None))]
 
         # Get the list possible objects for which we want to do some list assignment: 
-        assignment_heads = [entity_fqn_index.get(n) 
-                            for n in SchemaMappingInstanceSpecification.extract_valid_fqns(
+
+        print(
+            row_uri,self.naming_hierarchy_path
+        )
+
+        print( SchemaMappingInstanceSpecification.extract_valid_fqns(
                                 row_uri, data_graph, self.naming_hierarchy_path
-                                ) 
-                            ]
+                                ) )
+
+        assignment_heads = []
+
+        for n in SchemaMappingInstanceSpecification.extract_valid_fqns(
+            row_uri, data_graph, self.naming_hierarchy_path
+            ) :
+            assignment_heads.append(entity_fqn_index.get(n))
+
+        
         for ass_head in assignment_heads:
             for raw_head in raw_list_heads:
                 list_items = Collection(data_graph, raw_head)
@@ -827,11 +829,12 @@ class RelationshipInstanceSpecification(SchemaMappingInstanceSpecification):
         # possibilities
         relations = list(product(*[subject_entities, object_entities]))
         relation_list = []
+        print (f"Relations Input Length: { len(relations)} for {self._instance_name}")
         for relation in relations:
             if all((v is not None for v in relation)):
                 sobj, oobj = relation
                 relation_list.append(RelationObject(sobj, oobj, self.target_class))
-
+        print (f"Relations Output Length:{ len(relation_list)} for {self._instance_name}")
         return relation_list
 
 
@@ -888,6 +891,8 @@ class PropertyInstanceSpecification(SchemaMappingInstanceSpecification):
         candidate_subject_spec = self.parent_SchemaMapping.traverse_hierarchy_path(
             self._subject__column
         )
+        # How many fqns are possible here?
+        print(f"specs-count:{len(candidate_subject_spec)}, spec: {candidate_subject_spec}")
 
         # Get the FQNs from the data row - but these can be tricky in that if no match for the
         # root of the FQN is found,
@@ -917,11 +922,12 @@ class PropertyInstanceSpecification(SchemaMappingInstanceSpecification):
         # possibilities
         relations = list(product(*[subject_entities, literal_values]))
         relation_list = []
+        print (f"Property Input Length :{ len(relations)} for {self._instance_name}")
         for relation in relations:
             if all((v is not None for v in relation)):
                 sobj, oobj = relation
                 relation_list.append(PropertyObject(sobj, oobj, self.target_class))
-
+        print (f"Property Output Length:{ len(relation_list)} for {self._instance_name}")
         return relation_list
 
     def __repr__(self):

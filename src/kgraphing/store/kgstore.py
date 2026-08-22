@@ -171,7 +171,7 @@ class KGStore:
         q_results = g.query(sparql_q)
         return {k: p.toPython() for k,p in list(q_results)}
 
-    def get_graph_metrics(self, data_graph: Graph, graph_id: URIRef) -> dict:
+    def get_graph_metrics(self, data_graph: Graph) -> dict:
         total_triples = len(data_graph)
         #predicates = set(data_graph.predicates()) # This call fetches everything back from the server - all s,p,o values - filtering only after collecting everything
         predicate_counts = self._get_predicate_counts_for_graph(data_graph)      

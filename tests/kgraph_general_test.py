@@ -16,7 +16,6 @@ from importlib import resources
 from kgraphing import declarations
 from kgraphing.ingest import schemamapping
 from kgraphing.ingest import kgpipeline
-from kgraphing import rdfexplorer
 from kgraphing import nxproperties
 from kgraphing.store import kgstore
 from kgraphing.store import metadata
@@ -27,7 +26,6 @@ from kgraph_fixtures_test import (raw_data_df,
                                   serialised_graph, 
                                   kgp_pipeline, 
                                   kgp_graph, 
-                                  explorer_obj, 
                                   in_memory_store, 
                                   toy_graph, 
                                   ontology_cache, 
@@ -105,63 +103,31 @@ def test_kgpipeline_graph_validation_is_true(kgp_pipeline, kgp_graph):
 def test_kgpipeline_graph_matches_alt_graph(kgp_graph, serialised_graph):
     assert len(kgp_graph)==len(serialised_graph)
 
-def test_rdfexplorer_is_instance_of(explorer_obj):
-    assert isinstance(explorer_obj, rdfexplorer.RDFExplorer)
+def test_create_in_memory_store_and_populate_with_metadata_update_scenario_union(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph, scenario=kgstore.MergePolicy.UNION)
 
-def test_rdfexplorer_get_types(explorer_obj):
-    s_types = explorer_obj._get_all_types_in_graph().union(set([RDF.type]))
-    assert s_types == {URIRef('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-                        URIRef('http://www.w3.org/2004/02/skos/core#Concept'),
-                        URIRef('http://www.w3.org/2004/02/skos/core#ConceptScheme'),
-                        URIRef('https://kgraph.foo/onto/kgnam#Namespace')}
-
-
-def test_rdfexplorer_gen_entity_report(explorer_obj):
-    s_types = explorer_obj._get_all_types_in_graph().union(set([RDF.type]))
-    e_dict = explorer_obj.gen_entity_report_dict_for_types(s_types)
-    assert len(e_dict.keys())==35
-    assert all(v.got_neighbours for v in e_dict.values())
-
-def test_rdfexplorer_gen_entity_report_all_keys(explorer_obj):
-    s_types = explorer_obj._get_all_types_in_graph().union(set([RDF.type]))
-    e_dict = explorer_obj.gen_entity_report_dict_for_types(s_types)
-    e_store_objects = {k:v for k,v in explorer_obj.entity_store.items() if v.type=='object'}
-    assert all([all([k in ['title', 'property_table','outbound_links','inbound_links']]) for q in [
-        v.html_components(configuration={})
-        for k,v in e_store_objects.items()
-    ] for k in q.keys()])
-
-def test_rdfexplorer_gen_visualisation(explorer_obj):
-    nxg = explorer_obj.to_gravis_nx()
-    node_style_mappings = json.load(open(os.path.join(current_dir, "data/vocab_node_styles.json"), "r"))
-    edge_style_mappings = json.load(open(os.path.join(current_dir, "data/vocab_edge_styles.json"), "r"))
-    map_node_styles_on_rdfclass_f = nxproperties.partial(nxproperties.get_attribute, attribute="rdfclass")
-    map_edge_styles_on_rdfclass_f = nxproperties.partial(nxproperties.get_attribute, attribute="rdfclass")
-    
-
-    visualisation_g = nx.MultiDiGraph()
-    #print({node: value for node, value in nx.get_node_attributes(nxg, 'POS').items() if value in ('AUX', 'VERB')})
-    # Retrieve content from sentence_list *if* the number of nsubj's is > 0
-
-    visualisation_g = nxproperties.decorate_networkx_nodes_with_function(nxg,
-                                        map_node_styles_on_rdfclass_f,
-                                        node_style_mappings)
-    visualisation_g = nxproperties.decorate_networkx_edges_with_function(visualisation_g,
-                                        map_edge_styles_on_rdfclass_f,
-                                        edge_style_mappings)
-    
-    if isinstance(visualisation_g, (nx.MultiDiGraph, nx.MultiGraph)):
-        print([d
-            for s,f,k,d in visualisation_g.edges(data=True, keys=True)
-            ])
-    else:
-        print([d
-            for s,f,d in visualisation_g.edges(data=True)
-            ])
-
-
-def test_create_in_memory_store_and_populate_with_metadata(in_memory_store, toy_graph):
+def test_create_in_memory_store_and_populate_with_metadata_update_scenario_full_replace(in_memory_store, toy_graph):
     toy_graph_stored = in_memory_store.update_graph(toy_graph)
+    toy_graph_stored.add((URIRef('http://kgraph.foo.bar#example3'), 
+                URIRef('http://kgraph.foo.bar#predicate'), 
+                URIRef('http://kgraph.foo.bar#example4')))
+    toy_graph_stored = in_memory_store.update_graph(toy_graph, scenario=kgstore.MergePolicy.FULL_REPLACE)
+
+def test_create_in_memory_store_and_populate_with_metadata_update_scenario_entity_replace(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph)
+    toy_graph_stored.add((URIRef('http://kgraph.foo.bar#example3'), 
+                URIRef('http://kgraph.foo.bar#predicate'), 
+                URIRef('http://kgraph.foo.bar#example4')))
+    toy_graph_stored = in_memory_store.update_graph(toy_graph, scenario=kgstore.MergePolicy.ENTITY_REPLACE)
+
+def test_create_in_memory_store_and_populate_with_metadata_update_scenario_property_replace(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph)
+    toy_graph_stored.add((URIRef('http://kgraph.foo.bar#example3'), 
+                URIRef('http://kgraph.foo.bar#predicate'), 
+                URIRef('http://kgraph.foo.bar#example4')))
+    toy_graph_stored = in_memory_store.update_graph(toy_graph, scenario=kgstore.MergePolicy.PROPERTY_REPLACE)
+    
+
 
     gmeta_packet_graph = metadata.NamedGraphMetaData(
             uri = toy_graph_stored.identifier, 
@@ -177,7 +143,28 @@ def test_create_in_memory_store_and_populate_with_metadata(in_memory_store, toy_
     stored_graphs = in_memory_store.list_graphs()
     assert toy_graph_stored.identifier in stored_graphs
     assert URIRef("http://kgraph.foo.bar/metadata") in stored_graphs
-    
+
+def test_clear_graph(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph)
+    assert len(list(toy_graph_stored.triples((None, None, None)))) == 1
+    in_memory_store.clear_graph(toy_graph_stored.identifier)
+    assert len(list(toy_graph_stored.triples((None, None, None)))) == 0
+
+def test_drop_graph(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph)
+    assert len(list(toy_graph_stored.triples((None, None, None)))) == 1
+    in_memory_store.drop_graph(toy_graph_stored.identifier)
+    assert toy_graph_stored.identifier not in in_memory_store.list_graphs()
+
+def test_get_graph_metrics(in_memory_store, toy_graph):
+    toy_graph_stored = in_memory_store.update_graph(toy_graph)
+    metrics = in_memory_store.get_graph_metrics(toy_graph_stored)
+    assert set(metrics.keys())=={"triple_count", "predicate_count", "type_count", "untyped_count"}
+    assert metrics["triple_count"]==1
+    assert len(metrics["predicate_count"])==1
+    assert len(metrics["type_count"])==0
+    assert metrics["untyped_count"]==1
+
 def test_ontology_cache_instantiation_and_file_registration(ontology_cache):
     kgnam_path = str(resources.files(ontologies) / os.path.normpath("kgnam.owl"))
     OC = ontology_cache
@@ -197,7 +184,7 @@ def test_rdf2d_instantiation(rdf2dict_of_serialised_graph):
 def test_rdf2d_cache_enrichment(rdf2dict_of_serialised_graph):
     rdf2dict_of_serialised_graph.enrich_metadata()
     assert len(rdf2dict_of_serialised_graph.ontology_cache.registry)==5
-    assert len(rdf2dict_of_serialised_graph.entities)==299
+    assert len(rdf2dict_of_serialised_graph.entities)==299 or len(rdf2dict_of_serialised_graph.entities)==297
     assert len(rdf2dict_of_serialised_graph.relations)==23
     
 

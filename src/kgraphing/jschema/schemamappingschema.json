@@ -91,9 +91,9 @@
                                 "description" : "Set to true to treat the field as potentially containing multiple values separated by commas", 
                                 "type" : "boolean"
                             },
-                            "InterpretMultiValuesAsList" : {
-                                "description" : "Set to true to project the sequence of comma-separated values into an ordered list.", 
-                                "type" : "boolean"
+                            "ListContent" : {
+                                "description" : "Where a list header is being defined, ListContent points to the Instance where the contents of the list are encoded.", 
+                                "type" : "string"
                             },
                             "Definition" : {
                                 "description" : "Set to true to mark the field as being the location where instances for this object are to be defined, else the field is considered a relation, and new objects created here may be marked as --undefined-- if the serialisation being performed is considered to be \"closed\" then any --undefined-- objects will trigger a warning.", 

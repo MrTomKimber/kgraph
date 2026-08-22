@@ -11,7 +11,6 @@ from importlib import resources
 from kgraphing import declarations
 from kgraphing.ingest import schemamapping
 from kgraphing.ingest import kgpipeline
-from kgraphing import rdfexplorer
 from kgraphing.store import kgstore
 from kgraphing.store import metadata
 from kgraphing import ontologies, shapes
@@ -30,6 +29,12 @@ def raw_data_df() -> DataFrame:
     return rd_df
 
 @pytest.fixture(scope='session')
+def test_things_data_df() -> DataFrame:
+    rd_df = read_excel(os.path.join(current_dir, "data/testthings.xlsx"))
+    return rd_df
+
+
+@pytest.fixture(scope='session')
 def serialised_graph(schema_mapping_object, raw_data_df) -> Graph:
     g = schema_mapping_object.to_rdf_graph(raw_data_df)
     g.serialize(os.path.join(current_dir, "data/ignore_alphabet_graph.rdf"), format="xml")
@@ -40,6 +45,14 @@ def shacl_graph() -> Graph:
     g = Graph()
     g.parse(os.path.join(current_dir, "data/skos_vocabulary_mapping.json"))
     return g
+
+@pytest.fixture(scope='session')
+def kgp_pipeline_for_testthings() -> kgpipeline.KGraphPipeline:
+    mapping_config_at = os.path.join(current_dir, "data/test_things_mapping.json")
+    kgp = kgpipeline.KGraphPipeline(mapping_config_at)
+    return kgp
+
+
 
 @pytest.fixture(scope='session')
 def kgp_pipeline() -> kgpipeline.KGraphPipeline:
@@ -55,11 +68,6 @@ def kgp_pipeline() -> kgpipeline.KGraphPipeline:
 def kgp_graph(kgp_pipeline, raw_data_df) -> Graph:
     g = kgp_pipeline.process(raw_data_df)
     return g
-
-@pytest.fixture(scope='session')
-def explorer_obj(kgp_graph):
-    Explorer = rdfexplorer.RDFExplorer(kgp_graph)
-    return Explorer
 
 @pytest.fixture(scope='session')
 def in_memory_store() -> kgstore.KGStore:

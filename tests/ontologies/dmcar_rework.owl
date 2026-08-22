@@ -53,6 +53,17 @@
     
 
 
+    <!-- https://kgraph.foo/onto/datamodelling#isChildOf -->
+
+    <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isChildOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:comment>Describes a broad hierarchical relationship where the subject has a hierarchical parent within a particular hierarchy.
+
+In this context, a hierarchy is a tree where children can only have one parent. It is possible however for one entity to be involved across any number of hierarchies. As a result, isChildOf should normally be subclassed per hierarchy to enable sensible enforcement of this rule.</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://kgraph.foo/onto/datamodelling#isDiscriminatedBy -->
 
     <owl:ObjectProperty rdf:about="https://kgraph.foo/onto/datamodelling#isDiscriminatedBy">
@@ -141,28 +152,20 @@ Contrast with isPartOf which defines dependent, compositional relationships that
     
 
 
+    <!-- https://kgraph.foo/onto/datamodelling#RelationshipOptionality -->
+
+    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RelationshipOptionality">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Relationship"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- https://kgraph.foo/onto/datamodelling#RoleCardinality -->
 
     <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleCardinality">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- https://kgraph.foo/onto/datamodelling#RoleOptionality -->
-
-    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleOptionality">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- https://kgraph.foo/onto/datamodelling#RoleVerb -->
-
-    <owl:DatatypeProperty rdf:about="https://kgraph.foo/onto/datamodelling#RoleVerb">
-        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
         <rdfs:domain rdf:resource="https://kgraph.foo/onto/datamodelling#Role"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">A Verb that describes the role that an entity plays in its participation via an associated relationship.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -414,7 +417,7 @@ Contrast with isPartOf which defines dependent, compositional relationships that
                 <owl:onClass rdf:resource="https://kgraph.foo/onto/datamodelling#ElementList"/>
             </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:comment>A Key is a formal way of referencing instances of an entity.</rdfs:comment>
+        <rdfs:comment>A Key is a formal interface by which an entity is either referenced, or references another entity.</rdfs:comment>
     </owl:Class>
     
 
@@ -529,16 +532,16 @@ Contrast with isPartOf which defines dependent, compositional relationships that
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#RoleCardinality"/>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#RelationshipOptionality"/>
                 <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
-                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#RoleOptionality"/>
+                <owl:onProperty rdf:resource="https://kgraph.foo/onto/datamodelling#RoleCardinality"/>
                 <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
-                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment>A Role is the abstract representation of how an Entity participates in a Relationship. Each relationship definition should be associated with a subjectRole and an objectRole.
