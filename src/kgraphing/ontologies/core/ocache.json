@@ -1,0 +1,15 @@
+{
+    "http://purl.org/dc/dcam/": "dublin_core_abstract_model.rdf",
+    "http://purl.org/dc/elements/1.1/": "dublin_core_elements.rdf",
+    "http://purl.org/dc/terms/": "dublin_core_terms.rdf",
+    "http://purl.org/dc/dcmitype/": "dublin_core_type.rdf",
+    "http://www.w3.org/2004/02/skos/core#": "skos.owl",
+    "http://xmlns.com/foaf/0.1/": "foaf.rdf",
+    "http://www.w3.org/2003/06/sw-vocab-status/ns#": "vocab_status.rdf",
+    "http://purl.org/vocab/vann/": "vann-vocab-20100607.rdf",
+    "http://xmlns.com/wot/0.1/": "web_of_trust.rdf",
+    "http://www.w3.org/2008/05/skos-xl": "skos-xl.rdf",
+    "http://www.w3.org/2002/07/owl#": "owl.ttl",
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#": "rdf.owl",
+    "http://www.w3.org/2000/01/rdf-schema#": "rdfs.owl"
+}
