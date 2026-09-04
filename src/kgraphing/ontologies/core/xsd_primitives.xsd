@@ -1,0 +1,496 @@
+<?xml version='1.0'?>
+<!DOCTYPE xs:schema SYSTEM "../namespace/XMLSchema.dtd" [
+
+<!--
+     keep this schema XML1.0 DTD valid
+  -->
+        <!ENTITY % schemaAttrs 'xmlns:hfp CDATA #IMPLIED'>
+
+        <!ELEMENT hfp:hasFacet EMPTY>
+        <!ATTLIST hfp:hasFacet
+                name NMTOKEN #REQUIRED>
+
+        <!ELEMENT hfp:hasProperty EMPTY>
+        <!ATTLIST hfp:hasProperty
+                name NMTOKEN #REQUIRED
+                value CDATA #REQUIRED>
+]>
+<xs:schema
+  xmlns:hfp="http://www.w3.org/2001/XMLSchema-hasFacetAndProperty" 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified" 
+  xml:lang="en" 
+  targetNamespace="http://www.w3.org/2001/XMLSchema">
+
+  <xs:annotation>
+    <xs:documentation>
+      This document contains XML elements which look like 
+      definitions for the primitive datatypes.  These definitions are for
+      information only; the real built-in definitions are magic.
+    </xs:documentation>
+    <xs:documentation>
+      For each built-in datatype in this schema (both primitive and
+      derived) can be uniquely addressed via a URI constructed
+      as follows:
+        1) the base URI is the URI of the XML Schema namespace
+        2) the fragment identifier is the name of the datatype
+
+      For example, to address the int datatype, the URI is:
+
+        http://www.w3.org/2001/XMLSchema#int
+
+      Additionally, each facet definition element can be uniquely
+      addressed via a URI constructed as follows:
+        1) the base URI is the URI of the XML Schema namespace
+        2) the fragment identifier is the name of the facet
+
+      For example, to address the maxInclusive facet, the URI is:
+
+        http://www.w3.org/2001/XMLSchema#maxInclusive
+
+      Additionally, each facet usage in a built-in datatype definition
+      can be uniquely addressed via a URI constructed as follows:
+        1) the base URI is the URI of the XML Schema namespace
+        2) the fragment identifier is the name of the datatype, followed
+           by a period (".") followed by the name of the facet
+
+      For example, to address the usage of the maxInclusive facet in
+      the definition of int, the URI is:
+
+        http://www.w3.org/2001/XMLSchema#int.maxInclusive
+
+    </xs:documentation>
+  </xs:annotation>
+  <xs:simpleType name="string" id="string">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="length"/>
+        <hfp:hasFacet name="minLength"/>
+        <hfp:hasFacet name="maxLength"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#string"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace value="preserve" id="string.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="boolean" id="boolean">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="finite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#boolean"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="boolean.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="float" id="float">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="true"/>
+        <hfp:hasProperty name="cardinality" value="finite"/>
+        <hfp:hasProperty name="numeric" value="true"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#float"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="float.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="double" id="double">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="true"/>
+        <hfp:hasProperty name="cardinality" value="finite"/>
+        <hfp:hasProperty name="numeric" value="true"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#double"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="double.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="decimal" id="decimal">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="totalDigits"/>
+        <hfp:hasFacet name="fractionDigits"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="total"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="true"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#decimal"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="decimal.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="duration" id="duration">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#duration"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="duration.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="dateTime" id="dateTime">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#dateTime"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="dateTime.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="dateTime.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="time" id="time">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#time"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="time.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="time.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date" id="date">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#date"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="date.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="date.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gYearMonth" id="gYearMonth">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#gYearMonth"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="gYearMonth.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="gYearMonth.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gYear" id="gYear">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#gYear"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="gYear.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="gYear.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gMonthDay" id="gMonthDay">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#gMonthDay"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="gMonthDay.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="gMonthDay.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gDay" id="gDay">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#gDay"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="gDay.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="gDay.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="gMonth" id="gMonth">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="maxInclusive"/>
+        <hfp:hasFacet name="maxExclusive"/>
+        <hfp:hasFacet name="minInclusive"/>
+        <hfp:hasFacet name="minExclusive"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasFacet name="explicitTimezone"/>
+        <hfp:hasProperty name="ordered" value="partial"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#gMonth"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="gMonth.whiteSpace"/>
+      <xs:explicitTimezone value="optional" id="gMonth.explicitTimezone"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="hexBinary" id="hexBinary">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="length"/>
+        <hfp:hasFacet name="minLength"/>
+        <hfp:hasFacet name="maxLength"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#hexBinary"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="hexBinary.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="base64Binary" id="base64Binary">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="length"/>
+        <hfp:hasFacet name="minLength"/>
+        <hfp:hasFacet name="maxLength"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#base64Binary"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="base64Binary.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="anyURI" id="anyURI">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="length"/>
+        <hfp:hasFacet name="minLength"/>
+        <hfp:hasFacet name="maxLength"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#anyURI"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="anyURI.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="QName" id="QName">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="length"/>
+        <hfp:hasFacet name="minLength"/>
+        <hfp:hasFacet name="maxLength"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#QName"/>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="QName.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="NOTATION" id="NOTATION">
+    <xs:annotation>
+      <xs:appinfo>
+        <hfp:hasFacet name="length"/>
+        <hfp:hasFacet name="minLength"/>
+        <hfp:hasFacet name="maxLength"/>
+        <hfp:hasFacet name="pattern"/>
+        <hfp:hasFacet name="enumeration"/>
+        <hfp:hasFacet name="whiteSpace"/>
+        <hfp:hasFacet name="assertions"/>
+        <hfp:hasProperty name="ordered" value="false"/>
+        <hfp:hasProperty name="bounded" value="false"/>
+        <hfp:hasProperty name="cardinality" value="countably infinite"/>
+        <hfp:hasProperty name="numeric" value="false"/>
+      </xs:appinfo>
+      <xs:documentation source="http://www.w3.org/TR/xmlschema11-2/#NOTATION"/>
+      <xs:documentation>
+        NOTATION cannot be used directly in a schema; rather a type
+        must be derived from it by specifying at least one enumeration
+        facet whose value is the name of a NOTATION declared in the
+        schema.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:anyAtomicType">
+      <xs:whiteSpace fixed="true" value="collapse" id="NOTATION.whiteSpace"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

@@ -7,8 +7,8 @@ from send2trash import send2trash
 from rdflib.parser import Parser
 from rdflib.plugin import register, PluginException
 from rdflib.exceptions import ParserError
-from urllib.error import HTTPError, URLError
 from rdflib import Graph
+from urllib.parse import urlparse
 from urllib.error import HTTPError, URLError
 from importlib.resources import files, as_file
 import shutil
@@ -26,7 +26,10 @@ from kgraphing.ontologies import core
 #    "OWLXMLParser",
 #)
 
-
+def is_remote_url(input_string):
+    parsed = urlparse(input_string)
+    # Remote URLs have schemes like 'http', 'https', 'ftp'
+    return parsed.scheme in ('http', 'https', 'ftp', 's3', 'gs')
 
 class OntologyCache:
     registry: dict[str, str]
@@ -128,7 +131,7 @@ class OntologyCache:
                 if overwrite and ontology_url in self.registry:
                     serial_filename = self.registry[ontology_url]
                 else:
-                    if alias is None:
+                    if alias is None or is_remote_url(alias):
                         # Where an ontology is looked up online, it should be serialised, but
                         # it's tricky to crib a proper filename from any given url, so generate
                         # a uuid-based filename that we can be fairly confident is unique. 
