@@ -1,0 +1,57 @@
+Metadata-Version: 2.4
+Name: kgraphing
+Version: 0.0.1
+Summary: Add your description here
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: lightrdf>=0.4.0
+Requires-Dist: networkx>=3.6.1
+Requires-Dist: openpyxl>=3.1.5
+Requires-Dist: owlrl>=7.1.4
+Requires-Dist: pandas>=3.0.1
+Requires-Dist: pydeps>=3.0.2
+Requires-Dist: pyshacl>=0.31.0
+Requires-Dist: rdflib>=7.6.0
+Requires-Dist: sqlitedict>=2.1.0
+Provides-Extra: gravis
+
+# kgraphing
+
+## A collection of utilities for working with knowledge graphs.
+
+This library seeks to provide a set of utility functions to enable the 
+ingestion, management, visualisation and analysis of knowledge graph content
+expressed in the W3C RDF standard.
+
+### Ingestion
+
+Work with mappings to convert flat or nested data into fully marked-up RDF graphs.
+
+### Enrichment
+
+Leverage W3C standards to fetch distributed ontologies and definitions to annotate
+and enrich your knowledge graph.
+
+### Storage and Management
+
+Load, manage and combine content across named graphs in an RDF store.
+
+### Analysis
+
+Query and analyse the contents of graphs, run validation tasks with SHACL and 
+make use of RDF reasoners and inference engines. 
+
+Run common high level analyses over knowledge graphs to extract shape and structural
+information.
+
+### Visualisation
+
+Generate rich, meaningful visualisations of complex data relationships in an open
+flexible style.
+
+### Installation
+
+Install kgraphing using pip, or your favourite package manager. The command from pip is:
+
+`pip install kgraphing`
+
