@@ -35,5 +35,8 @@ package = false
 name = "pypi"
 url = "https://pypi.org/simple"
 
+[tool.hatch.build.targets.wheel]
+packages = ["kgraphing"]
+
 [project.optional-dependencies]
 gravis = []
